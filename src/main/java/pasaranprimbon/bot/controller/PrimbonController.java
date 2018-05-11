@@ -8,7 +8,8 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -25,12 +26,12 @@ public class PrimbonController {
         String contentText = content.getText();
 
         String newContentText = contentText.replace("/echo", "");
-        int dayDifference = dayDifferenceGetter(newContentText);
+        int dayDifference = dayDifferenceGetter(newContentText.substring(1));
         String dayName = dayGetter(dayDifference);
         String pasaranName = pasaranGetter(dayDifference);
 
-        String replyText = ">" + dayName + " " + pasaranName;
-        return new TextMessage(replyText.substring(1));
+        String replyText = dayName + " " + pasaranName;
+        return new TextMessage(replyText);
     }
 
     @EventMapping
@@ -44,11 +45,13 @@ public class PrimbonController {
 
         String[] tanggalan = tanggal.split("-");
 
-        Date referencedDate = new Date(1800, 01, 01);
-        Date givenDate = new Date(Integer.parseInt(tanggalan[0]), Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+        LocalDate referencedDate = new LocalDate.of(-100, 01, 01);
+        LocalDate givenDate = new LocalDate.of(Integer.parseInt(tanggalan[0]) - 1900, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
-        int diff = givenDate.getDate() - referencedDate.getDate();
-        return diff;
+        long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
+        int diffInt = (int) diff;
+        System.out.println(diffInt);
+        return diffInt;
     }
 
     public String dayGetter(int dayDifference) {
