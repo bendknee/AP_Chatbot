@@ -31,7 +31,7 @@ public class BillboardController {
         String parser = textContext.substring(0,18);
         String artist = textContext.substring(19,textContext.length());
         try {
-            if (!parser.equals("/billboard bill200 ")) {
+            if (!parser.equals("/billboard bill200")) {
                 throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException e) {
