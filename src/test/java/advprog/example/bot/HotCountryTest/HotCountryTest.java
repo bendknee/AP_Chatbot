@@ -11,7 +11,7 @@ import org.junit.Test;
 
 
 
-public class NewAgeTest {
+public class HotCountryTest {
     String url = "https://www.billboard.com/charts/country-songs";
     HotCountryBot hcb;
 
@@ -25,7 +25,7 @@ public class NewAgeTest {
     public void getChartTest() {
         assertNotNull(hcb.getChart());
         for(HotCountrySong sng : hcb.chart) {
-            sng.albumData();
+            sng.songData();
         }
     }
 

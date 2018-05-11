@@ -36,7 +36,7 @@ public class HotCountrySong {
         this.rank = rank;
     }
 
-    public String albumData() {
+    public String songData() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.artist + "\n");
         sb.append(this.title+ "\n");
