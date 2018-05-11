@@ -17,9 +17,9 @@
 #Please copy as `application.yml` and change your value.
 
 line.bot:
-  channel-token: RUjvRQaT4k6l5WfOj8AY0w/DLEsLr70aTdfOAyyfUTI4sjsmEYqvBPFLAx57hVG1P9y80dd5TujlBesMhIS3gq09ybTPnIYU5Og1OSW/TUMUIhzIFJ35BYcNKcLR3HhYYO02Th2N78V3Fl2p5Pz8KQdB04t89/1O/w1cDnyilFU=
-  channel-secret: 439c99086898c9e6e7cc04f4f51d2756
-  handler.path: /callback
+  channel-token: 'RUjvRQaT4k6l5WfOj8AY0w/DLEsLr70aTdfOAyyfUTI4sjsmEYqvBPFLAx57hVG1P9y80dd5TujlBesMhIS3gq09ybTPnIYU5Og1OSW/TUMUIhzIFJ35BYcNKcLR3HhYYO02Th2N78V3Fl2p5Pz8KQdB04t89/1O/w1cDnyilFU='
+  channel-secret: '439c99086898c9e6e7cc04f4f51d2756'
+  handler.path: '/callback'
 
 # To remove Client wire logs. Please comment out following lines.
 # See: https://docs.spring.io/spring-boot/docs/current/reference/html/howto-logging.html
