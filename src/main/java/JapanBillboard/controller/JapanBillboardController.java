@@ -36,7 +36,7 @@ public class JapanBillboardController {
             return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         String result = cekArtis(artist);
-        if (result == null) {
+        if (result == "") {
             return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         return new TextMessage(result);
