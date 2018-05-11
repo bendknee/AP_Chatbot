@@ -1,4 +1,5 @@
 package advprog.example.bot.NewAgeBotTest;
+import advprog.example.bot.NewAgeBot.NewAgeAlbum;
 import advprog.example.bot.NewAgeBot.NewAgeBot;
 
 import static org.junit.Assert.assertEquals;
@@ -18,16 +19,20 @@ public class NewAgeTest {
     @Before
     public void setUp() {
         nab = new NewAgeBot();
-
+        nab.find = "Armik";
     }
 
-    @Test void getChartTest() {
+    @Test
+    public void getChartTest() {
         assertNotNull(nab.getChart());
+        for(NewAgeAlbum alb : nab.chart) {
+            alb.albumData();
+        }
     }
 
     @Test
     public void isExistTest() {
-        assertTrue(nab.isExist()"Armik");
+        assertTrue(nab.isExist("Armik"));
     }
 
     @Test
