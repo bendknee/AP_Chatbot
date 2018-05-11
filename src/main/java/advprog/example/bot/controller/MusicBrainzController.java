@@ -18,12 +18,6 @@ public class MusicBrainzController {
 
     private static final String rootUrl = "https://musicbrainz.org/ws/2/";
 
-    @RequestMapping
-    public static void main(String args[]) {
-        RestTemplate restTemplate = new RestTemplate();
-
-    }
-
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         // TODO: Implement this'
@@ -44,4 +38,11 @@ public class MusicBrainzController {
                 event.getTimestamp(), event.getSource()));
     }
 
+    @EventMapping
+    public String handleWebRequest(Event event) {
+        RestTemplate restTemplate = new RestTemplate();
+        //restTemplate.getForObject(rootUrl, );
+
+        return null;
+    }
 }
