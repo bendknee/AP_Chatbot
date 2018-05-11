@@ -54,7 +54,7 @@ public class JapanBillboardController {
         Document doc = Jsoup.connect("https://www.billboard.com/charts/japan-hot-100").get();
         Elements containers = doc.select(".chart-row__artist");
         String hasil = "";
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
             Element elements = containers.get(i);
             if (elements.text().equalsIgnoreCase(artis)) {
                 hasil += "\n"+elements.select(".chart-row__artist").text() + "\n" +
