@@ -2,13 +2,12 @@ package advprog.example.bot.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
-import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.message.ImageMessage;
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
-import com.linecorp.bot.model.message.Message;
+import org.junit.jupiter.api.Test;
+
 
 
 public class XkcdCommandTest {
@@ -27,7 +26,7 @@ public class XkcdCommandTest {
         Message message = XkcdCommand.execute("-1");
         TextMessage messageText = (TextMessage)message;
 
-        assertEquals("ID not found", messageText.getText());
+        assertEquals("Comic not found", messageText.getText());
     }
 
     @Test

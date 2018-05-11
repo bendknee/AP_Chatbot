@@ -36,9 +36,9 @@ public class BotController {
                 return new TextMessage(args);
             case "/xkcd":
                 return XkcdCommand.execute(args);
+            default:
+                return handleDefaultMessageEvent(event);
         }
-
-        return handleDefaultMessageEvent(event);
     }
 
     @EventMapping
