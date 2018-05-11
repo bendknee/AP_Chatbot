@@ -6,7 +6,7 @@ public class LaughersManager {
         return message.contains("wkwk") | message.contains("haha");
     }
 
-    public void saveLaughersDataMessage(String message) {
+    public void processMessage(String message, long groupId, long userId) {
 
     }
 
