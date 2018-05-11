@@ -1,20 +1,23 @@
 package advprog.example.bot.HotCountryBot;
 
-public class Song {
+public class HotCountrySong {
+
     private String title;
     private String artist;
+    private int rank;
 
-    public Song(String title, String artist) {
-        this.name = name;
+    public HotCountrySong(String title, String artist, int rank) {
+        this.title = title;
         this.artist = artist;
+        this.rank = rank;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getArtist() {
@@ -25,8 +28,21 @@ public class Song {
         this.artist = artist;
     }
 
-    @Override
-    public String toString() {
-        return artist + " - " + name;
+    public int getRank() {
+        return rank;
     }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public String albumData() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.artist + "\n");
+        sb.append(this.title+ "\n");
+        sb.append(this.rank);
+
+        return sb.toString();
+    }
+
 }
