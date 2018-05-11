@@ -4,20 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.atLeastOnce;
 
-
+import advprog.example.bot.EventTestUtil;
 import com.linecorp.bot.model.event.Event;
+
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -30,44 +29,34 @@ public class MusicBrainzControllerTest {
         System.setProperty("line.bot.channelToken", "TOKEN");
     }
 
-    @Mock
-    private static MusicBrainzController musicBrainzController;
-
-    @Mock
-    private static MessageEvent<TextMessageContent> textMessageContentMock;
-
-    @Mock
-    private static Event eventMock;
-
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setUp() {
-        musicBrainzController = mock(MusicBrainzController.class);
-        textMessageContentMock = (MessageEvent<TextMessageContent>) mock(MessageEvent.class);
-        eventMock = mock(Event.class);
-
-        when(musicBrainzController.handleTextMessageEvent(textMessageContentMock))
-                .thenReturn(new TextMessage("Yo"));
-    }
+    @Autowired
+    private MusicBrainzController musicBrainzController;
 
     @Test
-    public void testContextLoads() {
+    void testContextLoads() {
         assertNotNull(musicBrainzController);
     }
 
     @Test
     void testHandleTextMessageEvent() {
-        TextMessage reply = musicBrainzController.handleTextMessageEvent(textMessageContentMock);
-        assertEquals("Yo", reply.getText());
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
 
+        TextMessage reply = musicBrainzController.handleTextMessageEvent(event);
+
+        assertEquals("Lorem Ipsum", reply.getText());
     }
 
     @Test
     void testHandleDefaultMessage() {
-        eventMock.getSource();
-        eventMock.getTimestamp();
+        Event event = mock(Event.class);
 
-        verify(eventMock, atLeastOnce()).getSource();
-        verify(eventMock, atLeastOnce()).getTimestamp();
+        event.getSource();
+        event.getTimestamp();
+
+        musicBrainzController.handleDefaultMessage(event);
+
+        verify(event, Mockito.atLeastOnce()).getSource();
+        verify(event, Mockito.atLeastOnce()).getTimestamp();
     }
 }
