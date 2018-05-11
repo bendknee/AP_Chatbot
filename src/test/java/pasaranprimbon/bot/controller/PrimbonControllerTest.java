@@ -41,11 +41,11 @@ public class PrimbonControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo 1800-01-31");
+                EventTestUtil.createDummyTextMessage("/echo 1981-09-12");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
-        assertEquals("Jumat Pon", reply.getText());
+        assertEquals("Sabtu Legi", reply.getText());
     }
 
     @Test
