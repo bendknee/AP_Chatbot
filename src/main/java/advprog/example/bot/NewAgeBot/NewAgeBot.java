@@ -1,24 +1,25 @@
 package advprog.example.bot.NewAgeBot;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class NewAgeBot {
 
-    HashMap<Integer, String> chart;
-    String artist;
+    List<NewAgeAlbum> chart;
+    String find;
 
     public HashMap<Integer, String> getChart(){
-
+        return null;
     }
 
     public boolean isExist() {
-        for(int i = 0; i< )
+        for(NewAgeAlbum a : chart) {
+            if(a.getArtist().toLowerCase().contains(find.toLowerCase())) {
+                return true;
+            }
+        }
+
+        return false;
     }
-
-    public HashMap<Integer, String> getAllArtis() {
-
-    }
-
-
 
 }
