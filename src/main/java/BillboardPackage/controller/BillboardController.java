@@ -28,18 +28,18 @@ public class BillboardController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String textContext = content.getText();
-        String parser = textContext.substring(0,18);
-        String artist = textContext.substring(19,textContext.length());
+        String parser = textContext.substring(0,19);
+        String artist = textContext.substring(20,textContext.length());
         try {
             if (!parser.equals("/billboard bill200")) {
                 throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException e) {
-            return new TextMessage("Command not found for " + content.getText());
+            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         String result = cekArtis(artist);
         if (result == null) {
-            return new TextMessage("Command not found for " + content.getText());
+            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         return new TextMessage(result);
     }
