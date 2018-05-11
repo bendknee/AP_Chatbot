@@ -1,4 +1,4 @@
-package advprog.example.bot;
+package pasaranprimbon.bot;
 
 import java.util.logging.Logger;
 
@@ -13,5 +13,22 @@ public class BotExampleApplication {
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
         SpringApplication.run(BotExampleApplication.class, args);
+    }
+
+    public String dayGetter(int dayDifference) {
+        ArrayList<String> dayList = new ArrayList<String>() {{
+            add("Rabu");
+            add("Kamis");
+            add("Jumat");
+            add("Sabtu");
+            add("Minggu");
+            add("Senin");
+            add("Selasa");
+        }};
+
+        int day = dayDifference % 7;
+        String dayName = dayList.get(day);
+
+        return dayName;
     }
 }
