@@ -31,9 +31,8 @@ public class RecentTweetsControllerTest {
 
     @Test
     void testHandleTextMessageEvent() {
-        // TheObsessivePr1 is a dummy Twitter account with more than 5 tweets
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/tweet recent TheObsessivePr1");
+                EventTestUtil.createDummyTextMessage("/tweet recent twitterapi");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
         String[] arrayOfTweets = reply.getText().split("\n");
