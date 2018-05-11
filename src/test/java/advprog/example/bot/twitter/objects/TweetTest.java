@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TweetTest {
     @Test
-    public void parseJsonTest() {
+    public void parseJsonTest() throws Exception {
         TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
         String rawResponse = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json"
                 + "?screen_name=TheObsessivePr1");
@@ -24,7 +24,7 @@ public class TweetTest {
     }
 
     @Test
-    public void parseJsonListTest() {
+    public void parseJsonListTest() throws Exception {
         TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
         String rawResponse = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json"
                 + "?screen_name=TheObsessivePr1");

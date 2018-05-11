@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,7 @@ public class TwitterAPIHelperTest {
     @Test
     public void authTest() {
         TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
-        String response = instance.authenticate();
-        assertTrue(response.contains("Bearer "));
+        instance.authenticate();
     }
 
     @Test

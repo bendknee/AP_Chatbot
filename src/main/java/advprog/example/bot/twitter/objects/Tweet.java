@@ -19,7 +19,7 @@ public class Tweet {
         List<Object> original = json.toList();
 
         for (Object item : original) {
-            result.add(parseJson((JSONObject) item));
+            result.add(parseJson(new JSONObject(item)));
         }
         return result;
     }
@@ -40,14 +40,5 @@ public class Tweet {
 
     public String toString() {
         return text + " (" + timeStamp + ")";
-    }
-
-    public boolean equals(Object o) {
-        if (!(o instanceof Tweet)) {
-            return false;
-        }
-
-        Tweet obj = (Tweet) o;
-        return text.equals(obj.getText()) && timeStamp.equals(obj.getTimeStamp());
     }
 }
