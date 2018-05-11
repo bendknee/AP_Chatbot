@@ -1,4 +1,4 @@
-package advprog.example.bot;
+package advprog.billboard-200.bot;
 
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -6,9 +6,9 @@ import com.linecorp.bot.model.event.source.UserSource;
 
 import java.time.Instant;
 
-public class EventTestUtil {
+public class BotBillboard200Test {
 
-    private EventTestUtil() {
+    private BotBillboard200Test() {
         // Default private constructor
     }
 
