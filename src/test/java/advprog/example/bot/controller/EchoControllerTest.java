@@ -57,4 +57,7 @@ public class EchoControllerTest {
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
+    void test(){
+        String replyText = contentText.replace("/echo", "");
+    }
 }
