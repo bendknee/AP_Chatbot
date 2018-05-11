@@ -15,6 +15,10 @@ public class BotExampleApplication {
         SpringApplication.run(BotExampleApplication.class, args);
     }
 
+    public int dayDifferenceGetter(String tanggal) {
+        
+    }
+
     public String dayGetter(int dayDifference) {
         ArrayList<String> dayList = new ArrayList<String>() {{
             add("Rabu");
