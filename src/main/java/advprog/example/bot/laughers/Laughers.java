@@ -21,6 +21,7 @@ public class Laughers {
     public Laughers(String groupId, String userId) {
         this.groupId = groupId;
         this.userId = userId;
+        numberOfLaugh = 1;
     }
 
     // For UT purposes

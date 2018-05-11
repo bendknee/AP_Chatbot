@@ -22,6 +22,7 @@ public class LaughersManager {
     }
 
     public boolean checkMessageContainsLaughers(String message) {
+        message = message.toLowerCase();
         return message.contains("wkwk") | message.contains("haha");
     }
 
@@ -83,11 +84,16 @@ public class LaughersManager {
             }
 
             stringBuilder.append(" (");
-            stringBuilder.append((int) ((double) laughers.getNumberOfLaugh() /
+            stringBuilder.append((int) ((double) laughers.getNumberOfLaugh() * 100.0 /
                 (double) sumOfAllLaugh));
             stringBuilder.append("%)");
         }
 
-        return stringBuilder.toString();
+        String result = stringBuilder.toString();
+        if (result.equals("")) {
+            result = "Tidak ada yang ketawa";
+        }
+
+        return result;
     }
 }
