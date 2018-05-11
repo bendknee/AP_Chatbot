@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.linecorp.bot:line-bot-servlet:1.15.0'
     implementation 'com.linecorp.bot:line-bot-model:1.15.0'
     implementation 'com.linecorp.bot:line-bot-api-client:1.15.0'
+    implementation "org.json:json:20180130"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
