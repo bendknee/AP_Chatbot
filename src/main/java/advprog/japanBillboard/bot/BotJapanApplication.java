@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BotExampleApplication {
+public class BotJapanApplication {
 
     private static final Logger LOGGER = Logger.getLogger(BotExampleApplication.class.getName());
 
