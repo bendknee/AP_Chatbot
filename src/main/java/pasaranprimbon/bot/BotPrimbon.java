@@ -31,4 +31,19 @@ public class BotExampleApplication {
 
         return dayName;
     }
+
+    public String pasaranGetter(int dayDifference) {
+        ArrayList<String> pasaranList = new ArrayList<String>() {{
+            add("Pon");
+            add("Wage");
+            add("Kliwon");
+            add("Legi");
+            add("Pahing");
+        }};
+
+        int pasaran = dayDifference % 5;
+        String pasaranName = pasaranList.get(pasaran);
+
+        return pasaranName;
+    }
 }
