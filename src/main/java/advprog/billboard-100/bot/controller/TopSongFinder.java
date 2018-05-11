@@ -1,4 +1,4 @@
-package advprog.example.bot.controller;
+package advprog.billboard-100.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -10,9 +10,9 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import java.util.logging.Logger;
 
 @LineMessageHandler
-public class EchoController {
+public class TopSongFinder {
 
-    private static final Logger LOGGER = Logger.getLogger(EchoController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TopSongFinder.class.getName());
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -20,9 +20,16 @@ public class EchoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        if (contentText.equalsIgnoreCase("/billboard hot100")) {
+            return new TextMessage("(1) Darude - Sandstorm\r\n" 
+                    + "(2) Simon & Garfunkel - Scarborough Fair\r\n"
+                    + "(3) Lazy Town - We Are Number One\r\n" + "...\r\n" 
+                    + "(10) Christopher Tin - Sogno di Volare\r\n"
+                    + "");  
+        } else {
+            return new TextMessage("error");            
+        }
+        //process contentText to get the top 10 songs
     }
 
     @EventMapping
