@@ -10,6 +10,19 @@ public class BotExampleApplication {
 
     private static final Logger LOGGER = Logger.getLogger(BotExampleApplication.class.getName());
 
+    public String URLReader(String youtubeURL) {
+        Document doc;
+        Element body;
+        try {
+            doc = Jsoup.connect(youtubeURL).get();
+            return  doc.getElementsByTag("title").text();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
         SpringApplication.run(BotExampleApplication.class, args);
