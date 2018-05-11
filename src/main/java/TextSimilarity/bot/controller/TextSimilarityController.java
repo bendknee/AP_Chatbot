@@ -8,6 +8,9 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import java.util.logging.Logger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
 
 @LineMessageHandler
 public class TextSimilarityController {
@@ -18,16 +21,28 @@ public class TextSimilarityController {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
-        TextMessageContent content = event.getMessage();
-        String contentText = content.getText();
 
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        TextMessageContent content = event.getMessage();
+        String contentText = content.getText().replace("/echo", "");
+        String url = generateUrl(contentText);
+
+        return new TextMessage(contentText);
     }
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
                 event.getTimestamp(), event.getSource()));
+    }
+
+    public String generateUrl(String text) {
+        String[] arr = text.replace("/echo ", "").replace("/docs_sim ", "").split("'");
+        String text1 = arr[1].replace(" ", "%20");
+        String text2 = arr[3].replace(" ", "%20");
+        String url = "https://api.dandelion.eu/datatxt/sim/v1/?"
+                + "text1=" + text1 + "&"
+                + "text2=" + text2 + "&"
+                + "token=08267f9bb04e40dc94f6181ddc9e56f4";
+        return url;
     }
 }
