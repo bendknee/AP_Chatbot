@@ -10,8 +10,4 @@ public class LaughersController {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         return null;
     }
-
-    public void handleDefaultMessage(Event event) {
-
-    }
 }

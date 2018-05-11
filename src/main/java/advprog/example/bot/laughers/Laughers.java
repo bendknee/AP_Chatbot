@@ -11,30 +11,30 @@ public class Laughers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private long groupId;
-    private long userId;
+    private String groupId; // group started with C, room started with R, user started with U
+    private String userId;
     private long numberOfLaugh;
 
     protected Laughers() {
     }
 
-    public Laughers(long groupId, long userId) {
+    public Laughers(String groupId, String userId) {
         this.groupId = groupId;
         this.userId = userId;
     }
 
     // For UT purposes
-    public Laughers(long groupId, long userId, long numberOfLaugh) {
+    public Laughers(String groupId, String userId, long numberOfLaugh) {
         this.groupId = groupId;
         this.userId = userId;
         this.numberOfLaugh = numberOfLaugh;
     }
 
-    public long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 

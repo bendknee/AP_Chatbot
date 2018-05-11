@@ -18,7 +18,7 @@ public class LaughersManager {
         return message.contains("wkwk") | message.contains("haha");
     }
 
-    public void processMessage(String message, long groupId, long userId) {
+    public void processMessage(String message, String groupId, String userId) {
         if (checkMessageContainsLaughers(message)) {
             Optional<Laughers> laughersOptional =
                 laughersRepository.findByGroupIdAndUserId(groupId, userId);
@@ -33,7 +33,7 @@ public class LaughersManager {
         }
     }
 
-    public String getTop5LaughersInGroup(long groupId) {
+    public String getTop5Laughers(String groupId) {
         List<Laughers> laughersList =
             laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
         StringBuilder stringBuilder = new StringBuilder();

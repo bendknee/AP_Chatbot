@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface LaughersRepository extends CrudRepository<Laughers, Long> {
 
-    List<Laughers> findByGroupIdOrderByNumberOfLaughDesc(long groupId);
-    Optional<Laughers> findByGroupIdAndUserId(long groupId, long userId);
+    List<Laughers> findByGroupIdOrderByNumberOfLaughDesc(String groupId);
+    Optional<Laughers> findByGroupIdAndUserId(String groupId, String userId);
 }
