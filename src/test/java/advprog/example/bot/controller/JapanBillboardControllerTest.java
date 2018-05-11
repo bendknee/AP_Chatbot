@@ -42,7 +42,7 @@ public class JapanBillboardControllerTest {
 
         TextMessage reply = japanBillboardController.handleTextMessageEvent(event);
 
-        assertEquals(reply.getText(), "(1) Me - Always Me");
+        assertEquals(reply.getText(), "(1) You and Me - Always Me");
     }
 
     @Test
