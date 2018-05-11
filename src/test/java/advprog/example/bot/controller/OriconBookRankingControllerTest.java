@@ -43,16 +43,16 @@ public class OriconBookRankingControllerTest {
         eventMock = mock(Event.class);
 
         when(languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock))
-                .thenReturn(new TextMessage("(1) Book Title A - Author A - 2017-01-01 - 12345
-                (2) Book Title B - Author B - 2017-01-01 - 12345
-                (3) Book Title C - Author C - 2017-01-01 - 12345
-                (4) Book Title D - Author D - 2017-01-01 - 12345
-                (5) Book Title E - Author E - 2017-01-01 - 12345
-                (6) Book Title F - Author F - 2017-01-01 - 12345
-                (7) Book Title G - Author G - 2017-01-01 - 12345
-                (8) Book Title H - Author H - 2017-01-01 - 12345
-                (9) Book Title I - Author I - 2017-01-01 - 12345
-                (10) Book Title J - Author J - 2017-01-01 - 12345"));
+                .thenReturn(new TextMessage("(1) Book Title A - Author A - 2017-01-01 - 12345\n" +
+                "(2) Book Title B - Author B - 2017-01-01 - 12345\n" +
+                "(3) Book Title C - Author C - 2017-01-01 - 12345\n" +
+                "(4) Book Title D - Author D - 2017-01-01 - 12345\n" +
+                "(5) Book Title E - Author E - 2017-01-01 - 12345\n" +
+                "(6) Book Title F - Author F - 2017-01-01 - 12345\n" +
+                "(7) Book Title G - Author G - 2017-01-01 - 12345\n" +
+                "(8) Book Title H - Author H - 2017-01-01 - 12345\n" +
+                "(9) Book Title I - Author I - 2017-01-01 - 12345\n" +
+                "(10) Book Title J - Author J - 2017-01-01 - 12345"));
     }
 
     @Test
@@ -64,16 +64,16 @@ public class OriconBookRankingControllerTest {
     public void testHandleTextMessageEvent() {
         TextMessage reply = languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock);
 
-        assertEquals("(1) Book Title A - Author A - 2017-01-01 - 12345
-                (2) Book Title B - Author B - 2017-01-01 - 12345
-                (3) Book Title C - Author C - 2017-01-01 - 12345
-                (4) Book Title D - Author D - 2017-01-01 - 12345
-                (5) Book Title E - Author E - 2017-01-01 - 12345
-                (6) Book Title F - Author F - 2017-01-01 - 12345
-                (7) Book Title G - Author G - 2017-01-01 - 12345
-                (8) Book Title H - Author H - 2017-01-01 - 12345
-                (9) Book Title I - Author I - 2017-01-01 - 12345
-                (10) Book Title J - Author J - 2017-01-01 - 12345", reply.getText());
+        assertEquals("(1) Book Title A - Author A - 2017-01-01 - 12345\n" +
+                "(2) Book Title B - Author B - 2017-01-01 - 12345\n" +
+                "(3) Book Title C - Author C - 2017-01-01 - 12345\n" +
+                "(4) Book Title D - Author D - 2017-01-01 - 12345\n" +
+                "(5) Book Title E - Author E - 2017-01-01 - 12345\n" +
+                "(6) Book Title F - Author F - 2017-01-01 - 12345\n" +
+                "(7) Book Title G - Author G - 2017-01-01 - 12345\n" +
+                "(8) Book Title H - Author H - 2017-01-01 - 12345\n" +
+                "(9) Book Title I - Author I - 2017-01-01 - 12345\n" +
+                "(10) Book Title J - Author J - 2017-01-01 - 12345", reply.getText());
     }
 
     @Test
