@@ -1,17 +1,24 @@
 package advprog.example.bot.laughers;
 
+import com.linecorp.bot.client.LineMessagingClient;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class LaughersManager {
 
     private LaughersRepository laughersRepository;
+    private LineMessagingClient lineMessagingClient;
 
     @Autowired
-    public LaughersManager(LaughersRepository laughersRepository) {
+    public LaughersManager(LaughersRepository laughersRepository,
+                           LineMessagingClient lineMessagingClient) {
         this.laughersRepository = laughersRepository;
+        this.lineMessagingClient = lineMessagingClient;
     }
 
     public boolean checkMessageContainsLaughers(String message) {
@@ -49,9 +56,35 @@ public class LaughersManager {
 
             stringBuilder.append(i + 1);
             stringBuilder.append(". ");
-            stringBuilder.append(laughers.getUserId());
+
+            try {
+                switch (laughers.getGroupId().charAt(0)) {
+                    case 'C':
+                        stringBuilder.append(lineMessagingClient
+                                                 .getGroupMemberProfile(groupId,
+                                                                        laughers.getUserId())
+                                                 .get().getDisplayName());
+                        break;
+                    case 'R':
+                        stringBuilder.append(lineMessagingClient
+                                                 .getRoomMemberProfile(groupId,
+                                                                       laughers.getUserId())
+                                                 .get().getDisplayName());
+                        break;
+                    case 'U':
+                    default:
+                        stringBuilder.append(lineMessagingClient
+                                                 .getProfile(laughers.getUserId())
+                                                 .get().getDisplayName());
+                        break;
+                }
+            } catch (Exception e) {
+                return "Error when get user profile name";
+            }
+
             stringBuilder.append(" (");
-            stringBuilder.append((int) ((double) laughers.getNumberOfLaugh() / (double) sumOfAllLaugh));
+            stringBuilder.append((int) ((double) laughers.getNumberOfLaugh() /
+                (double) sumOfAllLaugh));
             stringBuilder.append("%)");
         }
 
