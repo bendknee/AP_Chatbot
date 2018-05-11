@@ -8,9 +8,11 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import java.util.logging.Logger;
+import java.math.BigDecimal;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.JSONObject;
 
 @LineMessageHandler
 public class TextSimilarityController {
@@ -26,8 +28,9 @@ public class TextSimilarityController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         String url = generateUrl(contentText);
-
-        return new TextMessage(contentText);
+        String result = requestResult(url);
+        System.out.println("RESULT : " + result);
+        return new TextMessage(result);
     }
 
     @EventMapping
@@ -59,5 +62,39 @@ public class TextSimilarityController {
         }
 
         return url;
+    }
+
+    public String requestResult(String url) {
+        try {
+            URL urlObj = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            System.out.println("Response Code : " + connection.getResponseCode());
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String inputLine = "";
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = input.readLine()) != null) {
+                response.append(inputLine);
+            }
+            input.close();
+
+            System.out.println(response.toString());
+
+            String similarity = getSimilarity(response.toString());
+
+            return new BigDecimal(similarity).multiply(new BigDecimal(100)).toString()
+                    .substring(0, 5) + "%";
+        }
+        catch (Exception e) {
+            return "ERROR!";
+        }
+    }
+
+    public String getSimilarity(String response) {
+        int index = response.indexOf("similarity") + 12;
+        return response.substring(index, index + 6);
     }
 }
