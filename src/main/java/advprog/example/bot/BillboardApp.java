@@ -6,12 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JapanBotBillBoard {
+public class BillboardApp {
 
-    private static final Logger LOGGER = Logger.getLogger(JapanBotBillBoard.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(BillboardApp.class.getName());
 
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
-        SpringApplication.run(JapanBotBillBoard.class, args);
+        SpringApplication.run(BillboardApp.class, args);
     }
 }

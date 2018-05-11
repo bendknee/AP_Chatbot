@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 @LineMessageHandler
-public class JapanBillboardController {
+public class BillboardController {
 
     private static final Logger LOGGER = Logger.getLogger(JapanBillboardController.class.getName());
     private static final String[] jsonRequest;
