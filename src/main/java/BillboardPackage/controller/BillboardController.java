@@ -20,8 +20,6 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 public class BillboardController {
     private static final Logger LOGGER = Logger.getLogger(BillboardController.class.getName());
 
-    private static final RestTemplate restTemplate = new RestTemplate();
-
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
@@ -38,7 +36,7 @@ public class BillboardController {
             return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         String result = cekArtis(artist);
-        if (result == null) {
+        if (result == "") {
             return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
         return new TextMessage(result);
@@ -54,11 +52,11 @@ public class BillboardController {
     @EventMapping
     public static String cekArtis(String artis) throws IOException {
         Document doc = Jsoup.connect("https://www.billboard.com/charts/billboard-200").get();
-        Elements containers = doc.select(".chart-row__artist");
+        Elements containers = doc.select(".chart-row__title");
         String hasil = "";
         for (int i = 0; i < 200; i++) {
             Element elements = containers.get(i);
-            if (elements.text().equalsIgnoreCase(artis)) {
+            if (elements.select(".chart-row__artist").text().equalsIgnoreCase(artis)) {
                 hasil += "\n"+elements.select(".chart-row__artist").text() + "\n" +
                         elements.select(".chart-row__song").text() + "\n" + "Position : " + (i + 1) + "\n";
             }
