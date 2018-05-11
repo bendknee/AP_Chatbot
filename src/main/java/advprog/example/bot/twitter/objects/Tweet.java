@@ -3,39 +3,51 @@ package advprog.example.bot.twitter.objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class Tweet {
     private String text;
-    private Calendar timeStamp;
+    private String timeStamp;
 
-    public Tweet(String text, Calendar timeStamp) {
+    public Tweet(String text, String timeStamp) {
         this.text = text;
         this.timeStamp = timeStamp;
     }
 
     public static List<Tweet> parseJsonList(JSONArray json) {
-        return null;
+        List<Tweet> result = new ArrayList<Tweet>();
+        List<Object> original = json.toList();
+
+        for (Object item : original) {
+            result.add(parseJson((JSONObject) item));
+        }
+        return result;
     }
 
     public static Tweet parseJson(JSONObject json) {
-        return null;
+        String text = json.getString("text");
+        String timeStamp = json.getString("created_at");
+        return new Tweet(text, timeStamp);
     }
 
     public String getText() {
         return text;
     }
 
-    public Calendar getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
     public String toString() {
-        return null;
+        return text + " (" + timeStamp + ")";
     }
 
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof Tweet)) {
+            return false;
+        }
+
+        Tweet obj = (Tweet) o;
+        return text.equals(obj.getText()) && timeStamp.equals(obj.getTimeStamp());
     }
 }
