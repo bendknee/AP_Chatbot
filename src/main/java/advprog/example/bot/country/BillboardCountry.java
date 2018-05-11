@@ -28,8 +28,8 @@ public class BillboardCountry {
             Elements links = docs.getElementsByClass("chart-row");
             for (int i = 0; i < 10; i++) {
                 Element elem = links.get(i);
-                String name = elem.getElementsByClass("chart-row_song").html();
-                String artist = elem.getElementsByClass("chart-row__artis").html();
+                String name = elem.getElementsByClass("chart-row__song").html();
+                String artist = elem.getElementsByClass("chart-row__artist").html();
 
                 String formattedNames = Parser.unescapeEntities(name, false);
                 String formattedArtists = Parser.unescapeEntities(artist, false);
