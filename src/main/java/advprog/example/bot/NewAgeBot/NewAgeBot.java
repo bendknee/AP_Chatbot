@@ -7,8 +7,9 @@ public class NewAgeBot {
 
     List<NewAgeAlbum> chart;
     String find;
+    String url;
 
-    public HashMap<Integer, String> getChart(){
+    public List<NewAgeAlbum> getChart(){
         return null;
     }
 
@@ -20,6 +21,14 @@ public class NewAgeBot {
         }
 
         return false;
+    }
+
+    public String getFavArtist(){
+
+    }
+
+    public String getUrl() {
+
     }
 
 }
