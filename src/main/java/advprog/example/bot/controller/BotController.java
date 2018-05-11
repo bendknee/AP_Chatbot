@@ -34,9 +34,9 @@ public class BotController {
                 return new TextMessage(args);
             case "/sentiment":
                 return SentimentCommand.execute(args);
+            default:
+                return handleDefaultMessageEvent(event);
         }
-
-        return handleDefaultMessageEvent(event);
     }
 
     @EventMapping

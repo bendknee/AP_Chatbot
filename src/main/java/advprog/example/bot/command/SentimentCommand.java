@@ -1,7 +1,9 @@
 package advprog.example.bot.command;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
@@ -30,25 +32,25 @@ public class SentimentCommand {
         }
 
         double score = optScore.get();
-        return new TextMessage(String.format("Sentiment: %.2f%%", score*100.0));
+        return new TextMessage(String.format("Sentiment: %.2f%%", score * 100.0));
     }
 
     private static Optional<Double> getSentimentScore(String text) {
-        Optional<Map<String, Object>> optJson = getSentimentJson(text);
+        Optional<JsonNode> optJson = getSentimentJson(text);
 
         if (!optJson.isPresent()) {
             return Optional.empty();
         }
 
-        Map<String, Object> json = optJson.get();
-        List<Object> documents = (List)json.get("documents");
-        Map<String, Object> document = (Map<String, Object>)documents.get(0);
-        Double sentimentScore = (Double)document.get("score");
+        JsonNode json = optJson.get();
+        ArrayNode documents = (ArrayNode)json.get("documents");
+        JsonNode document = documents.get(0);
+        Double sentimentScore = document.get("score").asDouble();
 
         return Optional.of(sentimentScore);
     }
 
-    private static Optional<Map<String, Object>> getSentimentJson(String text) {
+    private static Optional<JsonNode> getSentimentJson(String text) {
         String url = "https://westcentralus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
 
         Map<String,String> document = new HashMap<>();
@@ -82,6 +84,7 @@ public class SentimentCommand {
 
             int responseCode = con.getResponseCode();
             if (responseCode != 200) {
+                System.out.println("(ERROR) RESPONSE CODE: " + responseCode);
                 return Optional.empty();
             }
 
@@ -93,10 +96,9 @@ public class SentimentCommand {
 
             con.disconnect();
 
-            Map<String, Object> map = new ObjectMapper().readValue(output,
-                    new TypeReference<Map<String, Object>>(){});
+            JsonNode jsonNode = new ObjectMapper().readTree(output);
 
-            return Optional.of(map);
+            return Optional.of(jsonNode);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,11 +2,11 @@ package advprog.example.bot.command;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
-
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
-import com.linecorp.bot.model.message.Message;
+import org.junit.jupiter.api.Test;
+
 
 
 public class SentimentCommandTest {
