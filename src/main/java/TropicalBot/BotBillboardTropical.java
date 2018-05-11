@@ -1,4 +1,4 @@
-package advprog.example.bot;
+package TropicalBot;
 
 import java.util.logging.Logger; 
 
