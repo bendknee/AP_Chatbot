@@ -41,4 +41,8 @@ public class Laughers {
     public long getNumberOfLaugh() {
         return numberOfLaugh;
     }
+
+    public void incrementNumberOfLaugh() {
+        this.numberOfLaugh++;
+    }
 }

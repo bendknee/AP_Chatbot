@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -55,13 +56,13 @@ public class LaughersManagerTest {
     @Test
     void testProcessMessageContainsLaughers() {
         laughersManager.processMessage("lucu wkwk haha", 1, 2);
-        verify(laughersRepository, atLeastOnce()).save();
+        verify(laughersRepository, atLeastOnce()).save(any());
     }
 
     @Test
     void testProcessMessageNotContainsLaughers() {
         laughersManager.processMessage("kerja!", 1, 2);
-        verify(laughersRepository, never()).save();
+        verify(laughersRepository, never()).save(any());
     }
 
     @Test
@@ -69,7 +70,7 @@ public class LaughersManagerTest {
         List<Laughers> laughers = new ArrayList<>();
         laughers.add(new Laughers(1, 2, 3));
         laughers.add(new Laughers(1, 3, 2));
-        doReturn(laughers).when(laughersRepository).findByGroupId(1);
+        doReturn(laughers).when(laughersRepository).findByGroupIdOrderByNumberOfLaughDesc(1);
 
         assertEquals("1. Endrawan (60%)\n2. Andika (40%)", laughersManager.getTop5LaughersInGroup(1));
     }
