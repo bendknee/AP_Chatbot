@@ -3,7 +3,7 @@ package advprog.example.bot;
 
 import java.util.HashMap;
 
-public class NewAgeBot {
+public class HotCountryBot {
 
     public HashMap<Integer, String> getChart(){
 
