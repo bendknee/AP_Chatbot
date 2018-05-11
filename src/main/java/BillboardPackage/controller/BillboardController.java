@@ -1,4 +1,4 @@
-package BillboardPackage.controller;
+package BillboardPackage.controller.Controller;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
