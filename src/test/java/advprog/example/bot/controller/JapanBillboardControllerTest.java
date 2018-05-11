@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 @RunWith( SpringJUnit4ClassRunner.class )
 public class JapanBillboardControllerTest {
     @Autowired
-    JapanBillboardController japanBillboardController;
+    BillboardController japanBillboardController;
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
