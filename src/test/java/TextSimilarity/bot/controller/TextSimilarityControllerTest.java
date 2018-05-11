@@ -41,11 +41,13 @@ public class TextSimilarityControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+                EventTestUtil.createDummyTextMessage("/echo /docs_sim "
+                        + "'Cameron wins the Oscar' "
+                        + "'All nominees for the Academy Awards'");
 
         TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals("72.01%", reply.getText());
     }
 
     @Test
