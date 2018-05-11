@@ -32,7 +32,7 @@ public class BotTropicalTest {
 
         TextMessage reply = BotTropicalTest.handleTextMessageEvent(event);
 
-        assertEquals(reply.getText(), "(1) Me - Always Me");
+        assertEquals(reply.getText(), "(1) Me and You - Always Me");
     }
     @Test
     public void testHandleDefaultMessage() {
