@@ -1,4 +1,4 @@
-package advprog.billboard.japan.controller;
+package JapanBillboard.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
