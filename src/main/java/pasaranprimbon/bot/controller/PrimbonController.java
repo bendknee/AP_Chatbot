@@ -1,11 +1,13 @@
 package pasaranprimbon.bot.controller;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.apache.tomcat.jni.Local;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -50,7 +52,13 @@ public class PrimbonController {
 
         long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
         int diffInt = (int) diff;
-        System.out.println(diffInt);
+
+        // error in java localdate, 1900 is considered lapyear
+        LocalDate lapYearError = LocalDate.of(0, 02, 28);
+        if (givenDate.isAfter(lapYearError)) {
+            diffInt--;
+        }
+
         return diffInt;
     }
 
