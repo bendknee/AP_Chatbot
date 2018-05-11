@@ -43,16 +43,16 @@ public class OriconComicRankingControllerTest {
         eventMock = mock(Event.class);
 
         when(languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock))
-                .thenReturn(new TextMessage("(1) 進撃の巨人 - (画)諫山創
-                (2) 僕のヒーローアカデミア - (画)堀越耕平
-                (3) Book Title H - Author H
-                (4) Book Title G - Author G
-                (5) Book Title F - Author F
-                (6) Book Title E - Author E
-                (7) Book Title D - Author D
-                (8) Book Title C - Author C
-                (9) Book Title B - Author B
-                (10) Book Title A - Author A"));
+                .thenReturn(new TextMessage("(1) 進撃の巨人 - (画)諫山創\n"+
+                "(2) 僕のヒーローアカデミア - (画)堀越耕平\n"+
+                "(3) Book Title H - Author H\n"+
+                "(4) Book Title G - Author G\n"+
+                "(5) Book Title F - Author F\n"+
+                "(6) Book Title E - Author E\n"+
+                "(7) Book Title D - Author D\n"+
+                "(8) Book Title C - Author C\n"+
+                "(9) Book Title B - Author B\n"+
+                "(10) Book Title A - Author A"));
     }
 
     @Test
@@ -64,16 +64,16 @@ public class OriconComicRankingControllerTest {
     public void testHandleTextMessageEvent() {
         TextMessage reply = languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock);
 
-        assertEquals("(1) 進撃の巨人 - (画)諫山創
-                (2) 僕のヒーローアカデミア - (画)堀越耕平
-                (3) Book Title H - Author H
-                (4) Book Title G - Author G
-                (5) Book Title F - Author F
-                (6) Book Title E - Author E
-                (7) Book Title D - Author D
-                (8) Book Title C - Author C
-                (9) Book Title B - Author B
-                (10) Book Title A - Author A", reply.getText());
+        assertEquals("(1) 進撃の巨人 - (画)諫山創\n"+
+                "(2) 僕のヒーローアカデミア - (画)堀越耕平\n"+
+                "(3) Book Title H - Author H\n"+
+                "(4) Book Title G - Author G\n"+
+                "(5) Book Title F - Author F\n"+
+                "(6) Book Title E - Author E\n"+
+                "(7) Book Title D - Author D\n"+
+                "(8) Book Title C - Author C\n"+
+                "(9) Book Title B - Author B\n"+
+                "(10) Book Title A - Author A", reply.getText());
     }
 
     @Test
