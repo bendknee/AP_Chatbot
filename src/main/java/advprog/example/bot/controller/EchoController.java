@@ -30,4 +30,12 @@ public class EchoController {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
                 event.getTimestamp(), event.getSource()));
     }
+
+    public void test(){
+      String replyText = contentText.replace("/echo", "");
+    }
 }
+
+
+
+//test
