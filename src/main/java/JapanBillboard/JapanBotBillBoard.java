@@ -1,4 +1,4 @@
-package JapanBillboard.controller;
+package JapanBillboard;
 
 import java.util.logging.Logger; 
 

@@ -6,38 +6,40 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+
+import java.io.IOException;
 import java.util.logging.Logger;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.client.RestTemplate;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 @LineMessageHandler
 public class JapanBillboardController {
 
     private static final Logger LOGGER = Logger.getLogger(JapanBillboardController.class.getName());
-    private static final String[] jsonRequest;
-
-    static {
-        jsonRequest = new String[]{"posts", "comments", "albums", "photos", "todos", "user"};
-    }
-
-    private static final RestTemplate restTemplate = new RestTemplate();
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
+        String textContext = content.getText();
+        String parser = textContext.substring(0,19);
+        String artist = textContext.substring(20,textContext.length());
         try {
-            if (!content.getText().equals("/billboard japan100")) {
+            if (!parser.equals("/billboard japan100")) {
                 throw new IllegalArgumentException();
             }
-            String replyText = getJsonObject();
-            //replyText = restTemplate.getForObject(ApiCommand.getCommand(), String.class);
-            return new TextMessage(replyText);
         } catch (IllegalArgumentException e) {
-            return new TextMessage("Command not found for " + content.getText());
+            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
         }
-
+        String result = cekArtis(artist);
+        if (result == null) {
+            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
+        }
+        return new TextMessage(result);
 
     }
 
@@ -47,8 +49,18 @@ public class JapanBillboardController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    @GetMapping
-    public String getJsonObject() {
-        return "(1) Me - Always Me";
+    @EventMapping
+    public static String cekArtis(String artis) throws IOException {
+        Document doc = Jsoup.connect("https://www.billboard.com/charts/japan-hot-100").get();
+        Elements containers = doc.select(".chart-row__artist");
+        String hasil = "";
+        for (int i = 0; i < 200; i++) {
+            Element elements = containers.get(i);
+            if (elements.text().equalsIgnoreCase(artis)) {
+                hasil += "\n"+elements.select(".chart-row__artist").text() + "\n" +
+                        elements.select(".chart-row__song").text() + "\n" + "Position : " + (i + 1) + "\n";
+            }
+        }
+        return hasil;
     }
 }

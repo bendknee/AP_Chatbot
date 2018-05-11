@@ -1,4 +1,4 @@
-package advprog.billboard.japan.controller;
+package JapanBllboardTest.controller;
 
 import advprog.billboard.japan.EventTestUtil; 
 import advprog.billboard.japan.LineBillboardJapanApplication;
