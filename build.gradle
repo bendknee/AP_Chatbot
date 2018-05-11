@@ -39,6 +39,7 @@ repositories {
 }
 
 dependencies {
+    compile "commons-validator:commons-validator:1.6"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.linecorp.bot:line-bot-spring-boot:1.15.0"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5_version"
