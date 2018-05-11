@@ -7,6 +7,8 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -22,7 +24,12 @@ public class PrimbonController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        String replyText = contentText.replace("/echo", "");
+        String newContentText = contentText.replace("/echo", "");
+        int dayDifference = dayDifferenceGetter(newContentText);
+        String dayName = dayGetter(dayDifference);
+        String pasaranName = pasaranGetter(dayDifference);
+
+        String replyText = ">" + dayName + " " + pasaranName;
         return new TextMessage(replyText.substring(1));
     }
 
@@ -33,7 +40,15 @@ public class PrimbonController {
     }
 
     public int dayDifferenceGetter(String tanggal) {
+        SimpleDateFormat reference = new SimpleDateFormat("yyyy-MM-dd");
 
+        String[] tanggalan = tanggal.split("-");
+
+        Date referencedDate = new Date(1800, 01, 01);
+        Date givenDate = new Date(Integer.parseInt(tanggalan[0]), Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+
+        int diff = givenDate.getDate() - referencedDate.getDate();
+        return diff;
     }
 
     public String dayGetter(int dayDifference) {
