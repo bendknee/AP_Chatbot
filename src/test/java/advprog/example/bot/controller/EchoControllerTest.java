@@ -59,6 +59,9 @@ public class EchoControllerTest {
     }
     @Test
     void testHandleTextContent() throws Exception {
-        echoController.handleTextContentPublic();
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+        TextMessage reply = echoController.handleTextMessageEvent(event);
+        echoController.handleTextContentPublic("hehe", event, reply);
     }
 }

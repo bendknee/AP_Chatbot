@@ -32,14 +32,14 @@ public class EchoController {
     }
 
     @EventMapping
-    public void handleTextContentPublic() throws Exception {
-        handleTextContent();
+    public void handleTextContentPublic (String replyToken, Event event, TextMessage content) throws Exception {
+        handleTextContent(replyToken, event, content);
     }
 
     @EventMapping
-    private void handleTextContent()
+    private void handleTextContent(String replyToken, Event event, TextMessage content)
             throws Exception {
-//        String text = content.getText();
+        String text = content.getText();
 
 //        log.info("Got text message from {}: {}", replyToken, text);
 //        switch (text) {
