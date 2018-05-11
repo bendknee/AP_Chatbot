@@ -1,4 +1,4 @@
-package advprog.example.bot.controller;
+package advprog.billboard-newage.bot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,7 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import advprog.example.bot.EventTestUtil;
+import advprog.billboard-newage.bot.BotBillboardNewAgeTest;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-public class EchoControllerTest {
+public class TopSongFinderTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
@@ -31,28 +31,42 @@ public class EchoControllerTest {
     }
 
     @Autowired
-    private EchoController echoController;
+    private TopSongFinder topSongFinder;
 
     @Test
     void testContextLoads() {
-        assertNotNull(echoController);
+        assertNotNull(topSongFinder);
     }
 
     @Test
-    void testHandleTextMessageEvent() {
-        MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+    void testHandleTextMessageEventSuccess() {
+        MessageEvent<TextMessageContent> event = BotBillboardNewAgeTest
+                .createDummyTextMessage("/billboard newage");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = topSongFinder.handleTextMessageEvent(event);
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals("(1) Darude - Sandstorm\r\n" 
+                + "(2) Simon & Garfunkel - Scarborough Fair\r\n"
+                + "(3) Lazy Town - We Are Number One\r\n" + "...\r\n" 
+                + "(10) Christopher Tin - Sogno di Volare\r\n"
+                + "", reply.getText());
+    }
+    
+    @Test
+    void testHandleTextMessageEventError() {
+        MessageEvent<TextMessageContent> event = BotBillboardNewAgeTest
+                .createDummyTextMessage("/billboard newnew");
+
+        TextMessage reply = topSongFinder.handleTextMessageEvent(event);
+
+        assertEquals("error", reply.getText());
     }
 
     @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        echoController.handleDefaultMessage(event);
+        topSongFinder.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
