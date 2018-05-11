@@ -45,8 +45,8 @@ public class PrimbonController {
 
         String[] tanggalan = tanggal.split("-");
 
-        LocalDate referencedDate = new LocalDate.of(-100, 01, 01);
-        LocalDate givenDate = new LocalDate.of(Integer.parseInt(tanggalan[0]) - 1900, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+        LocalDate referencedDate = LocalDate.of(-100, 01, 01);
+        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 1900, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
         long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
         int diffInt = (int) diff;
