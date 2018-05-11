@@ -11,7 +11,8 @@ public class Tweet {
     private Calendar timeStamp;
 
     public Tweet(String text, Calendar timeStamp) {
-
+        this.text = text;
+        this.timeStamp = timeStamp;
     }
 
     public static List<Tweet> parseJsonList(JSONArray json) {
