@@ -1,4 +1,4 @@
-package country.bot.controller;
+package advprog.example.bot.controller;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
@@ -32,11 +32,18 @@ public class BotController {
 
         switch (replyText.substring(1)){
             case "billboard hotcountry":
-                Billboard10Country hottest100 = new Billboard10Country("https://www.billboard.com/charts/country-songs");
-                String toReply = hottest100.printTopTentList();
+                Billboard10Country hottest10 = new Billboard10Country("https://www.billboard.com/charts/country-songs");
+                String toReply = hottest10.printTopTentList();
                 String replyToken = event.getReplyToken();
 
                 reply(toReply, replyToken);
+                break;
+            default:
+                toReply = "Please Use a good input. E.g. /echo billboard hotcountry";
+                replyToken = event.getReplyToken();
+                reply(toReply, replyToken);
+                break;
+
 
         }
 
