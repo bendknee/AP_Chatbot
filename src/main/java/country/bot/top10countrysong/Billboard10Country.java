@@ -1,4 +1,4 @@
-package advprog.example.bot.country;
+package country.bot.top10countrysong;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 
-public class BillboardCountry {
+public class Billboard10Country {
     private String billboardUrl;
     private List<Song> topTenCountryList;
 
-    public BillboardCountry(String billboardUrl) {
+    public Billboard10Country(String billboardUrl) {
         this.billboardUrl = billboardUrl;
         topTenCountryList = new ArrayList<Song>();
         setTopTenCountrySongs(billboardUrl);

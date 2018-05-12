@@ -1,4 +1,4 @@
-package advprog.example.bot.country;
+package country.bot.top10countrysong;
 
 public class Song {
     private String name;
