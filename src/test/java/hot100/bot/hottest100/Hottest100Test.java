@@ -26,7 +26,7 @@ public class Hottest100Test {
 
     @Test
     public void printTop100List() {
-        String expectedOutput = hottest100.printTo100List();
+        String expectedOutput = hottest100.printTo50List();
         System.out.println(expectedOutput);
         assertTrue(expectedOutput.contains("Ariana"));
     }
@@ -37,8 +37,13 @@ public class Hottest100Test {
     }
 
     @Test
-    public void getTopTenTropicalList() {
+    public void getTop50SongList() {
+        List<Song> list = hottest100.getTop50Hottest();
+        assertEquals(50, list.size());
+    }
+    @Test
+    public void getTop100SongList() {
         List<Song> list = hottest100.getTop100Hottest();
-        assertEquals(100, list.size());
+        assertEquals(50, list.size());
     }
 }

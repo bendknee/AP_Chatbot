@@ -1,21 +1,12 @@
 package hot100.bot.hottests100;
 
 public class Song {
-    private String name;
     private String artists;
 
-    public Song(String name, String artists) {
-        this.name = name;
+    public Song(String artists) {
         this.artists = artists;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getArtists() {
         return artists;
@@ -26,6 +17,6 @@ public class Song {
     }
     @Override
     public String toString() {
-        return artists + " - " + name;
+        return artists;
     }
 }
