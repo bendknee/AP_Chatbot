@@ -15,13 +15,13 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 @LineMessageHandler
+@SuppressWarnings("serial")
 public class LanguageDetectionController {
     private static final Logger LOGGER = Logger.getLogger(LanguageDetectionController.class.getName());
     private static final String BASE_API_URL = "https://api.dandelion.eu/datatxt/li/v1";
     private static final String API_TOKEN = "60f7f393c0cd43cbb579b08f95a57700";
     private static final String COMMAND_REGEX = "^/detect_lang .*";
     private static final UrlValidator URL_VALIDATOR = new UrlValidator();
-
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -42,12 +42,22 @@ public class LanguageDetectionController {
 
             if (response != null) {
                 StringBuilder stringBuilder = new StringBuilder();
-                for (Language language : response.getDetectedLangs()) {
-                    Locale locale = new Locale("id", language.getLang());
+                Language[] detectedLangs = response.getDetectedLangs();
+                for (int i = 0; i < detectedLangs.length; i++) {
+                    String languageCode = detectedLangs[i].getLang();
+                    Locale locale = new Locale(languageCode.substring(0, 2));
 
-                    String countryName = locale.getDisplayCountry();
-                    int confidence = (int) language.getConfidence() * 100;
-                    stringBuilder.append(countryName + " (" + confidence + "%)\n");
+                    String countryName = locale.getDisplayLanguage();
+                    if (languageCode.length() > 2) {
+                        countryName += languageCode.substring(2, languageCode.length());
+                    }
+
+                    int confidence = (int) (detectedLangs[i].getConfidence() * 100);
+                    stringBuilder.append(countryName + " (" + confidence + "%)");
+
+                    if (i + 1 < detectedLangs.length) {
+                        stringBuilder.append("\n");
+                    }
                 }
 
                 return new TextMessage(stringBuilder.toString());
