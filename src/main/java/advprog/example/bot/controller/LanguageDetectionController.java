@@ -11,6 +11,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -19,14 +20,7 @@ public class LanguageDetectionController {
     private static final String BASE_API_URL = "https://api.dandelion.eu/datatxt/li/v1";
     private static final String API_TOKEN = "60f7f393c0cd43cbb579b08f95a57700";
     private static final String COMMAND_REGEX = "^/detect_lang .*";
-    private static final UrlValidator URL_VALIDATOR = new UrlValidator() {
-        @Override
-        public boolean isValid(String value) {
-            return super.isValid(value)
-                    || super.isValid("https://" + value)
-                    || super.isValid("http://" + value);
-        }
-    };
+    private static final UrlValidator URL_VALIDATOR = new UrlValidator();
 
 
     @EventMapping
@@ -35,7 +29,8 @@ public class LanguageDetectionController {
 
         if (command.matches(COMMAND_REGEX)) {
             command = command.replace("/detect_lang ", "");
-            String commandType = URL_VALIDATOR.isValid(command) ? "url" : "text";
+            String commandType = URL_VALIDATOR.isValid(command)
+                    || URL_VALIDATOR.isValid("http://" + command) ? "url" : "text";
 
             UriComponentsBuilder uriBuilder = UriComponentsBuilder
                     .fromUriString(BASE_API_URL)
@@ -45,7 +40,18 @@ public class LanguageDetectionController {
             RestTemplate restTemplate = new RestTemplate();
             Response response = restTemplate.getForObject(uriBuilder.toUriString(), Response.class);
 
-            return new TextMessage(response.getDetectedLangs()[0].getLang() + " " + response.getDetectedLangs()[0].getConfidence());
+            if (response != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (Language language : response.getDetectedLangs()) {
+                    Locale locale = new Locale("id", language.getLang());
+
+                    String countryName = locale.getDisplayCountry();
+                    int confidence = (int) language.getConfidence() * 100;
+                    stringBuilder.append(countryName + " (" + confidence + "%)\n");
+                }
+
+                return new TextMessage(stringBuilder.toString());
+            }
         }
 
         return new TextMessage("nope");
@@ -53,7 +59,8 @@ public class LanguageDetectionController {
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
-        // TODO : Implement this
+        LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
+                event.getTimestamp(), event.getSource()));
     }
 }
 
