@@ -54,10 +54,12 @@ public class HotCountryBot {
         return false;
     }
 
-    public String getFavArtist(){
-        for(HotCountrySong a : chart) {
-            if(isExist(find)) {
-                return a.songData();
+    public String getFavArtist() {
+        if (isExist(find)) {
+            for (HotCountrySong a : chart) {
+                if (a.getArtist().toLowerCase().contains(find.toLowerCase())) {
+                    return a.songData();
+                }
             }
         }
         return "SORRY! Your favorite artist is not on the list!";
