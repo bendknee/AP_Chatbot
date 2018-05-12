@@ -23,14 +23,13 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-@RunWith(SpringJUnit4ClassRunner.class)
 public class BillboardTest {
-    @Autowired
-    BillboardController billboardController;
+
+    private BillboardController billboardController = new BillboardController();
 
     static {
-        System.setProperty("line.bot.channelSecret", "SECRET");
-        System.setProperty("line.bot.channelToken", "TOKEN");
+        System.setProperty("line.bot.channelSecret", "3f43b356681d321342cbc7bf2464207c");
+        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzBRxRxc4m5dSWebWQmxKhPuc39t2zQcrkR8i0/EbEL/RKdKDJjmlDRAT5Byf7nIMNPMnVNphJSn4TaJSShtv1cPd7PcME3EL6qitcLV8aeMsrL18HcZ2Q9+PHNqTDESpDY4El2z9cZVQdB04t89/1O/w1cDnyilFU=");
     }
 
     @Test
@@ -41,11 +40,12 @@ public class BillboardTest {
     @Test
     public void testHandleTextMessageEvent() throws IOException {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/billboard billboard200");
+                EventTestUtil.createDummyTextMessage("/billboard bill200 Katy");
 
         TextMessage reply = billboardController.handleTextMessageEvent(event);
 
-        assertEquals(reply.getText(), "Post Malone");
+        assertEquals(reply.getText(), "Sorry, "
+                + "Artist Katy is not in the chart");
     }
 
     @Test
@@ -54,7 +54,9 @@ public class BillboardTest {
                 EventTestUtil.createDummyTextMessage("/BLABLABLA");
 
         TextMessage reply = billboardController.handleTextMessageEvent(event);
-        assertEquals("Command not found for /BLABLABLA", reply.getText());
+        assertEquals("Sorry input not valid the f"
+                + "ormat should be /billboard bill200 Artist"
+                + "Name", reply.getText());
     }
 
     @Test
@@ -67,12 +69,8 @@ public class BillboardTest {
         verify(event, atLeastOnce()).getTimestamp();
     }
 
-    @Test
-    public void applicationContextLoaded() {
-    }
-
-    @Test
+/*    @Test
     public void applicationContextTest() {
         BillboardApp.main(new String[]{});
-    }
+    }*/
 }
