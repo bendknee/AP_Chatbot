@@ -22,6 +22,13 @@ public class NewAgeBot {
         this.getChart();
     }
 
+    public NewAgeBot(String find) {
+        this.find = find;
+        this.url = "https://www.billboard.com/charts/new-age-albums";
+        this.chart = new ArrayList<>();
+        this.getChart();
+    }
+
     public List<NewAgeAlbum> getChart(){
         try {
             Document doc = Jsoup.connect(url).get();
