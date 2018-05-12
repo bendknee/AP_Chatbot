@@ -26,20 +26,23 @@ public class JapanBillboardController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String textContext = content.getText();
+        if (textContext.length() < 18) {
+            return new TextMessage("Sorry your input is not valid");
+        }
         String parser = textContext.substring(0,19);
         String artist = textContext.substring(20,textContext.length());
         try {
             if (!parser.equals("/billboard japan100")) {
                 throw new IllegalArgumentException();
             }
+            String result = cekArtis(artist);
+            if (result.equalsIgnoreCase("")) {
+                return new TextMessage("Sorry, Artist "+ artist+ " is not in the chart" );
+            }
+            return new TextMessage(result);
         } catch (IllegalArgumentException e) {
-            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
+            return new TextMessage("Sorry, Artist"+artist+ " is not available" );
         }
-        String result = cekArtis(artist);
-        if (result == "") {
-            return new TextMessage("Sorry, Artist "+ content.getText()+ " is not in the chart" );
-        }
-        return new TextMessage(result);
     }
 
     @EventMapping
