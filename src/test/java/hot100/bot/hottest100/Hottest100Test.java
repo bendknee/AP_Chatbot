@@ -1,12 +1,12 @@
-package advprog.example.bot.Hottest100;
+package hot100.bot.hottest100;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import advprog.example.bot.hottest100.Hottest100;
-import advprog.example.bot.hottest100.Song;
+import hot100.bot.hottests100.Hottest100;
+import hot100.bot.hottests100.Song;
 import org.junit.Before;
 import org.junit.Test;
 

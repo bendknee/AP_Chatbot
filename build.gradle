@@ -15,6 +15,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
     }
 }
 
@@ -50,6 +51,7 @@ dependencies {
     implementation 'com.linecorp.bot:line-bot-servlet:1.15.0'
     implementation 'com.linecorp.bot:line-bot-model:1.15.0'
     implementation 'com.linecorp.bot:line-bot-api-client:1.15.0'
+    compile 'org.jsoup:jsoup:1.11.3'
 }
 
 // Configure Checkstyle plugin

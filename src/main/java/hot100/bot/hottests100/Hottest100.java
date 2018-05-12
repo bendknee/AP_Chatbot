@@ -1,4 +1,4 @@
-package advprog.example.bot.hottest100;
+package hot100.bot.hottests100;
 import static java.lang.String.format;
 
 import java.io.IOException;

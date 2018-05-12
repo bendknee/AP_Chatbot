@@ -1,4 +1,4 @@
-package advprog.example.bot.hottest100;
+package hot100.bot.hottests100;
 
 public class Song {
     private String name;
