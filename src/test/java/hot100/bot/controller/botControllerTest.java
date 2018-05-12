@@ -58,4 +58,13 @@ public class botControllerTest {
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
+
+    @Test
+    void testInswitch() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo billboard hot100 ARTIST");
+        TextMessage reply = botController.handleTextMessageEvent(event);
+        assertNotNull(reply);
+
+    }
 }
