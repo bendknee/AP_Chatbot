@@ -23,6 +23,13 @@ public class HotCountryBot {
         this.getChart();
     }
 
+    public HotCountryBot(String find) {
+        this.find = find;
+        this.url = "https://www.billboard.com/charts/country-songs";
+        this.chart = new ArrayList<>();
+        this.getChart();
+    }
+
     public List<HotCountrySong> getChart(){
         try {
             Document doc = Jsoup.connect(url).get();
