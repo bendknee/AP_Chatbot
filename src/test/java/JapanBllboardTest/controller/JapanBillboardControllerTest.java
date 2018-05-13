@@ -31,7 +31,7 @@ public class JapanBillboardControllerTest {
                 + "ILbXbowKiis43NmW/285W84e7zAVPuW+L"
                 + "8ZZuiPyakJNVmzouENCttynmsFPVkQZEM5zDUGbjdkCW0WCK8ISqtlF9vQ3"
                 + "frGBsSbcR401NTPOiid0VFND71YhQdB04"
-                + "t89/1O/w1cDnyilFU=\n");
+                + "t89/1O/w1cDnyilFU=");
     }
 
     @Test
@@ -68,8 +68,8 @@ public class JapanBillboardControllerTest {
         verify(event, atLeastOnce()).getTimestamp();
     }
 
-/*    @Test
+    @Test
     public void applicationContextTest() {
         JapanBotBillBoard.main(new String[]{});
-    }*/
+    }
 }
