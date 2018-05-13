@@ -59,9 +59,9 @@ public class EchoControllerTest {
     }
 
     @Test
-    void testHadleTextForNewAge() {
+    void testHadleTextForHotCountry() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/newage Kane Brown");
+                EventTestUtil.createDummyTextMessage("/billboard hotcountry Kane Brown");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
