@@ -25,12 +25,13 @@ public class JapanBillboardControllerTest {
     JapanBillboardController japanBillboardController = new JapanBillboardController();
 
     static {
-        System.setProperty("line.bot.channelSecret", "3f43b356681d321342cbc7bf2464207c");
-        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzBRxRxc4m5dSWebW"
-                + "QmxKhPuc39t2zQcrkR8i0/EbEL/RKdKDJjmlDRAT5By"
-                + "f7nIMNPMnVNphJSn4TaJSShtv1cPd7PcME3EL6qitcLV8ae"
-                + "MsrL18HcZ2Q9+PHNqTDESpDY4El2z9cZVQdB04t8"
-                + "9/1O/w1cDnyilFU=");
+        System.setProperty("line.bot.channelSecret", "c30b82a49293"
+                + "b7c16a9bf6488b7d3e63");
+        System.setProperty("line.bot.channelToken", "g3S2UFypbYUxSPFjlgr0TA96yKG+R"
+                + "ILbXbowKiis43NmW/285W84e7zAVPuW+L"
+                + "8ZZuiPyakJNVmzouENCttynmsFPVkQZEM5zDUGbjdkCW0WCK8ISqtlF9vQ3"
+                + "frGBsSbcR401NTPOiid0VFND71YhQdB04"
+                + "t89/1O/w1cDnyilFU=\n");
     }
 
     @Test
