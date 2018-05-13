@@ -35,7 +35,8 @@ public class CommandPattern {
             Matcher matcher = pattern.matcher(command);
 
             if (matcher.matches()) {
-                message = store.get(pattern).composeMessage(command, userId);
+                String arg = matcher.group(2);
+                message = store.get(pattern).composeMessage(arg, userId);
 
                 break;
             }
