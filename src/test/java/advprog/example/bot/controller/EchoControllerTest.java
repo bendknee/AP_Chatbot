@@ -57,4 +57,14 @@ public class EchoControllerTest {
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
+
+    @Test
+    void testHadleTextForNewAge() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/newage Kane Brown");
+
+        TextMessage reply = echoController.handleTextMessageEvent(event);
+
+        assertEquals("Kane Brown\nHeaven\n2", reply.getText());
+    }
 }
