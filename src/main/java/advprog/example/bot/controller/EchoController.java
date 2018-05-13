@@ -32,11 +32,18 @@ public class EchoController {
 
         String input = splitContent[1];
 
+
         if(command.equals("/echo")) {
             return new TextMessage(input);
-        } else if (command.equals("/newage")) {
-            NewAgeBot nab = new NewAgeBot(input);
-            return new TextMessage(nab.getFavArtist());
+        } else if (command.equals("/billboard")) {
+            String[] input2 = input.split(" ", 2);
+
+            String command2 = input2[0];
+            if(command2.toLowerCase().equals("newage")) {
+                String artist = input2[1];
+                NewAgeBot nab = new NewAgeBot(artist);
+                return new TextMessage(nab.getFavArtist());
+            }
         }
 
         return handleDefaultMessage(event);
