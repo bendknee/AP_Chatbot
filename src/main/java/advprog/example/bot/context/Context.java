@@ -15,7 +15,7 @@ public class Context {
         store.put(key, value);
     }
 
-    public static String removeContext(String key) {
+    public static String popContext(String key) {
         String value = null;
 
         if (store != null) {
