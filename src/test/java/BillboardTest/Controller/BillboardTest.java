@@ -1,19 +1,15 @@
 package BillboardTest.Controller;
 
 import advprog.example.bot.EventTestUtil;
-import BillboardPackage.BillboardApp;
-import BillboardPackage.controller.BillboardController;
+import billboardpackage.controller.BillboardController;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
@@ -29,7 +25,11 @@ public class BillboardTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "3f43b356681d321342cbc7bf2464207c");
-        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzBRxRxc4m5dSWebWQmxKhPuc39t2zQcrkR8i0/EbEL/RKdKDJjmlDRAT5Byf7nIMNPMnVNphJSn4TaJSShtv1cPd7PcME3EL6qitcLV8aeMsrL18HcZ2Q9+PHNqTDESpDY4El2z9cZVQdB04t89/1O/w1cDnyilFU=");
+        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzB"
+                + "RxRxc4m5dSWebWQmxKhPuc39t2zQcrkR8i0/EbE"
+                + "L/RKdKDJjmlDRAT5Byf7nIMNPMnVNphJSn4TaJSS"
+                + "htv1cPd7PcME3EL6qitcLV8aeMsrL18HcZ2Q9+PHNq"
+                + "TDESpDY4El2z9cZVQdB04t89/1O/w1cDnyilFU=");
     }
 
     @Test
