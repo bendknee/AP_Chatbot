@@ -1,30 +1,20 @@
 package advprog.example.bot.controller;
 
-import static advprog.example.bot.EventTestUtil.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import advprog.example.bot.EventTestUtil;
-
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
-
-import hot100.bot.hottests100.Hottest100;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import static advprog.example.bot.EventTestUtil.createDummyTextMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -51,7 +41,7 @@ public class BotControllerTest {
 
         TextMessage reply = botController.handleTextMessageEvent(event);
 
-        assertEquals("Please Use a good input. E.g. /echo billboard hotcountry", reply.getText());
+        assertEquals("Please Use a good input. E.g. /echo billboard hot100 [NAME OF ARTIST]", reply.getText());
     }
 
     @Test
@@ -67,7 +57,7 @@ public class BotControllerTest {
     @Test
     void testInswitch() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo billboard hot100 ARTIST");
+                EventTestUtil.createDummyTextMessage("/echo billboard hot100 Ed Sheeran");
         TextMessage reply = botController.handleTextMessageEvent(event);
         assertNotNull(reply);
 

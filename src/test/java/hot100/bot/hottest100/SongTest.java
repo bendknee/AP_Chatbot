@@ -15,19 +15,19 @@ public class SongTest {
 
     @Before
     public void setUp() {
-        song = new Song("Zulia");
+        song = new Song("Zulia", "HEHE");
     }
 
     @Test
     public void returnArtistTest() {
-        String artist = song.getArtists();
+        String artist = song.getArtist();
         assertEquals(artist, "Zulia");
     }
 
     @Test
     public void setNameTest() {
-        song.setArtists("Delfa");
-        String artistNew = song.getArtists();
+        song.setArtist("Delfa");
+        String artistNew = song.getArtist();
         assertEquals(artistNew, "Delfa");
     }
 }

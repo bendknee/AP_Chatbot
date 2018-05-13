@@ -16,20 +16,15 @@ public class Hottest100Test {
 
     @Before
     public void setUp() {
-        hottest100 = new Hottest100(url);
+        hottest100 = new Hottest100(url, "Drake");
     }
 
     @Test
     public void urlErrorTest() {
-        new Hottest100("https://haha.com.id/");
+        new Hottest100("https://haha.com.id/", "hehe");
     }
 
-    @Test
-    public void printTop100List() {
-        String expectedOutput = hottest100.printTo50List();
-        System.out.println(expectedOutput);
-        assertTrue(expectedOutput.contains("Ariana"));
-    }
+
 
     @Test
     public void getBillboardUrl() {
@@ -37,13 +32,8 @@ public class Hottest100Test {
     }
 
     @Test
-    public void getTop50SongList() {
-        List<Song> list = hottest100.getTop50Hottest();
-        assertEquals(50, list.size());
-    }
-    @Test
     public void getTop100SongList() {
         List<Song> list = hottest100.getTop100Hottest();
-        assertEquals(50, list.size());
+        assertEquals(100, list.size());
     }
 }

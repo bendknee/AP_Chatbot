@@ -34,22 +34,32 @@ public class BotController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         String toReply= "test";
-        String toReply1 = "test";
 
         String replyText = contentText.replace("/echo", "");
-        switch (replyText.substring(1).toLowerCase()){
-            case "billboard hot100 artist":
-                Hottest100 hottest100 = new Hottest100("https://www.billboard.com/charts/hot-100");
-                toReply = hottest100.printTo50List();
-                toReply1 = hottest100.printTo100List();
-                String replyToken = event.getReplyToken();
-                reply(toReply, toReply1, replyToken);
-                break;
-            default:
-                toReply = "Please Use a good input. E.g. /echo billboard hotcountry";
-                replyToken = event.getReplyToken();
-                reply(toReply, toReply1, replyToken);
-                break;
+        String[] findArtist = replyText.split(" ");
+        if (findArtist.length >= 4 && (findArtist[1]+findArtist[2]).equalsIgnoreCase("billboardhot100")) {
+            String nameArtistOrSong="";
+            if (findArtist.length > 4) {
+                for (int i = 3; i < findArtist.length; i++) {
+                    if (i!= findArtist.length-1) {
+                        nameArtistOrSong += findArtist[i] + " ";
+                    } else {
+                        nameArtistOrSong += findArtist[i];
+                    }
+                }
+
+            } else {
+                nameArtistOrSong = findArtist[3];
+            }
+            System.out.println(nameArtistOrSong);
+            Hottest100 hottest100 = new Hottest100("https://www.billboard.com/charts/hot-100", nameArtistOrSong);
+            toReply = hottest100.returnNameArtist();
+            String replyToken = event.getReplyToken();
+            reply(toReply, replyToken);
+        } else {
+            toReply = "Please Use a good input. E.g. /echo billboard hot100 [NAME OF ARTIST]";
+            String replyToken = event.getReplyToken();
+            reply(toReply, replyToken);
         }
         return new TextMessage(toReply);
     }
@@ -60,12 +70,11 @@ public class BotController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    private void reply(String replies, String replies1, String token){
+    private void reply(String replies, String token){
         Message textMessage = new TextMessage(replies);
-        Message textMessages = new TextMessage(replies1);
         Message sticker = new StickerMessage("1", "137");
         try {
-            List<Message> messageList = Arrays.asList(textMessage, textMessages, sticker);
+            List<Message> messageList = Arrays.asList(textMessage, sticker);
             lineMessagingClient.replyMessage(new ReplyMessage(token, messageList)).get();
 
         } catch (InterruptedException |ExecutionException e) {

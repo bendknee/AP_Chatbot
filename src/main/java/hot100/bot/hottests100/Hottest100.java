@@ -16,30 +16,36 @@ public class Hottest100 {
     private String billboardUrl;
     private List<Song> top50Hottest;
     private List<Song> top100Hottest;
+    private List<Song> nameArtist;
 
-    public Hottest100(String billboardUrl) {
+    public Hottest100(String billboardUrl, String nameArtists) {
         this.billboardUrl = billboardUrl;
         top50Hottest = new ArrayList<>();
         top100Hottest = new ArrayList<>();
-        setTop50Hottest(billboardUrl);
+        nameArtist = new ArrayList<>();
+        setTop100Hottest(billboardUrl, nameArtists);
     }
 
-    private void setTop50Hottest(String url) {
+    private void setTop100Hottest(String url, String nameArtists) {
         try{
             Document doc = Jsoup.connect(url).get();
             Elements link = doc.getElementsByClass("chart-row");
             for (int i = 0; i < 100; i++) {
                 Element elem = link.get(i);
                 String artist = elem.getElementsByClass("chart-row__artist").html();
+                String songs = elem.getElementsByClass("chart-row__song").html();
 
                 String formatArtist = Parser.unescapeEntities(artist, false);
+                String formatSongs = Parser.unescapeEntities(songs, false);
 
-                Song song = new Song(formatArtist);
-                if (i <= 49){
-                    top50Hottest.add(song);
-                } else {
-                    top100Hottest.add(song);
+                Song song = new Song(formatArtist, formatSongs);
+
+                if (nameArtists.equalsIgnoreCase(formatArtist)) {
+                    this.nameArtist.add(song);
+
                 }
+
+                top100Hottest.add(song);
             }
 
         } catch (IOException e){
@@ -47,24 +53,32 @@ public class Hottest100 {
         }
     }
 
-    public String printTo50List() {
+    public String returnNameArtist () {
         StringBuilder stringBuilder = new StringBuilder();
-        int counters = 1;
-        for (Song song : top50Hottest) {
-            stringBuilder.append(format("(%d) %s\n", counters, song.toString()));
-            counters++;
+        String string = "Sorry but the artist you're looking for is not available in this chart!";
+        int counter = 1;
+        if (!nameArtist.isEmpty()){
+            for (Song s : top100Hottest) {
+                if (nameArtist.contains(s)) {
+                    System.out.println(s.getName());
+                    string = stringBuilder.append(format("(%d)\n %s\n", counter, s.toString())).toString();
+                }
+                counter++;
+            }
         }
-        return stringBuilder.toString();
+        return string;
     }
-    public String printTo100List() {
+
+
+    /*public String printTo100List() {
         StringBuilder stringBuilder = new StringBuilder();
         int counters = 51;
         for (Song song : top100Hottest) {
-            stringBuilder.append(format("(%d) %s\n", counters, song.toString()));
+
             counters++;
         }
         return stringBuilder.toString();
-    }
+    }*/
 
     public String getBillboardUrl(){
         return billboardUrl;
@@ -74,6 +88,6 @@ public class Hottest100 {
         return top100Hottest;
     }
     public List<Song> getTop50Hottest() {
-        return top100Hottest;
+        return top50Hottest;
     }
 }
