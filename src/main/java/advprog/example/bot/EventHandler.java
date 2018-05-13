@@ -16,13 +16,22 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class EventHandler {
     private static final Logger LOGGER = Logger.getLogger(EchoComposer.class.getName());
-    private static final String NO_COMMAND_REPLY = "No command found. " + CommandPattern.getCommands();
 
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         Message reply = CommandPattern.getMessageFromEvent(event);
 
-        return reply == null ? new TextMessage(NO_COMMAND_REPLY) : reply;
+        if (reply == null) {
+            String replyValue = "\""
+                    + event.getMessage().getText()
+                    + "\""
+                    + " is not a valid command. "
+                    + CommandPattern.getCommands();
+
+            reply = new TextMessage(replyValue);
+        }
+
+        return reply;
     }
 
     @EventMapping
