@@ -1,4 +1,4 @@
-package advprog.example.bot.controller;
+package advprog.example.bot.composer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

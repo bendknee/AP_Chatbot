@@ -2,6 +2,7 @@ package advprog.example.bot;
 
 import java.util.logging.Logger;
 
+import advprog.example.bot.composer.EchoComposer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,9 @@ public class BotExampleApplication {
 
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
+
+        CommandPattern.addPattern("/echo", new EchoComposer());
+
         SpringApplication.run(BotExampleApplication.class, args);
     }
 }
