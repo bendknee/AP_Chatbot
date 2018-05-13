@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class FakeJsonController {
 
     private static final Logger LOGGER = Logger.getLogger(FakeJsonController.class.getName());
-    private static final String API_URL = "https://jsonplaceholder.typicode.com/posts?userId=1";
+    private static final String API_URL = "https://jsonplaceholder.typicode.com/users?id=1&id=2";
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
