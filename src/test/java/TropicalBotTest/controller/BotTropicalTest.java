@@ -1,22 +1,25 @@
 package TropicalBotTest.controller;
 
 import advprog.example.bot.EventTestUtil;
-import TropicalBot.controller.TropicalController;
-import TropicalBot.BotBillboardTropical;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
+
+import java.io.IOException;
+
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+
+import tropicalbot.controller.TropicalController;
+import tropicalbot.BotBillboardTropical;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -25,13 +28,12 @@ public class BotTropicalTest {
     TropicalController tropicalController = new TropicalController();
 
     static {
-        System.setProperty("line.bot.channelSecret", "3f43b356681d32"
-                + "1342cbc7bf2464207c");
-        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzBRxRxc4"
-                + "m5dSWebWQmxKhPuc39t2zQcrkR8i0/EbEL/RKdK"
-                + "DJjmlDRAT5Byf7nIMNPMnVNphJSn4TaJSShtv1cPd7P"
-                + "cME3EL6qitcLV8aeMsrL18HcZ2Q9+PHNqTDESp"
-                + "DY4El2z9cZVQdB04t89/1O/w1cDnyilFU=");
+        System.setProperty("line.bot.channelSecret", "4f5061aa776591"
+                + "aad1bf35965ab5f25d");
+        System.setProperty("line.bot.channelToken", "csN67un3gG09L80xWS5VjCcb0OM"
+                + "3GqOpQjBd76HuJn1Go8Wwb4xQbPK9kRygi144i9dsvFGc6OUgFiHCdJfxcen"
+                + "uByIV0ASTfk6xIxLwoC9fGE9+lqF/frcVm0AQUmukpJ1wR2kl"
+                + "5+1b9t7Pdf6fdgdB04t89/1O/w1cDnyilFU=");
     }
 
     @Test
@@ -55,7 +57,8 @@ public class BotTropicalTest {
                 EventTestUtil.createDummyTextMessage("/BLUBLABLU");
 
         TextMessage reply = tropicalController.handleTextMessageEvent(event);
-        assertEquals("Sorry your input is not valid", reply.getText());
+        assertEquals("Sorry your input is not valid " +
+                 "the format should be /billboard tropical ArtistName", reply.getText());
     }
 
     @Test
@@ -68,8 +71,8 @@ public class BotTropicalTest {
         verify(event, atLeastOnce()).getTimestamp();
     }
 
-/*    @Test
+    @Test
     public void applicationContextTest() {
         BotBillboardTropical.main(new String[]{});
-    }*/
+    }
 }
