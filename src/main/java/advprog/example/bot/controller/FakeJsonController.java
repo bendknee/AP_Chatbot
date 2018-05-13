@@ -6,6 +6,7 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.logging.Logger;
 
@@ -13,11 +14,24 @@ import java.util.logging.Logger;
 public class FakeJsonController {
 
     private static final Logger LOGGER = Logger.getLogger(EchoController.class.getName());
+    private static final String API_URL = "https://jsonplaceholder.typicode.com/users";
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
-        // TODO : Implement this
-        return null;
+        String replyText = "Something happened. Please try again.";
+        String command = event.getMessage().getText();
+
+        if (command != null && command.matches("^/fake_json$")) {
+            RestTemplate restTemplate = new RestTemplate();
+
+            String response = restTemplate.getForObject(API_URL, String.class);
+
+            if (response != null) {
+                replyText = response;
+            }
+        }
+
+        return new TextMessage(replyText);
     }
 
     @EventMapping
@@ -25,3 +39,4 @@ public class FakeJsonController {
         // TODO : Implement this
     }
 }
+
