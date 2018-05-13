@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class FakeJsonController {
 
-    private static final Logger LOGGER = Logger.getLogger(EchoController.class.getName());
-    private static final String API_URL = "https://jsonplaceholder.typicode.com/users";
+    private static final Logger LOGGER = Logger.getLogger(FakeJsonController.class.getName());
+    private static final String API_URL = "https://jsonplaceholder.typicode.com/posts?userId=1";
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
