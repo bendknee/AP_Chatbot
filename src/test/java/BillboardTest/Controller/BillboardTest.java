@@ -2,6 +2,7 @@ package BillboardTest.Controller;
 
 import advprog.example.bot.EventTestUtil;
 import billboardpackage.controller.BillboardController;
+import billboardpackage.BillboardApp;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -24,12 +25,13 @@ public class BillboardTest {
     private BillboardController billboardController = new BillboardController();
 
     static {
-        System.setProperty("line.bot.channelSecret", "3f43b356681d321342cbc7bf2464207c");
-        System.setProperty("line.bot.channelToken", "1zaKuQmgqKzB"
-                + "RxRxc4m5dSWebWQmxKhPuc39t2zQcrkR8i0/EbE"
-                + "L/RKdKDJjmlDRAT5Byf7nIMNPMnVNphJSn4TaJSS"
-                + "htv1cPd7PcME3EL6qitcLV8aeMsrL18HcZ2Q9+PHNq"
-                + "TDESpDY4El2z9cZVQdB04t89/1O/w1cDnyilFU=");
+        System.setProperty("line.bot.channelSecret", "68d4dc2b82c35"
+                + "d6e24eadf8bfea40fa2\n");
+        System.setProperty("line.bot.channelToken", "JLOZx62DldFCg59q3tbHAt"
+                + "hoXwCgEpTBYQk194MZZnUGjkCTdANhwjeBjX/GjRkSDU"
+                + "bW60uDeWiQhJPPOetPB9y/7V1q7SqvhyABn8RRkLFWI2o"
+                + "+bewYl+5qazqJJEYfahfQWEXKqA2sQf+3df"
+                + "ruFgdB04t89/1O/w1cDnyilFU=");
     }
 
     @Test
@@ -69,8 +71,8 @@ public class BillboardTest {
         verify(event, atLeastOnce()).getTimestamp();
     }
 
-/*    @Test
+    @Test
     public void applicationContextTest() {
         BillboardApp.main(new String[]{});
-    }*/
+    }
 }

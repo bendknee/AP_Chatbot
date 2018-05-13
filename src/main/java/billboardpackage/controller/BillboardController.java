@@ -21,6 +21,16 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 public class BillboardController {
     private static final Logger LOGGER = Logger.getLogger(BillboardController.class.getName());
 
+    static {
+        System.setProperty("line.bot.channelSecret", "68d4dc2b82c35"
+                + "d6e24eadf8bfea40fa2\n");
+        System.setProperty("line.bot.channelToken", "JLOZx62DldFCg59q3tbHAt"
+                + "hoXwCgEpTBYQk194MZZnUGjkCTdANhwjeBjX/GjRkSDU"
+                + "bW60uDeWiQhJPPOetPB9y/7V1q7SqvhyABn8RRkLFWI2o"
+                + "+bewYl+5qazqJJEYfahfQWEXKqA2sQf+3df"
+                + "ruFgdB04t89/1O/w1cDnyilFU=");
+    }
+
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent"
@@ -46,7 +56,7 @@ public class BillboardController {
             return new TextMessage(result);
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry, Artist "
-                    + artist + " is not available");
+                    + textContext + " is not available");
         }
     }
 
@@ -57,7 +67,6 @@ public class BillboardController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    @EventMapping
     public static String cekArtis(String artis) throws IOException {
         Document doc = Jsoup.connect("https://www"
                 + ".billboard.com/charts/billboard-200").get();
