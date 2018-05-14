@@ -7,6 +7,9 @@ stages:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  POSTGRES_DB: database
+  POSTGRES_USER: username
+  POSTGRES_PASSWORD: ""
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -35,3 +38,6 @@ DeployProduction:
   environment:
     name: production
     url: $HEROKU_APP_HOST
+
+services:
+  - postgres:latest
