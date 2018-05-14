@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class PrimbonController {
 
-    private static final long serialVersionUID = 7526471155622776147L;
     private static final Logger LOGGER = Logger.getLogger(advprog.example.bot.controller.EchoController.class.getName());
 
     @EventMapping
@@ -61,6 +60,7 @@ public class PrimbonController {
         return diffInt;
     }
 
+    @SuppressWarnings("serial")
     public String dayGetter(int dayDifference) {
         ArrayList<String> dayList = new ArrayList<String>() {{
             add("Rabu");
@@ -84,6 +84,7 @@ public class PrimbonController {
         return dayName;
     }
 
+    @SuppressWarnings("serial")
     public String pasaranGetter(int dayDifference) {
         ArrayList<String> pasaranList = new ArrayList<String>() {{
             add("Pon");
