@@ -1,4 +1,4 @@
-package JapanBillboard.controller;
+package japanbillboard.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -32,13 +32,15 @@ public class JapanBillboardController {
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
+    public TextMessage
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String textContext = content.getText();
         if (textContext.length() < 18) {
-            return new TextMessage("Sorry your input is not valid");
+            return new TextMessage("Sorry your input is not valid "
+                    + "the format should be /billboard japan100 ArtistName");
         }
         String parser = textContext.substring(0, 19);
         String artist = textContext.substring(20, textContext.length());
@@ -52,7 +54,7 @@ public class JapanBillboardController {
             }
             return new TextMessage(result);
         } catch (IllegalArgumentException e) {
-            return new TextMessage("Sorry, Artist" + textContext + " is not available");
+            return new TextMessage("Sorry, Artist " + textContext + " is not available");
         }
     }
 
@@ -69,8 +71,9 @@ public class JapanBillboardController {
         for (int i = 0; i < 100; i++) {
             Element elements = containers.get(i);
             if (elements.select(".chart-row__artist").text().equalsIgnoreCase(artis)) {
-                hasil += "\n" + elements.select(".chart-row__artist").text() + "\n" +
-                        elements.select(".chart-row__song").text() + "\n" + "Position : " + (i + 1) + "\n";
+                hasil += "\n" + elements.select(".chart-row__artist").text() + "\n"
+                        + elements.select(".chart-row__song").text()
+                        + "\n" + "Position : " + (i + 1) + "\n";
             }
         }
         return hasil;

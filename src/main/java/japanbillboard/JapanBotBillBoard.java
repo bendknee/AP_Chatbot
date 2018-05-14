@@ -1,4 +1,4 @@
-package JapanBillboard;
+package japanbillboard;
 
 import java.util.logging.Logger;
 

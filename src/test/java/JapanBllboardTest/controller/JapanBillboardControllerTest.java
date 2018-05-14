@@ -1,22 +1,27 @@
-package JapanBllboardTest.controller;
+package japanbllboardtest.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
-import JapanBillboard.JapanBotBillBoard;
-import JapanBillboard.controller.JapanBillboardController;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
+
+import japanbillboard.JapanBotBillBoard;
+import japanbillboard.controller.JapanBillboardController;
+
+import java.io.IOException;
+
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -42,11 +47,13 @@ public class JapanBillboardControllerTest {
     @Test
     public void testHandleTextMessageEvent() throws IOException {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/billboard japan100 Yeah");
+                EventTestUtil.createDummyTextMessage("/billboard "
+                        + "japan100 Yeah");
 
         TextMessage reply = japanBillboardController.handleTextMessageEvent(event);
 
-        assertEquals(reply.getText(), "Sorry, Artist Yeah is not in the chart");
+        assertEquals(reply.getText(), "Sorry, Artist Yeah "
+                + "is not in the chart");
     }
 
     @Test
@@ -55,7 +62,9 @@ public class JapanBillboardControllerTest {
                 EventTestUtil.createDummyTextMessage("/BLABLABLA");
 
         TextMessage reply = japanBillboardController.handleTextMessageEvent(event);
-        assertEquals("Sorry your input is not valid", reply.getText());
+        assertEquals("Sorry your input is not valid "
+                + "the format should be /billboard "
+                + "japan100 ArtistName", reply.getText());
     }
 
     @Test
@@ -71,5 +80,28 @@ public class JapanBillboardControllerTest {
     @Test
     public void applicationContextTest() {
         JapanBotBillBoard.main(new String[]{});
+    }
+
+    @Test
+    public void testillegalArgument() throws IOException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("wuigcedcvwdcvw"
+                        + "dscbdscsdcdcubsdc");
+
+        TextMessage reply = japanBillboardController.handleTextMessageEvent(event);
+        assertEquals("Sorry, Artist wuigcedcvwdcvw"
+                + "dscbdscsdcdcubsdc is not available", reply.getText());
+    }
+
+    @Test
+    public void testsuksesArgument() throws IOException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/billboard "
+                        + "japan100 hkt48");
+
+        TextMessage reply = japanBillboardController.handleTextMessageEvent(event);
+        assertEquals("\n" + "HKT48" + "\n"
+                + "Hayaokuri Calendar"
+                + "\n" + "Position : " + 1 + "\n", reply.getText());
     }
 }
