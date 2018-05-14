@@ -22,7 +22,7 @@ public class NewAgeTest {
     @Test
     public void getChartTest() {
         assertNotNull(nab.getChart());
-        for(NewAgeAlbum alb : nab.chart) {
+        for (NewAgeAlbum alb : nab.chart) {
             alb.albumData();
         }
     }
