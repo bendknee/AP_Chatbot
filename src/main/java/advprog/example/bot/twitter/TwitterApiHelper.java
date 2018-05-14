@@ -1,8 +1,6 @@
 package advprog.example.bot.twitter;
 
 import advprog.example.bot.twitter.objects.Tweet;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,13 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class TwitterAPIHelper {
-    private static TwitterAPIHelper instance;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class TwitterApiHelper {
+    private static TwitterApiHelper instance;
     private static String bearerToken;
 
-    public static TwitterAPIHelper getInstance() {
+    public static TwitterApiHelper getInstance() {
         if (instance == null) {
-            instance = new TwitterAPIHelper();
+            instance = new TwitterApiHelper();
         }
 
         instance.authenticate();
@@ -69,8 +70,8 @@ public class TwitterAPIHelper {
                 content.append(inputLine);
             }
 
-            JSONObject response_bearer = new JSONObject(content.toString());
-            bearerToken = response_bearer.getString("access_token");
+            JSONObject responseBearer = new JSONObject(content.toString());
+            bearerToken = responseBearer.getString("access_token");
         } catch (Exception e) {
             e.printStackTrace();
         }

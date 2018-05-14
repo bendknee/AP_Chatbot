@@ -1,9 +1,10 @@
 package advprog.example.bot.twitter.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.*;
 
 public class Tweet {
     private String text;

@@ -13,11 +13,11 @@ public class RecentTweetsCommand implements Command {
     public Message produceMessage(MessageContent content) {
         String contentText = ((TextMessageContent) content).getText();
         String username = contentText.replace("/tweet recent ", "");
-        List<Tweet> tweetList = TwitterAPIHelper.getInstance().getRecentTweets(username);
+        List<Tweet> tweetList = TwitterApiHelper.getInstance().getRecentTweets(username);
 
         String message = "";
         for (Tweet tweet : tweetList) {
-            message += tweet.toString() + "/n/n";
+            message += tweet.toString() + "\r\n";
         }
 
         return new TextMessage(message);

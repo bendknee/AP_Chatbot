@@ -1,33 +1,33 @@
 package advprog.example.bot.twitter;
 
-import advprog.example.bot.twitter.objects.Tweet;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import advprog.example.bot.twitter.objects.Tweet;
+
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.json.JSONArray;
+import org.junit.Test;
 
-public class TwitterAPIHelperTest {
+public class TwitterApiHelperTest {
     @Test
     public void authTest() {
-        TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
         instance.authenticate();
     }
 
     @Test
     public void requestGetTest() {
-        TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
         String response = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi");
         assertFalse(response.isEmpty());
     }
 
     @Test
     public void getTweetsFromValidAccountWithMoreThan5TweetsTest() {
-        TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
         List<Tweet> response = instance.getRecentTweets("twitterapi");
         assertEquals(response.size(), 5);
 
@@ -39,7 +39,7 @@ public class TwitterAPIHelperTest {
 
     @Test
     public void getTweetsFromValidAccountWithLessThan5TweetsTest() {
-        TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
         List<Tweet> response = instance.getRecentTweets("TheObsessivePr1");
 
         String rawSecondResponse = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json"
