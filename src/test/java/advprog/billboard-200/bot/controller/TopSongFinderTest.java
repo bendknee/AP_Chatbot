@@ -40,8 +40,8 @@ public class TopSongFinderTest {
 
     @Test
     void testHandleTextMessageEventSuccess() {
-        MessageEvent<TextMessageContent> event = BotBillBoardTropicalTest
-                .createDummyTextMessage("/billboard tropical");
+        MessageEvent<TextMessageContent> event = BotBillboard200Test
+                .createDummyTextMessage("/billboard bill200");
 
         TextMessage reply = topSongFinder.handleTextMessageEvent(event);
 
@@ -55,7 +55,7 @@ public class TopSongFinderTest {
     @Test
     void testHandleTextMessageEventError() {
         MessageEvent<TextMessageContent> event = BotBillboard200Test
-                .createDummyTextMessage("/billboard tropica");
+                .createDummyTextMessage("/billboard billbill");
 
         TextMessage reply = topSongFinder.handleTextMessageEvent(event);
 
