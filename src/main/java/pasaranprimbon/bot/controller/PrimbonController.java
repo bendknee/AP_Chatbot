@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class PrimbonController {
 
+    private static final long serialVersionUID = 7526471155622776147L;
     private static final Logger LOGGER = Logger.getLogger(advprog.example.bot.controller.EchoController.class.getName());
 
     @EventMapping
