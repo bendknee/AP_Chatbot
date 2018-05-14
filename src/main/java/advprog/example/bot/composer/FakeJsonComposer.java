@@ -5,6 +5,7 @@ import com.linecorp.bot.model.message.TextMessage;
 
 import java.util.Random;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,11 +34,19 @@ public class FakeJsonComposer {
         int jsonTypeIndex = random.nextInt(JSON_TYPES.length);
         int instanceId = random.nextInt(9) + 1;
 
-        UriComponentsBuilder uri = UriComponentsBuilder
+        String uri = UriComponentsBuilder
                 .fromUriString(API_URL + JSON_TYPES[jsonTypeIndex])
-                .queryParam("id", instanceId);
+                .queryParam("id", instanceId)
+                .toUriString();
 
-        String response = restTemplate.getForObject(uri.toUriString(), String.class);
-        return response;
+        ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+
+        String responseText = "Something is wrong with our 3rd party server. "
+                + "Please try again later.";
+        if (response.getStatusCode().is2xxSuccessful()) {
+            responseText = response.getBody();
+        }
+
+        return responseText;
     }
 }
