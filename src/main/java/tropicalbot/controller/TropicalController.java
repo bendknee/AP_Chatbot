@@ -31,7 +31,8 @@ public class TropicalController {
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
+    public TextMessage
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -69,8 +70,9 @@ public class TropicalController {
         for (int i = 0; i < 25; i++) {
             Element elements = containers.get(i);
             if (elements.select(".chart-row__artist").text().equalsIgnoreCase(artis)) {
-                hasil += "\n" + elements.select(".chart-row__artist").text() + "\n" +
-                        elements.select(".chart-row__song").text() + "\n" + "Position : " + (i + 1) + "\n";
+                hasil += "\n" + elements.select(".chart-row__artist").text() + "\n"
+                        + elements.select(".chart-row__song").text()
+                        + "\n" + "Position : " + (i + 1) + "\n";
             }
         }
         return hasil;

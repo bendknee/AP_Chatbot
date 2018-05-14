@@ -1,4 +1,10 @@
-package TropicalBotTest.controller;
+package tropicalbottest.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
 
@@ -14,12 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-
-import tropicalbot.controller.TropicalController;
 import tropicalbot.BotBillboardTropical;
+import tropicalbot.controller.TropicalController;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -57,8 +59,9 @@ public class BotTropicalTest {
                 EventTestUtil.createDummyTextMessage("/BLUBLABLU");
 
         TextMessage reply = tropicalController.handleTextMessageEvent(event);
-        assertEquals("Sorry your input is not valid " +
-                 "the format should be /billboard tropical ArtistName", reply.getText());
+        assertEquals("Sorry your input is not valid "
+                + "the format should be /billboard tropical "
+                + "ArtistName", reply.getText());
     }
 
     @Test
@@ -74,5 +77,16 @@ public class BotTropicalTest {
     @Test
     public void applicationContextTest() {
         BotBillboardTropical.main(new String[]{});
+    }
+
+    @Test
+    public void testillegalArgument() throws IOException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("wuigcedcvwdcvw"
+                        + "dscbdscsdcdcubsdc");
+
+        TextMessage reply = tropicalController.handleTextMessageEvent(event);
+        assertEquals("Sorry, Artist wuigcedcvwdcvw"
+                + "dscbdscsdcdcubsdc is not available", reply.getText());
     }
 }
