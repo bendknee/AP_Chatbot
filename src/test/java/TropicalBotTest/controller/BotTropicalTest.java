@@ -89,4 +89,16 @@ public class BotTropicalTest {
         assertEquals("Sorry, Artist wuigcedcvwdcvw"
                 + "dscbdscsdcdcubsdc is not available", reply.getText());
     }
+
+    @Test
+    public void testsuksesArgument() throws IOException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/billboard "
+                        + "tropical raymix");
+
+        TextMessage reply = tropicalController.handleTextMessageEvent(event);
+        assertEquals("\n" + "Raymix" + "\n"
+                + "Oye Mujer"
+                + "\n" + "Position : " + 1 + "\n", reply.getText());
+    }
 }
