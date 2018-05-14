@@ -1,4 +1,4 @@
-package TextSimilarity.bot.controller;
+package advprog.example.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -7,12 +7,13 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
-import java.util.logging.Logger;
-import java.math.BigDecimal;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Logger;
+
 
 @LineMessageHandler
 public class TextSimilarityController {
@@ -51,8 +52,7 @@ public class TextSimilarityController {
             url += "text1=" + text1 + "&"
                     + "text2=" + text2 + "&"
                     + "token=" + token;
-        }
-        else {
+        } else {
             String[] arr = text.split(" ");
             String url1 = arr[0];
             String url2 = arr[1];
@@ -87,8 +87,7 @@ public class TextSimilarityController {
 
             return new BigDecimal(similarity).multiply(new BigDecimal(100)).toString()
                     .substring(0, 5) + "%";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return "ERROR!";
         }
     }
