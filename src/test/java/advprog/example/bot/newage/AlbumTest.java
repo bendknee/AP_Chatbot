@@ -1,8 +1,6 @@
-package advprog.example.bot.NewAgeBotTest;
+package advprog.example.bot.newage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import advprog.example.bot.NewAgeBot.NewAgeAlbum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,12 +1,9 @@
-package advprog.example.bot.NewAgeBotTest;
-import advprog.example.bot.NewAgeBot.NewAgeAlbum;
-import advprog.example.bot.NewAgeBot.NewAgeBot;
+package advprog.example.bot.newage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +40,7 @@ public class NewAgeTest {
 
     //TODO apakah menggunakan api yang benar
     @Test
-    public void urlTest(){
+    public void urlTest() {
         assertEquals(url, nab.getUrl());
 
     }

@@ -1,4 +1,4 @@
-package advprog.example.bot.NewAgeBot;
+package advprog.example.bot.newage;
 
 public class NewAgeAlbum {
 

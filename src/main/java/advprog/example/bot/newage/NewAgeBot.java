@@ -1,4 +1,4 @@
-package advprog.example.bot.NewAgeBot;
+package advprog.example.bot.newage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class NewAgeBot {
         this.getChart();
     }
 
-    public List<NewAgeAlbum> getChart(){
+    public List<NewAgeAlbum> getChart() {
         try {
             Document doc = Jsoup.connect(url).get();
             Elements data = doc.getElementsByClass("chart-row");
@@ -41,7 +41,7 @@ public class NewAgeBot {
                 String newTitle = Parser.unescapeEntities(title, false);
                 String newArtist = Parser.unescapeEntities(artist, false);
 
-                NewAgeAlbum alb = new NewAgeAlbum(newTitle, newArtist, i+1);
+                NewAgeAlbum alb = new NewAgeAlbum(newTitle, newArtist, i + 1);
                 this.chart.add(alb);
             }
         } catch (IOException e) {
@@ -60,7 +60,7 @@ public class NewAgeBot {
         return false;
     }
 
-    public String getFavArtist(){
+    public String getFavArtist() {
         if (isExist(find)) {
             for (NewAgeAlbum a : chart) {
                 if (a.getArtist().toLowerCase().contains(find.toLowerCase())) {

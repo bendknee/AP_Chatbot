@@ -1,6 +1,6 @@
 package advprog.example.bot.controller;
 
-import advprog.example.bot.NewAgeBot.NewAgeBot;
+import advprog.example.bot.newage.NewAgeBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
