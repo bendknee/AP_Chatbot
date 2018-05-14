@@ -7,7 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import advprog.example.bot.EventTestUtil;
+import pasaranprimbon.bot.PrimbonTestUtil;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -41,7 +41,7 @@ public class PrimbonControllerTest {
     @Test
     void testIncorrectInput() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/primbon jodoh dan pekerjaan");
+                PrimbonTestUtil.createDummyTextMessage("/primbon jodoh dan pekerjaan");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 
@@ -51,7 +51,7 @@ public class PrimbonControllerTest {
     @Test
     void testHandlePastTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/primbon 1000-01-26");
+                PrimbonTestUtil.createDummyTextMessage("/primbon 1000-01-26");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 
@@ -61,7 +61,7 @@ public class PrimbonControllerTest {
     @Test
     void testHandlePresentTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/primbon 1981-09-12");
+                PrimbonTestUtil.createDummyTextMessage("/primbon 1981-09-12");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 
@@ -71,7 +71,7 @@ public class PrimbonControllerTest {
     @Test
     void testHandleFutureTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/primbon 3000-02-12");
+                PrimbonTestUtil.createDummyTextMessage("/primbon 3000-02-12");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 
