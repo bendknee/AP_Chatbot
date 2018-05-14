@@ -32,11 +32,11 @@ public class MusicBrainzController {
             RestTemplate restTemplate = new RestTemplate();
 
             replyText = restTemplate.getForObject(ROOT_API+artistName, String.class);
-
+            return new TextMessage(replyText);
         }
 
         return null;
-        //return new TextMessage(replyText);
+        //
     }
 
     @EventMapping
