@@ -2,6 +2,7 @@ package advprog.example.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.ImageMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
@@ -25,6 +26,14 @@ public class EchoController {
         return new TextMessage(replyText.substring(1));
     }
 
+    @EventMapping
+    public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) {
+        LOGGER.fine(String.format("ImageMessageContent(timestamp='%s',content='%s')",
+                event.getTimestamp(), event.getMessage()));
+
+
+        return null;
+    }
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
