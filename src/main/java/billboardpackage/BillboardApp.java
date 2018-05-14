@@ -10,13 +10,13 @@ public class BillboardApp {
     private static final Logger LOGGER = Logger.getLogger(BillboardApp.class.getName());
 
     static {
-        System.setProperty("line.bot.channelSecret", "6704d8fc1af3f5d"
-                + "9f353585de13e1ae59");
-        System.setProperty("line.bot.channelToken", "p/2QDsiSAhNUe+n+hi2POsxPXNvbVyin/hsgEBdTY"
-                + "56dTCriaMcvhB8KFH7eEaxA019s0J+qWoAiNRxN"
-                + "w4O8G7gdEZNN/KRwZBOR8+ZCkUUgmwvIZo"
-                + "p3WyYcmSF1M9WymDRldeHv/5AML9hDQ3"
-                + "wQjAdB04t89/1O/w1cDnyilFU=");
+        System.setProperty("line.bot.channelSecret", "976d1b06307ba2"
+                + "536326e9a69aec048f");
+        System.setProperty("line.bot.channelToken", "ziqv6nFQ2dpydj2FvuMdI"
+                + "zPNhVpcppcg86ZNUSXO/qHfir4+FvT1w9/fypH/pKHisx7peMAk"
+                + "CuZ1AB7SoqNf+nlMPmpEbTlLz4/tHcWkSu6VGZY7ehHlaCVhAqr"
+                + "RM9RahU7gvEb1Eju00cvvuPp4vgd"
+                + "B04t89/1O/w1cDnyilFU=");
     }
 
     public static void main(String[] args) {
