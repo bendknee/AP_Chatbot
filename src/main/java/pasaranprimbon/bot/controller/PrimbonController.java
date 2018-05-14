@@ -4,6 +4,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.StickerMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -27,7 +28,7 @@ public class PrimbonController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        String newContentText = contentText.replace("/echo", "");
+        String newContentText = contentText.replace("/primbon", "");
         int dayDifference = dayDifferenceGetter(newContentText.substring(1));
         String dayName = dayGetter(dayDifference);
         String pasaranName = pasaranGetter(dayDifference);
@@ -47,18 +48,22 @@ public class PrimbonController {
 
         String[] tanggalan = tanggal.split("-");
 
-        LocalDate referencedDate = LocalDate.of(-100, 01, 01);
-        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 1900, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+        LocalDate referencedDate = LocalDate.of(0, 01, 01);
+        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 1800, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
         long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
-        int diffInt = (int) diff;
+        int diffInt = (int) --diff;
 
-        // error in java localdate, 1900 is considered lapyear
-        LocalDate lapYearError = LocalDate.of(0, 02, 28);
+        // error in java localdate, 1900 is considered lapyear while it is not
+        /*LocalDate lapYearError = LocalDate.of(0, 02, 28);
         if (givenDate.isAfter(lapYearError)) {
             diffInt--;
-        }
+        }*/
 
+        //LocalDate errorDetect = LocalDate.of(300,1,1);
+        //System.out.println(errorDetect.isLeapYear());
+
+        //System.out.println(diffInt);
         return diffInt;
     }
 
@@ -74,7 +79,13 @@ public class PrimbonController {
         }};
 
         int day = dayDifference % 7;
-        String dayName = dayList.get(day);
+        String dayName;
+
+        if (day < 0) {
+            dayName = dayList.get(dayList.size() + day);
+        } else {
+            dayName = dayList.get(day);
+        }
 
         return dayName;
     }
@@ -89,7 +100,14 @@ public class PrimbonController {
         }};
 
         int pasaran = dayDifference % 5;
-        String pasaranName = pasaranList.get(pasaran);
+        String pasaranName;
+
+
+        if (pasaran < 0) {
+            pasaranName = pasaranList.get(pasaranList.size() + pasaran);
+        } else {
+            pasaranName = pasaranList.get(pasaran);
+        }
 
         return pasaranName;
     }

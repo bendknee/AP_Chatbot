@@ -31,19 +31,19 @@ public class PrimbonControllerTest {
     }
 
     @Autowired
-    private PrimbonController echoController;
+    private PrimbonController primbonController;
 
     @Test
     void testContextLoads() {
-        assertNotNull(echoController);
+        assertNotNull(primbonController);
     }
 
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo 1981-09-12");
+                EventTestUtil.createDummyTextMessage("/primbon 1981-09-12");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = primbonController.handleTextMessageEvent(event);
 
         assertEquals("Sabtu Legi", reply.getText());
     }
@@ -52,7 +52,7 @@ public class PrimbonControllerTest {
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        echoController.handleDefaultMessage(event);
+        primbonController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
