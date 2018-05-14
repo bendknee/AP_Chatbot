@@ -50,6 +50,6 @@ public class BotController {
 
     public void initializeTextCommands() {
         textCommands.put("^/echo .*", new EchoCommand());
-        textCommands.put("^/tweets recent .*", new RecentTweetsCommand());
+        textCommands.put("^/tweet recent .*", new RecentTweetsCommand());
     }
 }

@@ -15,14 +15,12 @@ public class TwitterAPIHelper {
     private static String bearerToken;
 
     public static TwitterAPIHelper getInstance() {
-        if (instance != null) {
-            instance.authenticate();
-            return instance;
-        } else {
+        if (instance == null) {
             instance = new TwitterAPIHelper();
-            instance.authenticate();
-            return instance;
         }
+
+        instance.authenticate();
+        return instance;
     }
 
     public String requestGet(String url) {
@@ -81,6 +79,7 @@ public class TwitterAPIHelper {
     public List<Tweet> getRecentTweets(String username) {
         String response = requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json?"
                 + "screen_name=" + username + "&count=5");
+        System.out.println(response);
         JSONArray json = new JSONArray(response);
         return Tweet.parseJsonList(json);
     }

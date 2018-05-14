@@ -16,15 +16,15 @@ public class Tweet {
 
     public static List<Tweet> parseJsonList(JSONArray json) {
         List<Tweet> result = new ArrayList<Tweet>();
-        List<Object> original = json.toList();
 
-        for (Object item : original) {
-            result.add(parseJson(new JSONObject(item)));
+        for (int i = 0; i < json.length(); i++) {
+            result.add(parseJson(json.getJSONObject(i)));
         }
         return result;
     }
 
     public static Tweet parseJson(JSONObject json) {
+        System.out.println(json.toString());
         String text = json.getString("text");
         String timeStamp = json.getString("created_at");
         return new Tweet(text, timeStamp);

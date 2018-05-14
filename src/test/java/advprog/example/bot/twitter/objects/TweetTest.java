@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class TweetTest {
     @Test
@@ -19,8 +19,8 @@ public class TweetTest {
         JSONObject latestTweet = new JSONArray(rawResponse).getJSONObject(0);
         Tweet response = Tweet.parseJson(latestTweet);
 
-        assertTrue(rawResponse.contains(response.getText()));
-        assertTrue(rawResponse.contains(response.getTimeStamp().toString()));
+        assertEquals(latestTweet.getString("text"), response.getText());
+        assertEquals(latestTweet.getString("created_at"), response.getTimeStamp());
     }
 
     @Test

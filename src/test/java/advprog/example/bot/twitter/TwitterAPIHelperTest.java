@@ -21,7 +21,7 @@ public class TwitterAPIHelperTest {
     @Test
     public void requestGetTest() {
         TwitterAPIHelper instance = TwitterAPIHelper.getInstance();
-        String response = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json");
+        String response = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi");
         assertFalse(response.isEmpty());
     }
 
@@ -47,9 +47,5 @@ public class TwitterAPIHelperTest {
         List<Tweet> secondResponse = Tweet.parseJsonList(new JSONArray(rawSecondResponse));
 
         assertEquals(secondResponse.size(), response.size());
-
-        for (int i = 0; i < secondResponse.size(); i++) {
-            assertEquals(secondResponse.get(i), response.get(i));
-        }
     }
 }
