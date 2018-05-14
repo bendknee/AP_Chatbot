@@ -51,8 +51,8 @@ public class NewAgeBot {
     }
 
     public boolean isExist(String find) {
-        for(NewAgeAlbum a : chart) {
-            if(a.getArtist().toLowerCase().contains(find.toLowerCase())) {
+        for (NewAgeAlbum a : chart) {
+            if (a.getArtist().toLowerCase().contains(find.toLowerCase())) {
                 return true;
             }
         }

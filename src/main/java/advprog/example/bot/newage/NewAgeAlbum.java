@@ -39,7 +39,7 @@ public class NewAgeAlbum {
     public String albumData() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.artist + "\n");
-        sb.append(this.title+ "\n");
+        sb.append(this.title + "\n");
         sb.append(this.rank);
 
         return sb.toString();
