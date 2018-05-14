@@ -50,7 +50,6 @@ public class BillboardTest {
                 EventTestUtil.createDummyTextMessage("/billboard bill200 Katy");
 
         TextMessage reply = billboardController.handleTextMessageEvent(event);
-
         assertEquals(reply.getText(), "Sorry, "
                 + "Artist Katy is not in the chart");
     }
