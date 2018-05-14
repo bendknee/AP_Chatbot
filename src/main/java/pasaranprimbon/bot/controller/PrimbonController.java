@@ -15,7 +15,8 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class PrimbonController {
 
-    private static final Logger LOGGER = Logger.getLogger(pasaranprimbon.bot.controller.PrimbonController.class.getName());
+    private static final Logger LOGGER =
+            Logger.getLogger(pasaranprimbon.bot.controller.PrimbonController.class.getName());
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -29,7 +30,8 @@ public class PrimbonController {
 
         try {
             String[] tanggalan = newContentText.split("-");
-            LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+            LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]),
+                    Integer.parseInt(tanggalan[2]));
 
             int dayDifference = dayDifferenceGetter(newContentText);
             String dayName = dayGetter(dayDifference);
@@ -52,9 +54,10 @@ public class PrimbonController {
         String[] tanggalan = tanggal.split("-");
 
         LocalDate referencedDate = LocalDate.of(-200, 01, 01);
-        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000,
+                Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
-        long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
+        long diff = ChronoUnit.DAYS.between(referencedDate, givenDate);
         int diffInt = (int) diff;
 
         return diffInt;
@@ -63,14 +66,15 @@ public class PrimbonController {
     @SuppressWarnings("serial")
     public String dayGetter(int dayDifference) {
         ArrayList<String> dayList = new ArrayList<String>() {{
-            add("Rabu");
-            add("Kamis");
-            add("Jumat");
-            add("Sabtu");
-            add("Minggu");
-            add("Senin");
-            add("Selasa");
-        }};
+                add("Rabu");
+                add("Kamis");
+                add("Jumat");
+                add("Sabtu");
+                add("Minggu");
+                add("Senin");
+                add("Selasa");
+            }
+        };
 
         int day = dayDifference % 7;
         String dayName;
@@ -87,12 +91,13 @@ public class PrimbonController {
     @SuppressWarnings("serial")
     public String pasaranGetter(int dayDifference) {
         ArrayList<String> pasaranList = new ArrayList<String>() {{
-            add("Pon");
-            add("Wage");
-            add("Kliwon");
-            add("Legi");
-            add("Pahing");
-        }};
+                add("Pon");
+                add("Wage");
+                add("Kliwon");
+                add("Legi");
+                add("Pahing");
+            }
+        };
 
         int pasaran = dayDifference % 5;
         String pasaranName;
