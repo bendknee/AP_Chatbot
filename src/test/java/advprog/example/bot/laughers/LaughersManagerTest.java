@@ -1,8 +1,5 @@
 package advprog.example.bot.laughers;
 
-import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.profile.UserProfileResponse;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,17 +11,20 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.profile.UserProfileResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -48,12 +48,12 @@ public class LaughersManagerTest {
 
     @BeforeEach
     void setUp() {
-       laughersManager = new LaughersManager(laughersRepository, lineMessagingClient);
-       profileResponse1 =
+        laughersManager = new LaughersManager(laughersRepository, lineMessagingClient);
+        profileResponse1 =
             CompletableFuture.completedFuture(new UserProfileResponse("Endrawan",
                                                                       "U1",
                                                                       "", ""));
-       profileResponse2 =
+        profileResponse2 =
             CompletableFuture.completedFuture(new UserProfileResponse("Andika",
                                                                       "U2",
                                                                       "", ""));
@@ -110,7 +110,8 @@ public class LaughersManagerTest {
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U1");
         doReturn(profileResponse2)
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U2");
-        assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ", laughersManager.getTop5Laughers("C1"));
+        assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ",
+                     laughersManager.getTop5Laughers("C1"));
     }
 
     @Test
@@ -124,7 +125,8 @@ public class LaughersManagerTest {
         doReturn(profileResponse2)
             .when(lineMessagingClient)
             .getRoomMemberProfile("R1", "U2");
-        assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ", laughersManager.getTop5Laughers("R1"));
+        assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ",
+                     laughersManager.getTop5Laughers("R1"));
     }
 
     @Test
@@ -134,7 +136,8 @@ public class LaughersManagerTest {
         doReturn(laughers).when(laughersRepository).findByGroupIdOrderByNumberOfLaughDesc("U1");
         doReturn(profileResponse1)
             .when(lineMessagingClient).getProfile("U1");
-        assertEquals("1. Endrawan (100%)\n2. \n3. \n4. \n5. ", laughersManager.getTop5Laughers("U1"));
+        assertEquals("1. Endrawan (100%)\n2. \n3. \n4. \n5. ",
+                     laughersManager.getTop5Laughers("U1"));
     }
 
     @Test
@@ -147,6 +150,7 @@ public class LaughersManagerTest {
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U1");
         doReturn(profileResponse2)
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U2");
-        assertEquals("1. Endrawan (50%)\n1. Andika (50%)\n3. \n4. \n5. ", laughersManager.getTop5Laughers("C1"));
+        assertEquals("1. Endrawan (50%)\n1. Andika (50%)\n3. \n4. \n5. ",
+                     laughersManager.getTop5Laughers("C1"));
     }
 }

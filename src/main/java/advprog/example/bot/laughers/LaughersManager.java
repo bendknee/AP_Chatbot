@@ -2,11 +2,11 @@ package advprog.example.bot.laughers;
 
 import com.linecorp.bot.client.LineMessagingClient;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class LaughersManager {
@@ -51,8 +51,8 @@ public class LaughersManager {
         int[] percentage = new int[5];
         for (int i = 0; i < Math.min(5, laughersList.size()); i++) {
             Laughers laughers = laughersList.get(i);
-            percentage[i] = (int) ((double) laughers.getNumberOfLaugh() * 100.0 /
-                (double) sumOfAllLaugh);
+            percentage[i] = (int) ((double) laughers.getNumberOfLaugh() * 100.0
+                / (double) sumOfAllLaugh);
         }
 
         for (int i = 0; i < 5; i++) {
