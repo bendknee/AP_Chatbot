@@ -4,10 +4,10 @@ import advprog.example.bot.context.Context;
 import advprog.example.bot.composer.EchoComposer;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.AudioMessageContent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
-import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
@@ -30,7 +30,15 @@ public class EventHandler {
         String userId = event.getSource().getUserId();
         String imageId = event.getMessage().getId();
 
-        Context.storeContext(userId, imageId);
+        Context.storeImageContext(userId, imageId);
+    }
+
+    @EventMapping
+    public void handleAudioMessageEvent(MessageEvent<AudioMessageContent> event) {
+        String userId = event.getSource().getUserId();
+        String audioId = event.getMessage().getId();
+
+
     }
 
     @EventMapping
