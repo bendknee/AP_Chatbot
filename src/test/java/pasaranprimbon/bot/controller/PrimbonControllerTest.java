@@ -39,13 +39,33 @@ public class PrimbonControllerTest {
     }
 
     @Test
-    void testHandleTextMessageEvent() {
+    void testHandlePastTextMessageEvent() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/primbon 1000-01-26");
+
+        TextMessage reply = primbonController.handleTextMessageEvent(event);
+
+        assertEquals("Minggu Wage", reply.getText());
+    }
+
+    @Test
+    void testHandlePresentTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/primbon 1981-09-12");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 
         assertEquals("Sabtu Legi", reply.getText());
+    }
+
+    @Test
+    void testHandleFutureTextMessageEvent() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/primbon 3000-02-12");
+
+        TextMessage reply = primbonController.handleTextMessageEvent(event);
+
+        assertEquals("Rabu Legi", reply.getText());
     }
 
     @Test

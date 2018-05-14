@@ -48,22 +48,12 @@ public class PrimbonController {
 
         String[] tanggalan = tanggal.split("-");
 
-        LocalDate referencedDate = LocalDate.of(0, 01, 01);
-        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 1800, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+        LocalDate referencedDate = LocalDate.of(-200, 01, 01);
+        LocalDate givenDate = LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
         long diff = ChronoUnit.DAYS.between( referencedDate , givenDate );
-        int diffInt = (int) --diff;
+        int diffInt = (int) diff;
 
-        // error in java localdate, 1900 is considered lapyear while it is not
-        /*LocalDate lapYearError = LocalDate.of(0, 02, 28);
-        if (givenDate.isAfter(lapYearError)) {
-            diffInt--;
-        }*/
-
-        //LocalDate errorDetect = LocalDate.of(300,1,1);
-        //System.out.println(errorDetect.isLeapYear());
-
-        //System.out.println(diffInt);
         return diffInt;
     }
 
