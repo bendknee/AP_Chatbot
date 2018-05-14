@@ -61,6 +61,18 @@ public class TextSimilarityControllerTest {
     }
 
     @Test
+    void testTextSimilarityCorrectUrl() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo /docs_sim "
+                        + "http://www.bbc.com/news/world-us-canada-26734036 "
+                        + "http://edition.cnn.com/2014/03/24/politics/obama-europe-trip/");
+
+        TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
+
+        assertEquals("63.31%", reply.getText());
+    }
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 

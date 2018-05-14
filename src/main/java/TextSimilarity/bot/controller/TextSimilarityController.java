@@ -54,10 +54,10 @@ public class TextSimilarityController {
         }
         else {
             String[] arr = text.split(" ");
-            String text1 = arr[0].replace(" ", "%20");
-            String text2 = arr[1].replace(" ", "%20");
-            url += "url1=" + text1 + "&"
-                    + "url2=" + text2 + "&"
+            String url1 = arr[0];
+            String url2 = arr[1];
+            url += "url1=" + url1 + "&"
+                    + "url2=" + url2 + "&"
                     + "token=" + token;
         }
 
