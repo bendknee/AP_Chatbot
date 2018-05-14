@@ -15,7 +15,7 @@ public class MusicBrainzController {
 
     private static final Logger LOGGER = Logger.getLogger(MusicBrainzController.class.getName());
 
-    private static final String ROOT_API = "https://musicbrainz.org/ws/2/artist/";
+    private static final String ROOT_API = "https://musicbrainz.org/ws/2/artist/?query=";
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -23,13 +23,20 @@ public class MusicBrainzController {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
 
+        String replyText = "";
+
         String contentText = event.getMessage().getText();
+
         if (contentText.contains("/10album")) {
+            String artistName = contentText.substring(8);
             RestTemplate restTemplate = new RestTemplate();
+
+            replyText = restTemplate.getForObject(ROOT_API+artistName, String.class);
+
         }
 
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        return null;
+        //return new TextMessage(replyText);
     }
 
     @EventMapping
@@ -38,5 +45,5 @@ public class MusicBrainzController {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
                 event.getTimestamp(), event.getSource()));
     }
-    
+
 }
