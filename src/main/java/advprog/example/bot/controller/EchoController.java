@@ -1,5 +1,6 @@
 package advprog.example.bot.controller;
 
+import advprog.example.bot.feature.PicAnalyze;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
@@ -22,16 +23,19 @@ public class EchoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
+        //asumsi input bisa merupakan url,
+        String reply = PicAnalyze.analyze(contentText);
+        return new TextMessage(reply);
+        /*
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
+        */
     }
 
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) {
         LOGGER.fine(String.format("ImageMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
-
-
         return null;
     }
 

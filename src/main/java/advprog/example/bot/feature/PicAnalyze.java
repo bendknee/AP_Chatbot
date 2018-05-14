@@ -11,27 +11,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-public class PicAnalyze
+public static class PicAnalyze
 {
-    // **********************************************
-    // *** Update or verify the following values. ***
-    // **********************************************
 
-    // Replace the subscriptionKey string value with your valid subscription key.
-    public static final String subscriptionKey = "6c6d2bacea154229bb8972c7c33303cb";
+    static final String subscriptionKey = "6c6d2bacea154229bb8972c7c33303cb";
+    static final String uriBase = "southeastasia.api.cognitive.microsoft.com/vision/v1.0/analyze";
 
-    // Replace or verify the region.
-    //
-    // You must use the same region in your REST API call as you used to obtain your subscription keys.
-    // For example, if you obtained your subscription keys from the westus region, replace
-    // "westcentralus" in the URI below with "westus".
-    //
-    // NOTE: Free trial subscription keys are generated in the westcentralus region, so if you are using
-    // a free trial subscription key, you should not need to change this region.
-    public static final String uriBase = "https://go.microsoft.com/fwlink/?linkid=848312";
-
-
-    public static void main(String[] args)
+    public static void analyze(String imageUrl)
     {
         HttpClient httpclient = new DefaultHttpClient();
 
@@ -52,7 +38,7 @@ public class PicAnalyze
             request.setHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
 
             // Request body.
-            StringEntity reqEntity = new StringEntity("{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/1/12/Broadway_and_Times_Square_by_night.jpg\"}");
+            StringEntity reqEntity = new StringEntity("{\"url\":\""+imageUrl+"\"}");
             request.setEntity(reqEntity);
 
             // Execute the REST API call and get the response entity.
@@ -65,13 +51,13 @@ public class PicAnalyze
                 String jsonString = EntityUtils.toString(entity);
                 JSONObject json = new JSONObject(jsonString);
                 System.out.println("REST Response:\n");
-                System.out.println(json.toString(2));
+                return json.toString(2);
             }
         }
         catch (Exception e)
         {
             // Display error message.
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 }
