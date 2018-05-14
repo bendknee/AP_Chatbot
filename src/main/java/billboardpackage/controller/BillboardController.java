@@ -5,6 +5,7 @@ import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import java.io.IOException;
 
@@ -14,8 +15,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @LineMessageHandler
 public class BillboardController {
@@ -32,7 +31,8 @@ public class BillboardController {
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
+    public TextMessage
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent"
                         + "(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
