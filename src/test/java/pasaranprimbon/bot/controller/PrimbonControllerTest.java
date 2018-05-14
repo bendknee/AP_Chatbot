@@ -41,7 +41,7 @@ public class PrimbonControllerTest {
     @Test
     void testIncorrectInput() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/primbon jodoh");
+                EventTestUtil.createDummyTextMessage("/primbon jodoh dan pekerjaan");
 
         TextMessage reply = primbonController.handleTextMessageEvent(event);
 

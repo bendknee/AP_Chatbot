@@ -29,7 +29,7 @@ public class PrimbonController {
 
         try {
             String[] tanggalan = newContentText.split("-");
-            LocalDate checkInput = LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+            LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
 
             int dayDifference = dayDifferenceGetter(newContentText);
             String dayName = dayGetter(dayDifference);
