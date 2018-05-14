@@ -1,0 +1,146 @@
+package com.bot.botapakah;
+//import com.bot.Creator.FaceDetector;
+import com.bot.Getter.Getter;
+
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.ImageMessageContent;
+import com.linecorp.bot.model.message.ImageMessage;
+import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.spring.boot.annotation.EventMapping;
+import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+//import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+
+@SpringBootApplication
+@LineMessageHandler
+public class BotApakahApplication extends SpringBootServletInitializer {
+
+    @Autowired
+    private LineMessagingClient lineMessagingClient;
+
+    private static String AccessToken = "Access Token here";
+    Getter getter = new Getter(AccessToken);
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(BotApakahApplication.class);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(BotApakahApplication.class, args);
+    }
+
+    @EventMapping
+    public void handleTextEvent(MessageEvent<TextMessageContent> messageEvent){
+        String pesan = messageEvent.getMessage().getText().toLowerCase();
+        String[] pesanSplit = pesan.split(" ");
+        if(pesanSplit[0].equals("apakah")){
+            String jawaban = getRandomJawaban();
+            String replyToken = messageEvent.getReplyToken();
+            balasChatDenganRandomJawaban(replyToken, jawaban);
+        }
+        else if(pesanSplit[0].equals("halo")){
+            String jawaban = jawabanhalo();
+            String replyToken = messageEvent.getReplyToken();
+            balasChatDenganRandomJawaban(replyToken, jawaban);
+        }
+        else if(pesanSplit[0].equals("untuk")){
+            if(pesanSplit[1].equals("ilmu")){
+                if(pesanSplit[2].equals("komputer")){
+                    String jawaban = jawabanuntukilmukomputer();
+                    String replyToken = messageEvent.getReplyToken();
+                    balasChatDenganRandomJawaban(replyToken, jawaban);
+                }
+            }
+        }
+        else if(pesanSplit[0].equals("mirror")){
+            String jawaban = jawabanmirrror(pesanSplit[1]);
+            String replyToken = messageEvent.getReplyToken();
+            balasChatDenganRandomJawaban(replyToken, jawaban);
+        }
+
+    }
+    @EventMapping
+    public void handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException {
+        // You need to install ImageMagick
+        handleHeavyContent(
+                event.getReplyToken(),
+                event.getMessage().getId(),
+                responseBody -> {
+                    DownloadedContent jpg = saveContent("jpg", responseBody);
+                    DownloadedContent previewImg = createTempFile("jpg");
+                    system(
+                            "convert",
+                            "-resize", "240x",
+                            jpg.path.toString(),
+                            previewImg.path.toString());
+                    reply(((MessageEvent) event).getReplyToken(),
+                            new ImageMessage(jpg.getUri(), jpg.getUri()));
+                });
+    }
+
+    //        ImageMessageContent imageMessageContent = img.getMessage();
+//        String id_umum = imageMessageContent.getId();
+//        FaceDetector faceDetector = new FaceDetector();
+//        TextMessage textMessage = faceDetector.handleImageContent(id_umum);
+    //balasChatDenganRandomJawaban(img.getReplyToken(), String.valueOf(textMessage));
+    //System.out.println("ID MESSAGE IMAGE : " + id_umum);
+
+    private String jawabanmirrror(String pesan){
+        String jawaban = pesan;
+        StringBuilder jawaban1 = new StringBuilder();
+
+        // append a string into StringBuilder jawaban1
+        jawaban1.append(jawaban);
+
+        // reverse StringBuilder jawaban1
+        jawaban1 = jawaban1.reverse();
+        return String.valueOf(jawaban1);
+    }
+    private String jawabanuntukilmukomputer(){
+        String jawaban = "Samudera laut ilmu terhampar dihadapanku, cakrawala bersinar memanggilku kesana, kan ku seberangi lautan, tak ku kenal putus asa, dengan daya dan upaya untuk ilmu komputer.";
+        return jawaban;
+    }
+    private String jawabanhalo(){
+        String jawaban = "Halo Juga!";
+        return jawaban;
+    }
+
+    private String getRandomJawaban(){
+        String jawaban = "";
+        int random = new Random().nextInt();
+        if(random%2==0){
+            jawaban = "Ya";
+        } else{
+            jawaban = "Nggak";
+        }
+        return jawaban;
+    }
+
+    private void balasChatDenganRandomJawaban(String replyToken, String jawaban){
+        TextMessage jawabanDalamBentukTextMessage = new TextMessage(jawaban);
+        try {
+            lineMessagingClient
+                    .replyMessage(new ReplyMessage(replyToken, jawabanDalamBentukTextMessage))
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println("Ada error saat ingin membalas chat");
+        }
+    }
+
+
+}
