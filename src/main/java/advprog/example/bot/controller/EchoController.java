@@ -1,7 +1,6 @@
 package advprog.example.bot.controller;
 
-import advprog.example.bot.HotCountryBot.HotCountryBot;
-import advprog.example.bot.HotCountryBot.HotCountrySong;
+import advprog.example.bot.hotcountry.HotCountryBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -33,13 +32,13 @@ public class EchoController {
 
         String input = splitContent[1];
 
-        if(command.equals("/echo")) {
+        if (command.equals("/echo")) {
             return new TextMessage(input);
         } else if (command.equals("/billboard")) {
             String[] input2 = input.split(" ", 2);
 
             String command2 = input2[0];
-            if(command2.toLowerCase().equals("hotcountry")) {
+            if (command2.toLowerCase().equals("hotcountry")) {
                 String artist = input2[1];
                 HotCountryBot hcb = new HotCountryBot(artist);
                 return new TextMessage(hcb.getFavArtist());

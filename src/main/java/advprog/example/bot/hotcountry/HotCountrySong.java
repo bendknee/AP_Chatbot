@@ -1,4 +1,4 @@
-package advprog.example.bot.HotCountryBot;
+package advprog.example.bot.hotcountry;
 
 public class HotCountrySong {
 
@@ -39,7 +39,7 @@ public class HotCountrySong {
     public String songData() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.artist + "\n");
-        sb.append(this.title+ "\n");
+        sb.append(this.title + "\n");
         sb.append(this.rank);
 
         return sb.toString();

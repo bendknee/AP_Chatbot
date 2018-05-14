@@ -1,6 +1,6 @@
 package advprog.example.bot.HotCountryTest;
-import advprog.example.bot.HotCountryBot.HotCountrySong;
-import advprog.example.bot.HotCountryBot.HotCountryBot;
+import advprog.example.bot.hotcountry.HotCountrySong;
+import advprog.example.bot.hotcountry.HotCountryBot;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

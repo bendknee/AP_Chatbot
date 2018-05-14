@@ -1,4 +1,4 @@
-package advprog.example.bot.HotCountryBot;
+package advprog.example.bot.hotcountry;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class HotCountryBot {
         this.getChart();
     }
 
-    public List<HotCountrySong> getChart(){
+    public List<HotCountrySong> getChart() {
         try {
             Document doc = Jsoup.connect(url).get();
             Elements data = doc.getElementsByClass("chart-row");
@@ -42,7 +42,7 @@ public class HotCountryBot {
                 String newTitle = Parser.unescapeEntities(title, false);
                 String newArtist = Parser.unescapeEntities(artist, false);
 
-               HotCountrySong alb = new HotCountrySong(newTitle, newArtist, i+1);
+                HotCountrySong alb = new HotCountrySong(newTitle, newArtist, i + 1);
                 this.chart.add(alb);
             }
         } catch (IOException e) {
@@ -52,8 +52,8 @@ public class HotCountryBot {
     }
 
     public boolean isExist(String find) {
-        for(HotCountrySong a : chart) {
-            if(a.getArtist().toLowerCase().contains(find.toLowerCase())) {
+        for (HotCountrySong a : chart) {
+            if (a.getArtist().toLowerCase().contains(find.toLowerCase())) {
                 return true;
             }
         }
