@@ -38,7 +38,7 @@ public class EventHandler {
         String userId = event.getSource().getUserId();
         String audioId = event.getMessage().getId();
 
-
+        Context.storeAudioContext(userId, audioId);
     }
 
     @EventMapping
