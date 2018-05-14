@@ -40,7 +40,7 @@ public class Hottest100 {
 
                 Song song = new Song(formatArtist, formatSongs);
 
-                if (nameArtists.equalsIgnoreCase(formatArtist)) {
+                if (formatArtist.contains(nameArtists)) {
                     this.nameArtist.add(song);
 
                 }
