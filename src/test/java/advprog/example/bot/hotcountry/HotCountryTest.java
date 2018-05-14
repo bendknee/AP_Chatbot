@@ -22,7 +22,7 @@ public class HotCountryTest {
     @Test
     public void getChartTest() {
         assertNotNull(hcb.getChart());
-        for(HotCountrySong sng : hcb.chart) {
+        for (HotCountrySong sng : hcb.chart) {
             sng.songData();
         }
     }

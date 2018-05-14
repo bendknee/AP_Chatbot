@@ -1,46 +1,43 @@
 package advprog.example.bot.hotcountry;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 
-import org.junit.Before;
-import org.junit.Test;
 
 public class SongTest {
 
-    String url = "https://www.billboard.com/charts/country-songs";
-    HotCountryBot hcb;
+    HotCountrySong song;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        hcb = new HotCountryBot();
-        hcb.find = "Armik";
+        song = new HotCountrySong("My song", "My artist", 3);
     }
 
-    @Test
-    public void getChartTest() {
-        assertNotNull(hcb.getChart());
-        for(HotCountrySong sng : hcb.chart) {
-            sng.songData();
-        }
-    }
-
-    @Test
-    public void isExistTest() {
-        assertTrue(hcb.isExist("Armik"));
-    }
-
-    @Test
-    public void favTest() {
-        assertEquals("Armik\nPacifica\n1", hcb.getFavArtist());
+    @org.junit.jupiter.api.Test
+    public void titleTest() {
+        Assertions.assertEquals("My song", song.getTitle());
+        song.setTitle("My song2");
+        Assertions.assertEquals("My song2", song.getTitle());
     }
 
 
-    //TODO apakah menggunakan api yang benar
-    @Test
-    public void urlTest() {
-        assertEquals(url, hcb.getUrl());
+    @org.junit.jupiter.api.Test
+    public void artisTest() {
+        Assertions.assertEquals("My artist", song.getArtist());
+        song.setArtist("My artist2");
+        Assertions.assertEquals("My artist2", song.getArtist());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void rankTest() {
+        Assertions.assertEquals(3, song.getRank());
+        song.setRank(2);
+        Assertions.assertEquals(2, song.getRank());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void songDataTest() {
+        Assertions.assertEquals("My artist\nMy song\n3"  , song.songData());
     }
 
 }
