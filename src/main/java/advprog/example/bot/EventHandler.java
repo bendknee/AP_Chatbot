@@ -19,6 +19,8 @@ public class EventHandler {
 
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+        CommandPattern.notifyWatcher(event);
+        
         Message reply = CommandPattern.getMessageFromEvent(event);
 
         if (reply == null) {
