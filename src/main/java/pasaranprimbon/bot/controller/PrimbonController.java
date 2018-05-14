@@ -1,16 +1,12 @@
 package pasaranprimbon.bot.controller;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.StickerMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import org.apache.tomcat.jni.Local;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -28,12 +24,21 @@ public class PrimbonController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        String newContentText = contentText.replace("/primbon", "");
-        int dayDifference = dayDifferenceGetter(newContentText.substring(1));
-        String dayName = dayGetter(dayDifference);
-        String pasaranName = pasaranGetter(dayDifference);
+        String newContentText = contentText.replace("/primbon ", "");
+        String replyText;
 
-        String replyText = dayName + " " + pasaranName;
+        try {
+            String[] tanggalan = newContentText.split("-");
+            LocalDate checkInput = LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]), Integer.parseInt(tanggalan[2]));
+
+            int dayDifference = dayDifferenceGetter(newContentText);
+            String dayName = dayGetter(dayDifference);
+            String pasaranName = pasaranGetter(dayDifference);
+            replyText = dayName + " " + pasaranName;
+        } catch (Exception e) {
+            replyText = "Please insert the correct date format (yyyy-MM-dd)";
+        }
+
         return new TextMessage(replyText);
     }
 
@@ -44,8 +49,6 @@ public class PrimbonController {
     }
 
     public int dayDifferenceGetter(String tanggal) {
-        SimpleDateFormat reference = new SimpleDateFormat("yyyy-MM-dd");
-
         String[] tanggalan = tanggal.split("-");
 
         LocalDate referencedDate = LocalDate.of(-200, 01, 01);

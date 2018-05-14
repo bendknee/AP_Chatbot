@@ -39,6 +39,16 @@ public class PrimbonControllerTest {
     }
 
     @Test
+    void testIncorrectInput() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/primbon jodoh");
+
+        TextMessage reply = primbonController.handleTextMessageEvent(event);
+
+        assertEquals("Please insert the correct date format (yyyy-MM-dd)", reply.getText());
+    }
+
+    @Test
     void testHandlePastTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/primbon 1000-01-26");
