@@ -1,5 +1,8 @@
 image: gradle:4.7-jdk8-alpine
 
+services:
+  - postgres:latest
+
 stages:
   - build
   - test
@@ -10,7 +13,6 @@ variables:
   POSTGRES_DB: database
   POSTGRES_USER: username
   POSTGRES_PASSWORD: "password"
-  POSTGRES_HOST: "postgres"
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -26,8 +28,6 @@ Test:
     - gradle check
     - gradle jacocoTestReport
     - gradle jacocoTestCoverageVerification
-  services:
-    - postgres:latest
 
 DeployProduction:
   image: ruby:2.4
