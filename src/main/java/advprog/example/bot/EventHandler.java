@@ -20,18 +20,7 @@ public class EventHandler {
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         CommandPattern.notifyWatcher(event);
-        
         Message reply = CommandPattern.getMessageFromEvent(event);
-
-        if (reply == null) {
-            String replyValue = "\""
-                    + event.getMessage().getText()
-                    + "\""
-                    + " is not a valid command. "
-                    + CommandPattern.getCommands();
-
-            reply = new TextMessage(replyValue);
-        }
 
         return reply;
     }
