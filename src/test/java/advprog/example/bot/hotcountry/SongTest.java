@@ -1,6 +1,4 @@
-package advprog.example.bot.HotCountryTest;
-import advprog.example.bot.hotcountry.HotCountrySong;
-import advprog.example.bot.hotcountry.HotCountryBot;
+package advprog.example.bot.hotcountry;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,16 +7,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+public class SongTest {
 
-
-public class HotCountryTest {
     String url = "https://www.billboard.com/charts/country-songs";
     HotCountryBot hcb;
 
     @Before
     public void setUp() {
         hcb = new HotCountryBot();
-        hcb.find = "Kane Brown";
+        hcb.find = "Armik";
     }
 
     @Test
@@ -31,21 +28,19 @@ public class HotCountryTest {
 
     @Test
     public void isExistTest() {
-        assertTrue(hcb.isExist("Kane Brown"));
+        assertTrue(hcb.isExist("Armik"));
     }
 
     @Test
     public void favTest() {
-        assertEquals("Kane Brown\nHeaven\n2", hcb.getFavArtist());
+        assertEquals("Armik\nPacifica\n1", hcb.getFavArtist());
     }
 
 
     //TODO apakah menggunakan api yang benar
     @Test
-    public void urlTest(){
+    public void urlTest() {
         assertEquals(url, hcb.getUrl());
-
     }
 
 }
-
