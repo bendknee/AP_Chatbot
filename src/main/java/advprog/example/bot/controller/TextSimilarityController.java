@@ -28,10 +28,16 @@ public class TextSimilarityController {
 
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        String url = generateUrl(contentText);
-        String result = requestResult(url);
-        System.out.println("RESULT : " + result);
-        return new TextMessage(result);
+
+        if (contentText.contains("/docs_sim") && contentText.length() > 10) {
+            String url = generateUrl(contentText);
+            String result = requestResult(url);
+            System.out.println("RESULT: " + result);
+            return new TextMessage(result);
+        } else {
+            return new TextMessage("Untuk membandingan 2 text dokumen, balas dengan "
+                    + "/docs_sim 'TEXT1' 'TEXT2' atau /docs_sim URL1 URL2");
+        }
     }
 
     @EventMapping
@@ -41,7 +47,8 @@ public class TextSimilarityController {
     }
 
     public String generateUrl(String text) {
-        text = text.replace("/echo /docs_sim ", "");
+        System.out.println("CHAT: " + text);
+        text = text.replace("/docs_sim ", "");
         String token = "08267f9bb04e40dc94f6181ddc9e56f4"; //NOTE! TOKEN CAN EXPIRED
         String url = "https://api.dandelion.eu/datatxt/sim/v1/?";
 
@@ -61,6 +68,7 @@ public class TextSimilarityController {
                     + "token=" + token;
         }
 
+        System.out.println("URL: " + url);
         return url;
     }
 
@@ -70,7 +78,7 @@ public class TextSimilarityController {
             HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            System.out.println("Response Code : " + connection.getResponseCode());
+            System.out.println("Response Code: " + connection.getResponseCode());
 
             BufferedReader input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
@@ -81,19 +89,27 @@ public class TextSimilarityController {
             }
             input.close();
 
-            System.out.println(response.toString());
+            System.out.println("JSON Response: " + response.toString());
 
-            String similarity = getSimilarity(response.toString());
+            return getSimilarity(response.toString());
 
-            return new BigDecimal(similarity).multiply(new BigDecimal(100)).toString()
-                    .substring(0, 5) + "%";
         } catch (Exception e) {
-            return "ERROR!";
+            return "ERROR! Untuk membandingan 2 text dokumen, balas dengan "
+                    + "/docs_sim 'TEXT1' 'TEXT2' atau /docs_sim URL1 URL2";
         }
     }
 
     public String getSimilarity(String response) {
-        int index = response.indexOf("similarity") + 12;
-        return response.substring(index, index + 6);
+        if (response.contains("\"similarity\":1.0")) {
+            return "100%";
+        } else if (response.contains("\"similarity\":0.0")) {
+            return "0%";
+        } else {
+            int index = response.indexOf("similarity") + 12;
+            String similarity = response.substring(index, index + 6);
+            return new BigDecimal(similarity).multiply(new BigDecimal(100)).toString()
+                    .substring(0, 5) + "%";
+        }
+
     }
 }

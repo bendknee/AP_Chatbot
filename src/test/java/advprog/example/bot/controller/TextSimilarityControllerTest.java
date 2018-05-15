@@ -41,7 +41,7 @@ public class TextSimilarityControllerTest {
     @Test
     void testTextSimilarityCorrect() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo /docs_sim "
+                EventTestUtil.createDummyTextMessage("/docs_sim "
                         + "'Cameron wins the Oscar' "
                         + "'All nominees for the Academy Awards'");
 
@@ -51,25 +51,61 @@ public class TextSimilarityControllerTest {
     }
 
     @Test
-    void testTextSimilarityFalse() {
+    void testTextSimilarityDocSim() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo /docs_sim");
+                EventTestUtil.createDummyTextMessage("Haii namaku John Cena");
 
         TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
 
-        assertEquals("ERROR!", reply.getText());
+        assertEquals("Untuk membandingan 2 text dokumen, balas dengan "
+                + "/docs_sim 'TEXT1' 'TEXT2' atau /docs_sim URL1 URL2", reply.getText());
+    }
+
+    @Test
+    void testTextSimilarityFalse() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/docs_sim");
+
+        TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
+
+        assertEquals("Untuk membandingan 2 text dokumen, balas dengan "
+                + "/docs_sim 'TEXT1' 'TEXT2' atau /docs_sim URL1 URL2", reply.getText());
     }
 
     @Test
     void testTextSimilarityCorrectUrl() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo /docs_sim "
+                EventTestUtil.createDummyTextMessage("/docs_sim "
                         + "http://www.bbc.com/news/world-us-canada-26734036 "
                         + "http://edition.cnn.com/2014/03/24/politics/obama-europe-trip/");
 
         TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
 
         assertEquals("63.31%", reply.getText());
+    }
+
+    @Test
+    void testTextSimilaritySameText() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/docs_sim "
+                        + "'Cameron wins the Oscar' "
+                        + "'Cameron wins the Oscar'");
+
+        TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
+
+        assertEquals("100%", reply.getText());
+    }
+
+    @Test
+    void testTextSimilarityZeroSimilarity() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/docs_sim "
+                        + "'I do not feel so good' "
+                        + "'Food is love'");
+
+        TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
+
+        assertEquals("0%", reply.getText());
     }
 
     @Test
