@@ -37,7 +37,7 @@ public class TropicalController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String textContext = content.getText();
-        if (textContext.length() < 18) {
+        if (textContext.length() < 20) {
             return new TextMessage("Sorry your input is not valid"
                     + " the format should be /billboard tropical ArtistName");
         }
