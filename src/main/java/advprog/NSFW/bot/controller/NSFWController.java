@@ -71,7 +71,7 @@ public class NSFWController {
             return new TextMessage(reply);
         }
         catch (JSONException e) {
-            return new TextMessage("nsfw");
+            return new TextMessage(e.getMessage());
         }
     }
 
@@ -138,9 +138,9 @@ public class NSFWController {
         JSONObject json = new JSONObject(inputjson);
         //JSONArray photo = json.getJSONObject("categories").getJSONArray("name");
         String hasil = json.getJSONArray("results").getJSONObject(0).getJSONArray("categories").getJSONObject(0).getString("name");
-        if (!hasil.equalsIgnoreCase("nsfw")) return "sfw";
+        if (hasil.equalsIgnoreCase("safe")) return "sfw";
         else {
-            return hasil;
+            return "nsfw";
         }
     }
 }
