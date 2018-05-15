@@ -38,7 +38,7 @@ public class NearbyPhotosController {
         String latitude = Double.toString(content.getLatitude());
         String longitude = Double.toString(content.getLongitude());
 
-        String flickrRestUrl =  BASE_URL + API_METHOD + "&api_key=" + API_KEY + "&accuracy=13" + "&lat="
+        String flickrRestUrl =  BASE_URL + API_METHOD + "&api_key=" + API_KEY + "&lat="
                 + latitude + "&lon=" + longitude + EXTENSION_PARAM;
 
         String stringifiedJson = restGetMethod(flickrRestUrl);
@@ -46,8 +46,8 @@ public class NearbyPhotosController {
         List<ImageCarouselColumn> carouselColumns = carouselColumnsGenerator(allPhotosData);
 
 
-        TemplateMessage templateMessage = new TemplateMessage("Return Carousell",
-                new ImageCarouselTemplate(carouselColumns));
+        TemplateMessage templateMessage = new TemplateMessage("Found " + carouselColumns.size()
+                + " images", new ImageCarouselTemplate(carouselColumns));
         return Collections.singletonList(templateMessage);
     }
 
