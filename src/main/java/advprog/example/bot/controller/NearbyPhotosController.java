@@ -26,7 +26,7 @@ public class NearbyPhotosController {
     private final String BASE_URL = "https://api.flickr.com/services/rest/?method=";
     private final String API_KEY = "4847f0e678f60a5f7e213521c263deef";
     private final String API_METHOD = "flickr.photos.search";
-    private final String EXTENSION_PARAM = "&accuracy=13&radius=3&per_page=5&format=json&nojsoncallback=1";
+    private final String EXTENSION_PARAM = "&radius=3&per_page=5&format=json&nojsoncallback=1";
     private HashSet<String> requests;
 
     @EventMapping
@@ -38,7 +38,7 @@ public class NearbyPhotosController {
         String latitude = Double.toString(content.getLatitude());
         String longitude = Double.toString(content.getLongitude());
 
-        String flickrRestUrl =  BASE_URL + API_METHOD + "&api_key=" + API_KEY + "&lat="
+        String flickrRestUrl =  BASE_URL + API_METHOD + "&api_key=" + API_KEY + "&accuracy=13" + "&lat="
                 + latitude + "&lon=" + longitude + EXTENSION_PARAM;
 
         String stringifiedJson = restGetMethod(flickrRestUrl);
@@ -54,7 +54,6 @@ public class NearbyPhotosController {
     private String restGetMethod(String url) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
-        //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
         return restTemplate.getForObject(url, String.class, header);
     }
 
