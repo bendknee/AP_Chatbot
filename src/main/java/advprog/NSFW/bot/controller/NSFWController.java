@@ -60,13 +60,17 @@ public class NSFWController {
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
         String id = event.getMessage().getId();
-        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-        try {
-            String reply = checker(url);
-            return new TextMessage(reply);
-        } catch (JSONException e) {
-            return new TextMessage("Json Not Found");
-        }
+        return new TextMessage(id);
+//        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+//        try {
+//            String reply = checker(url);
+//            return new TextMessage(reply);
+//        }catch (IOException e){
+//            return new TextMessage("Ea");
+//        }
+//        catch (JSONException e) {
+//            return new TextMessage("Json Not Found");
+//        }
     }
 
     public void auth(){
