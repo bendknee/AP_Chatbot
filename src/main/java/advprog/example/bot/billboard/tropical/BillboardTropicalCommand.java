@@ -3,7 +3,6 @@ package advprog.example.bot.billboard.tropical;
 import advprog.example.bot.Command;
 import advprog.example.bot.billboard.tropical.objects.Song;
 import com.linecorp.bot.model.event.message.MessageContent;
-import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
@@ -19,6 +18,6 @@ public class BillboardTropicalCommand implements Command {
             replyText += song.toString() + "\n";
         }
 
-        return new TextMessage(replyText.substring(0,replyText.length() - 1));
+        return new TextMessage(replyText.substring(0, replyText.length() - 1));
     }
 }

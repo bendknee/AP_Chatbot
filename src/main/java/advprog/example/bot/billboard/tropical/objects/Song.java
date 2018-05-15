@@ -24,6 +24,6 @@ public class Song {
     }
 
     public String toString() {
-        return "("+ rank + ") " + author + " - " + song;
+        return "(" + rank + ") " + author + " - " + song;
     }
 }

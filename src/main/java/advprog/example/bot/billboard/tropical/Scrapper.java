@@ -1,34 +1,34 @@
 package advprog.example.bot.billboard.tropical;
 
+import advprog.example.bot.billboard.tropical.objects.Song;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import advprog.example.bot.billboard.tropical.objects.Song;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Scrapper {
-
+    public static final String TROPICAL_LINK = "https://www.billboard.com/charts/tropical-songs";
     private static Scrapper instance = null;
     private Document billboard;
-    public final static String TROPICAL_LINK = "https://www.billboard.com/charts/tropical-songs";
+
+    public static Scrapper getInstance() {
+        if (instance == null) {
+            instance = new Scrapper();
+        }
+        return instance;
+    }
 
     private Scrapper() {
         try {
             billboard = Jsoup.connect(TROPICAL_LINK).get();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static Scrapper getInstance() {
-        if(instance == null) {
-            instance = new Scrapper();
-        }
-        return instance;
     }
 
     public Document getDocument() {

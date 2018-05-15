@@ -1,18 +1,17 @@
 package advprog.example.bot.billboard.tropical;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import advprog.example.bot.billboard.tropical.objects.Song;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ScrapperTest {
 

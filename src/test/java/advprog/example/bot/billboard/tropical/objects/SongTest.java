@@ -1,8 +1,7 @@
-package advprog.example.bot.twitter.objects;
+package advprog.example.bot.billboard.tropical.objects;
 
 import static org.junit.Assert.assertEquals;
 
-import advprog.example.bot.billboard.tropical.objects.Song;
 import org.junit.Test;
 
 public class SongTest {
