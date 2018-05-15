@@ -53,16 +53,22 @@ public class LaughersManager {
             try {
                 switch (groupType) {
                     case 'C':
-                        lineMessagingClient.getGroupMemberProfile(groupId, laughers.getUserId());
+                        lineMessagingClient.getGroupMemberProfile(groupId, laughers.getUserId())
+                                           .get()
+                                           .getDisplayName();
                         activeUser.add(laughers);
                         break;
                     case 'R':
-                        lineMessagingClient.getRoomMemberProfile(groupId, laughers.getUserId());
+                        lineMessagingClient.getRoomMemberProfile(groupId, laughers.getUserId())
+                                           .get()
+                                           .getDisplayName();
                         activeUser.add(laughers);
                         break;
                     case 'U':
                     default:
-                        lineMessagingClient.getProfile(laughers.getUserId());
+                        lineMessagingClient.getProfile(laughers.getUserId())
+                                           .get()
+                                           .getDisplayName();
                         activeUser.add(laughers);
                         break;
                 }
