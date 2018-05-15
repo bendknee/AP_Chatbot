@@ -1,7 +1,6 @@
 package advprog.example.bot.laughers;
 
 import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.profile.MembersIdsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,42 +43,34 @@ public class LaughersManager {
         }
     }
 
-    private List<String> getActiveUser(char groupType, String groupId) throws Exception {
-        List<String> activeUser = new ArrayList<>();
-        String start = null;
-        boolean canGetMoreMember = true;
-        MembersIdsResponse membersIdsResponse;
+    private List<Laughers> getTop5ActiveLaughers(char groupType,
+                                                 String groupId) {
+        List<Laughers> laughersList = laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
+        List<Laughers> activeUser = new ArrayList<>();
 
-        switch (groupType) {
-            case 'C':
-                while (canGetMoreMember) {
-                    membersIdsResponse = lineMessagingClient.getGroupMembersIds(groupId, start)
-                                                            .get();
-                    activeUser.addAll(membersIdsResponse.getMemberIds());
-                    canGetMoreMember = membersIdsResponse.getNext().isPresent();
-                    if (canGetMoreMember) {
-                        start = membersIdsResponse.getNext().get();
-                    }
+        for (Laughers laughers : laughersList) {
+            try {
+                switch (groupType) {
+                    case 'C':
+                        lineMessagingClient.getGroupMemberProfile(groupId, laughers.getUserId());
+                        activeUser.add(laughers);
+                        break;
+                    case 'R':
+                        lineMessagingClient.getRoomMemberProfile(groupId, laughers.getUserId());
+                        activeUser.add(laughers);
+                        break;
+                    case 'U':
+                    default:
+                        lineMessagingClient.getProfile(laughers.getUserId());
+                        activeUser.add(laughers);
+                        break;
                 }
-                break;
-            case 'R':
-                while (canGetMoreMember) {
-                    membersIdsResponse = lineMessagingClient.getRoomMembersIds(groupId, start)
-                                                            .get();
-                    activeUser.addAll(membersIdsResponse.getMemberIds());
-                    canGetMoreMember = membersIdsResponse.getNext().isPresent();
-                    if (canGetMoreMember) {
-                        start = membersIdsResponse.getNext().get();
-                    }
-                }
-                break;
-            case 'U':
-            default:
-                activeUser.add(groupId);
-                break;
+            } catch (Exception e) {
+                // empty
+            }
         }
 
-        return activeUser;
+        return activeUser.stream().limit(5).collect(Collectors.toList());
     }
 
     private int[] getTop5Percentage(List<Laughers> laughersList) {
@@ -127,20 +118,7 @@ public class LaughersManager {
 
     public String getTop5Laughers(String groupId) {
         char groupType = groupId.charAt(0);
-
-        List<String> activeUser;
-        try {
-            activeUser = getActiveUser(groupType, groupId);
-        } catch (Exception e) {
-            return "Error when get members";
-        }
-
-        List<Laughers> laughersList =
-            laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId)
-                              .stream()
-                              .filter(laughers -> activeUser.contains(laughers.getUserId()))
-                              .collect(Collectors.toList());
-
+        List<Laughers> laughersList = getTop5ActiveLaughers(groupType, groupId);
         int[] percentage = getTop5Percentage(laughersList);
 
         StringBuilder stringBuilder = new StringBuilder();

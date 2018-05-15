@@ -12,11 +12,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.profile.MembersIdsResponse;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -47,7 +45,6 @@ public class LaughersManagerTest {
 
     private CompletableFuture<UserProfileResponse> profileResponse1;
     private CompletableFuture<UserProfileResponse> profileResponse2;
-    private CompletableFuture<MembersIdsResponse> membersIdsResponse;
 
     @BeforeEach
     void setUp() {
@@ -60,10 +57,6 @@ public class LaughersManagerTest {
             CompletableFuture.completedFuture(new UserProfileResponse("Andika",
                                                                       "U2",
                                                                       "", ""));
-        membersIdsResponse =
-            CompletableFuture.completedFuture(new MembersIdsResponse(Arrays.asList("U1",
-                                                                                   "U2"),
-                                                                     null));
     }
 
     @Test
@@ -117,7 +110,6 @@ public class LaughersManagerTest {
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U1");
         doReturn(profileResponse2)
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U2");
-        doReturn(membersIdsResponse).when(lineMessagingClient).getGroupMembersIds(any(), any());
         assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ",
                      laughersManager.getTop5Laughers("C1"));
     }
@@ -133,7 +125,6 @@ public class LaughersManagerTest {
         doReturn(profileResponse2)
             .when(lineMessagingClient)
             .getRoomMemberProfile("R1", "U2");
-        doReturn(membersIdsResponse).when(lineMessagingClient).getRoomMembersIds(any(), any());
         assertEquals("1. Endrawan (60%)\n2. Andika (40%)\n3. \n4. \n5. ",
                      laughersManager.getTop5Laughers("R1"));
     }
@@ -159,7 +150,6 @@ public class LaughersManagerTest {
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U1");
         doReturn(profileResponse2)
             .when(lineMessagingClient).getGroupMemberProfile("C1", "U2");
-        doReturn(membersIdsResponse).when(lineMessagingClient).getGroupMembersIds(any(), any());
         assertEquals("1. Endrawan (50%)\n1. Andika (50%)\n3. \n4. \n5. ",
                      laughersManager.getTop5Laughers("C1"));
     }
