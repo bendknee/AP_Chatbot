@@ -66,19 +66,4 @@ public class JapanController {
         }
         return sb.toString();
     }
-
-    public String scrapper() throws IOException{
-        Document dc = Jsoup.connect("https://www.billboard.com/charts/japan-hot-100").get();
-        Elements body = dc.select("div.chart-row__main-display");
-        StringBuilder sb = new StringBuilder();
-        int i=0;
-        List<String> chart = null;
-
-        for (Element step:body){
-            chart.add(step.select(".chart-row__song").text());
-        }
-        System.out.println(chart);
-
-        return "haha";
-    }
 }
