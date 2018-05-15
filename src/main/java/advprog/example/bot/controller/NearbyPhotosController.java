@@ -84,7 +84,10 @@ public class NearbyPhotosController {
                     "https://www.flickr.com/photos/%s/%s", image.get("owner"), image.get("id")
             );
             String title;
-            if (image.get("title").length() > 12) {
+            if (image.get("title").length() == 0) {
+                title = "...";
+            }
+            else if (image.get("title").length() > 12) {
                 title = image.get("title").substring(0,9) + "...";
             } else {
                 title = image.get("title");
