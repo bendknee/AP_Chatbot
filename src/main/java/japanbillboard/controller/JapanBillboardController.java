@@ -38,7 +38,7 @@ public class JapanBillboardController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String textContext = content.getText();
-        if (textContext.length() < 20) {
+        if (textContext.length() < 19) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /billboard japan100 ArtistName");
         }
