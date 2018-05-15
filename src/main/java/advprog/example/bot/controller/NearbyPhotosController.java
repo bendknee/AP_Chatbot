@@ -26,16 +26,8 @@ public class NearbyPhotosController {
     private final String BASE_URL = "https://api.flickr.com/services/rest/?method=";
     private final String API_KEY = "4847f0e678f60a5f7e213521c263deef";
     private final String API_METHOD = "flickr.photos.search";
-    private final String EXTENSION_PARAM = "&per_page=5&format=json&nojsoncallback=1&radius=3&accuracy=13";
+    private final String EXTENSION_PARAM = "&accuracy=13&radius=3&per_page=5&format=json&nojsoncallback=1";
     private HashSet<String> requests;
-
-    /*@EventMapping
-    public TextMessage handleApplicationTrigger(MessageEvent<TextMessageContent> event) {
-        LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
-                event.getTimestamp(), event.getMessage()));
-
-
-    }*/
 
     @EventMapping
     public List<Message> handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
