@@ -1,21 +1,25 @@
 package advprog.example.bot.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import advprog.example.bot.EventTestUtil;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
@@ -26,63 +30,42 @@ public class OriconComicRankingControllerTest {
         System.setProperty("line.bot.channelToken", "TOKEN");
     }
 
-    @Mock
-    private static OriconComicRankingController oriconComicRankingControllerMock;
+    @Autowired
+    private OriconComicRankingController oriconController;
 
-    @Mock
-    private static MessageEvent<TextMessageContent> textMessageContentMock;
-
-    @Mock
-    private static Event eventMock;
-
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setUp() {
-        oriconComicRankingControllerMock = mock(OriconComicRankingController.class);
-        textMessageContentMock = (MessageEvent<TextMessageContent>) mock(MessageEvent.class);
-        eventMock = mock(Event.class);
-
-        when(languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock))
-                .thenReturn(new TextMessage("(1) 進撃の巨人 - (画)諫山創\n"+
-                "(2) 僕のヒーローアカデミア - (画)堀越耕平\n"+
-                "(3) Book Title H - Author H\n"+
-                "(4) Book Title G - Author G\n"+
-                "(5) Book Title F - Author F\n"+
-                "(6) Book Title E - Author E\n"+
-                "(7) Book Title D - Author D\n"+
-                "(8) Book Title C - Author C\n"+
-                "(9) Book Title B - Author B\n"+
-                "(10) Book Title A - Author A"));
+    @Test
+    void testContextLoads() {
+        assertNotNull(oriconController);
     }
 
     @Test
-    public void testContextLoads() {
-        assertNotNull(languageDetectionControllerMock);
+    void testHandleTextMessageEvent() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon 2018-05-11");
+
+        TextMessage reply = oriconController.handleTextMessageEvent(event);
+
+        assertEquals("2018-05-11", reply.getText());
     }
 
     @Test
-    public void testHandleTextMessageEvent() {
-        TextMessage reply = languageDetectionControllerMock.handleTextMessageEvent(textMessageContentMock);
+    void testHandleDefaultMessage() {
+        Event event = mock(Event.class);
 
-        assertEquals("(1) 進撃の巨人 - (画)諫山創\n"+
-                "(2) 僕のヒーローアカデミア - (画)堀越耕平\n"+
-                "(3) Book Title H - Author H\n"+
-                "(4) Book Title G - Author G\n"+
-                "(5) Book Title F - Author F\n"+
-                "(6) Book Title E - Author E\n"+
-                "(7) Book Title D - Author D\n"+
-                "(8) Book Title C - Author C\n"+
-                "(9) Book Title B - Author B\n"+
-                "(10) Book Title A - Author A", reply.getText());
+        oriconController.handleDefaultMessage(event);
+
+        verify(event, atLeastOnce()).getSource();
+        verify(event, atLeastOnce()).getTimestamp();
     }
 
     @Test
-    public void testHandleDefaultMessage() {
-        eventMock.getSource();
-        eventMock.getTimestamp();
-
-        verify(eventMock, atLeastOnce()).getSource();
-        verify(eventMock, atLeastOnce()).getTimestamp();
+    void testMakeGetCall() throws Exception {
+    	assertEquals(null, null);
+    }
+    
+    @Test
+    void testScreenScrapeGetBooks() {
+    	assertEquals(oriconController.screenScrapeGetBooks("<html></html>"), null);
     }
 
 }
