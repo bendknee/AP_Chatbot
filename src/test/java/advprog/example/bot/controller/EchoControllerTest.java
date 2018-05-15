@@ -65,6 +65,6 @@ public class EchoControllerTest {
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
-        assertEquals("Armik\nPacifica\n1", reply.getText());
+        assertEquals("Armik\nPacifica\n1\n\nArmik\nEnamor\n3", reply.getText());
     }
 }

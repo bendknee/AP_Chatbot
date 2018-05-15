@@ -61,12 +61,20 @@ public class NewAgeBot {
     }
 
     public String getFavArtist() {
+        StringBuilder sb = new StringBuilder();
         if (isExist(find)) {
             for (NewAgeAlbum a : chart) {
                 if (a.getArtist().toLowerCase().contains(find.toLowerCase())) {
-                    return a.albumData();
+                    if (sb.toString().length() == 0) {
+                        sb.append(a.albumData());
+                    } else {
+                        sb.append("\n\n" + a.albumData());
+                    }
                 }
             }
+        }
+        if (sb.toString().length() > 0) {
+            return sb.toString();
         }
         return "SORRY! Your favorite artist is not on the list!";
     }

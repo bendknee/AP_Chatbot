@@ -34,7 +34,7 @@ public class NewAgeTest {
 
     @Test
     public void favTest() {
-        assertEquals("Armik\nPacifica\n1", nab.getFavArtist());
+        assertEquals("Armik\nPacifica\n1\n\nArmik\nEnamor\n3", nab.getFavArtist());
     }
 
 
