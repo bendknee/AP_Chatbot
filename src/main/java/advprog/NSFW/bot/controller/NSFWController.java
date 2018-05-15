@@ -66,14 +66,14 @@ public class NSFWController {
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-        return new TextMessage(url);
-//        try {
-//            String reply = checker(url);
-//            return new TextMessage(reply);
-//        }
-//        catch (JSONException e) {
-//            return new TextMessage(e.getMessage());
-//        }
+        auth(url);
+        try {
+            String reply = checker(url);
+            return new TextMessage(reply);
+        }
+        catch (JSONException e) {
+            return new TextMessage("nsfw");
+        }
     }
 
     public static class DownloadedContent {
@@ -87,14 +87,14 @@ public class NSFWController {
                 .toUriString();
     }
 
-    public void auth(){
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-//
-//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-//
-//        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+    public void auth(String url){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
     }
 
 
