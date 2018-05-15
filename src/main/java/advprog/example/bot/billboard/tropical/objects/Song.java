@@ -6,18 +6,24 @@ public class Song {
     private String song;
 
     public Song(int rank, String author, String song) {
-
+        this.rank = rank;
+        this.author = author;
+        this.song = song;
     }
 
     public String getAuthor() {
-        return null;
+        return author;
     }
 
     public int getRank() {
-        return 0;
+        return rank;
     }
 
     public String getSong() {
-        return null;
+        return song;
+    }
+
+    public String toString() {
+        return "("+ rank + ") " + author + " - " + song;
     }
 }

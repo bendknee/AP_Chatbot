@@ -33,6 +33,7 @@ public class ScrapperTest {
 
         for (Song song : sample) {
             assertTrue(html.contains(song.getAuthor()));
+            assertTrue(html.contains(Integer.toString(song.getRank())));
             assertTrue(html.contains(song.getSong()));
         }
     }

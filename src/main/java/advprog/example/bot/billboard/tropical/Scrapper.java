@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import advprog.example.bot.billboard.tropical.objects.Song;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,18 +35,21 @@ public class Scrapper {
         return billboard;
     }
 
-    public static List<String> getChart() throws IOException {
-        List<String> messages = new LinkedList<>();
+    public List<Song> getChart() {
+        List<Song> songs = new LinkedList<>();
         Elements block = Scrapper.getInstance().getDocument()
                 .select("div.chart-data");
-        for (Element el : block.select("article.chart-row")) {
-            Elements text = el.select("div.chart-row__main-display");
-            String number = text.select("span.chart-row__current-week").text();
-            String author = text.select("a.chart-row__artist").text();
+        List<Element> container = block.select("article.chart-row");
+
+        for (int i = 0; i < container.size() && i < 10; i++) {
+            Elements text = container.get(i).select("div.chart-row__main-display");
+            int number = Integer.parseInt(text.select("span.chart-row__current-week").text());
+            String author = text.select(".chart-row__artist").text();
             String title = text.select("h2.chart-row__song").text();
-            messages.add("(" + number + ") " + author + " - " + title);
+            songs.add(new Song(number, author, title));
         }
-        return messages;
+
+        return songs;
     }
 }
 
