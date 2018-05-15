@@ -2,16 +2,20 @@ package advprog.example.bot.composer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+
+import java.io.IOException;
+
+import java.util.Iterator;
+import java.util.Locale;
+
 import org.apache.commons.validator.routines.UrlValidator;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Locale;
 
 public class LanguageDetectionComposer {
     private static final String BASE_API_URL = "https://api.dandelion.eu/datatxt/li/v1";
