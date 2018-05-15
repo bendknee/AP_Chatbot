@@ -2,6 +2,7 @@ package advprog.NSFW.bot.controller;
 
 import com.google.common.io.ByteStreams;
 import com.linecorp.bot.client.MessageContentResponse;
+import org.apache.tomcat.util.codec.binary.Base64;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
@@ -13,12 +14,10 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -27,9 +26,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.Collections;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 
@@ -64,28 +64,60 @@ public class NSFWController {
 
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
+        int min = 0;
+        int max = 1;
+        int randomNum = ThreadLocalRandom.current().nextInt(min, max);
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
         //auth(url);
-        return new TextMessage(restGetMethod(url));
-//        try {
-//            String reply = checker(url);
-//            return new TextMessage(reply);
-//        }
-//        catch (JSONException e) {
-//            return new TextMessage("nsfw");
-//        }
-    }
-
-    public static class DownloadedContent {
-        Path path;
-        String uri;
+        //System.out.println(restGetMethod(url));
+        //return new TextMessage(restGetMethod(url));
+        //String url = restPostMethod(api);
+        //return new TextMessage(url);
+        try {
+            String reply = checker(url);
+            return new TextMessage(reply);
+        }
+        catch (JSONException e) {
+            if (randomNum == 0){
+                return  new TextMessage("sfw");
+            }
+            else return new TextMessage("nsfw");
+        }
     }
 
     private static String createUri(String path) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(path).build()
                 .toUriString();
+    }
+
+    static String getBasicAuth(String username, String password) {
+        String auth = username + ":" + password;
+        String auth64 = new String(org.apache.tomcat.util.codec.binary.Base64.encodeBase64(auth.getBytes()));
+
+        return "Basic " + auth64;
+    }
+
+    public String nembakApi(String id) {
+        String basic = getBasicAuth("uname", "password");
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+
+        UriComponentsBuilder uri = UriComponentsBuilder
+                .fromUriString("https://api.imagga.com/v1/colors")
+                .queryParam("url", url);
+        LOGGER.info(uri.toUriString());
+
+        HttpHeaders header = new HttpHeaders();
+        header.add("Authorization", basic);
+
+        HttpEntity<String> request = new HttpEntity<String>(String.valueOf(header));
+        ResponseEntity<String> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, String.class);
+
+        LOGGER.info(response.getBody());
+        return response.getBody();
+        //jsonnode
     }
 
     public void auth(String url){
@@ -95,17 +127,27 @@ public class NSFWController {
 
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        //return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
     }
 
     private String restGetMethod(String url) {
+        String basic = getBasicAuth("uname", "password");
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
+        header.add("Authorization", basic);
         //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
         return restTemplate.getForObject(url, String.class, header);
     }
 
-
+    private String restPostMethod(String url) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_JSON);
+        header.set("Authorization", "Bearer "+ url);
+        HttpEntity<String> entity = new HttpEntity<String>(header);
+        return restTemplate.postForObject(url, entity, String.class);
+    }
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
@@ -115,7 +157,7 @@ public class NSFWController {
 
     public String checker(String input) throws IOException, JSONException {
         String credentialsToEncode = "acc_0e29e261d8dc785" + ":" + "c9cb9ad5c23de1757e2d1c614e703939";
-        String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
+        String basicAuth = java.util.Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
         String endpoint_url = "https://api.imagga.com/v1/categorizations/nsfw_beta";
         //String image_url = "https://cdn.pornpics.com/pics1/2017-08-06/474907_16big.jpg";  //Porn
