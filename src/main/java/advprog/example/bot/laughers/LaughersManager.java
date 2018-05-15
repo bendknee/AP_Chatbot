@@ -1,9 +1,12 @@
 package advprog.example.bot.laughers;
 
 import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.model.profile.MembersIdsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,60 +44,121 @@ public class LaughersManager {
         }
     }
 
-    public String getTop5Laughers(String groupId) {
-        List<Laughers> laughersList =
-            laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
-        StringBuilder stringBuilder = new StringBuilder();
+    private List<String> getActiveUser(char groupType, String groupId) throws Exception {
+        List<String> activeUser = new ArrayList<>();
+        String start = null;
+        boolean canGetMoreMember = true;
+        MembersIdsResponse membersIdsResponse;
+
+        switch (groupType) {
+            case 'C':
+                while (canGetMoreMember) {
+                    membersIdsResponse = lineMessagingClient.getGroupMembersIds(groupId, start)
+                                                            .get();
+                    activeUser.addAll(membersIdsResponse.getMemberIds());
+                    canGetMoreMember = membersIdsResponse.getNext().isPresent();
+                    if (canGetMoreMember) {
+                        start = membersIdsResponse.getNext().get();
+                    }
+                }
+                break;
+            case 'R':
+                while (canGetMoreMember) {
+                    membersIdsResponse = lineMessagingClient.getRoomMembersIds(groupId, start)
+                                                            .get();
+                    activeUser.addAll(membersIdsResponse.getMemberIds());
+                    canGetMoreMember = membersIdsResponse.getNext().isPresent();
+                    if (canGetMoreMember) {
+                        start = membersIdsResponse.getNext().get();
+                    }
+                }
+                break;
+            case 'U':
+            default:
+                activeUser.add(groupId);
+                break;
+        }
+
+        return activeUser;
+    }
+
+    private int[] getTop5Percentage(List<Laughers> laughersList) {
+        int[] percentage = new int[5];
 
         long sumOfAllLaugh = laughersList.stream().mapToLong(Laughers::getNumberOfLaugh).sum();
-
-        int[] percentage = new int[5];
         for (int i = 0; i < Math.min(5, laughersList.size()); i++) {
             Laughers laughers = laughersList.get(i);
             percentage[i] = (int) ((double) laughers.getNumberOfLaugh() * 100.0
                 / (double) sumOfAllLaugh);
         }
 
+        return percentage;
+    }
+
+    private int getRank(int position, int[] percentage) {
+        int rank = position;
+
+        for (int j = position - 1; j >= 0; j--) {
+            if (percentage[position] == percentage[j]) {
+                rank = j;
+            }
+        }
+
+        return rank + 1;
+    }
+
+    private String getDisplayName(char groupType, String groupId, String userId) throws Exception {
+        switch (groupType) {
+            case 'C':
+                return lineMessagingClient.getGroupMemberProfile(groupId, userId)
+                                          .get()
+                                          .getDisplayName();
+            case 'R':
+                return lineMessagingClient.getRoomMemberProfile(groupId, userId)
+                                          .get()
+                                          .getDisplayName();
+            case 'U':
+            default:
+                return lineMessagingClient.getProfile(userId)
+                                          .get()
+                                          .getDisplayName();
+        }
+    }
+
+    public String getTop5Laughers(String groupId) {
+        char groupType = groupId.charAt(0);
+
+        List<String> activeUser;
+        try {
+            activeUser = getActiveUser(groupType, groupId);
+        } catch (Exception e) {
+            return "Error when get members";
+        }
+
+        List<Laughers> laughersList =
+            laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId)
+                              .stream()
+                              .filter(laughers -> activeUser.contains(laughers.getUserId()))
+                              .collect(Collectors.toList());
+
+        int[] percentage = getTop5Percentage(laughersList);
+
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 5; i++) {
             if (i != 0) {
                 stringBuilder.append("\n");
             }
 
             if (i < laughersList.size()) {
-                Laughers laughers = laughersList.get(i);
-
-                int rank = i;
-                for (int j = i - 1; j >= 0; j--) {
-                    if (percentage[i] == percentage[j]) {
-                        rank = j;
-                    }
-                }
-                stringBuilder.append(rank + 1);
+                stringBuilder.append(getRank(i, percentage));
                 stringBuilder.append(". ");
 
                 try {
-                    switch (laughers.getGroupId().charAt(0)) {
-                        case 'C':
-                            stringBuilder.append(lineMessagingClient
-                                                     .getGroupMemberProfile(groupId,
-                                                                            laughers.getUserId())
-                                                     .get().getDisplayName());
-                            break;
-                        case 'R':
-                            stringBuilder.append(lineMessagingClient
-                                                     .getRoomMemberProfile(groupId,
-                                                                           laughers.getUserId())
-                                                     .get().getDisplayName());
-                            break;
-                        case 'U':
-                        default:
-                            stringBuilder.append(lineMessagingClient
-                                                     .getProfile(laughers.getUserId())
-                                                     .get().getDisplayName());
-                            break;
-                    }
+                    stringBuilder.append(getDisplayName(groupType,
+                                                        groupId,
+                                                        laughersList.get(i).getUserId()));
                 } catch (Exception e) {
-                    return "Error when get user profile name";
+                    stringBuilder.append("Error when get user profile name");
                 }
 
                 stringBuilder.append(" (");
