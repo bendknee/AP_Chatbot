@@ -3,6 +3,8 @@ package advprog.example.bot.controller;
 import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.template.ImageCarouselColumn;
 import com.linecorp.bot.model.message.template.ImageCarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
@@ -14,11 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -40,7 +38,7 @@ public class NearbyPhotosController {
     }*/
 
     @EventMapping
-    public ImageCarouselTemplate handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
+    public List<Message> handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
         LOGGER.fine(String.format("LocationMessageContent(timestamp='%s',title='%s')",
                 event.getTimestamp(), event.getMessage().getTitle()));
 
@@ -55,7 +53,10 @@ public class NearbyPhotosController {
         List<Map<String, String>> allPhotosData = stringToJson(stringifiedJson);
         List<ImageCarouselColumn> carouselColumns = carouselColumnsGenerator(allPhotosData);
 
-        return new ImageCarouselTemplate(carouselColumns);
+
+        TemplateMessage templateMessage = new TemplateMessage("Return Carousell",
+                new ImageCarouselTemplate(carouselColumns));
+        return Collections.singletonList(templateMessage);
     }
 
     private String restGetMethod(String url) {
