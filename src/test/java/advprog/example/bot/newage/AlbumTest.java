@@ -38,6 +38,6 @@ public class AlbumTest {
 
     @Test
     void albumDataTest() {
-        assertEquals("My artist\nMy album\n3"  , album.albumData());
+        assertEquals("My artist\nMy album\n3", album.albumData());
     }
 }
