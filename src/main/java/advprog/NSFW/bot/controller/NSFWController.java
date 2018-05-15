@@ -67,6 +67,7 @@ public class NSFWController {
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
         //auth(url);
+        restGetMethod(url);
         try {
             String reply = checker(url);
             return new TextMessage(reply);
@@ -95,6 +96,13 @@ public class NSFWController {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+    }
+
+    private String restGetMethod(String url) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders header = new HttpHeaders();
+        //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
+        return restTemplate.getForObject(url, String.class, header);
     }
 
 
@@ -137,7 +145,6 @@ public class NSFWController {
     public String json(String inputjson) throws JSONException {
 
         JSONObject json = new JSONObject(inputjson);
-        //JSONArray photo = json.getJSONObject("categories").getJSONArray("name");
         String hasil = json.getJSONArray("results").getJSONObject(0).getJSONArray("categories").getJSONObject(0).getString("name");
         if (hasil.equalsIgnoreCase("safe")) return "sfw";
         else {
