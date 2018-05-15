@@ -45,7 +45,8 @@ public class LaughersManager {
 
     private List<Laughers> getTop5ActiveLaughers(char groupType,
                                                  String groupId) {
-        List<Laughers> laughersList = laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
+        List<Laughers> laughersList =
+            laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
         List<Laughers> activeUser = new ArrayList<>();
 
         for (Laughers laughers : laughersList) {
