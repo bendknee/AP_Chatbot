@@ -1,5 +1,6 @@
 package advprog.example.bot.billboard.tropical;
 
+import advprog.example.bot.billboard.tropical.objects.Song;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScrapperTest {
 
-    List<String> sample;
+    List<Song> sample;
     Document doc;
 
     @Before
     public void setUp() throws IOException {
-        System.out.println("Run Newscrapper test...");
-        sample = Scrapper.getChart();
+        System.out.println("Run Scrapper test...");
+        sample = Scrapper.getInstance().getChart();
         doc = Jsoup.connect(Scrapper.TROPICAL_LINK).get();
     }
 
@@ -30,20 +31,19 @@ public class ScrapperTest {
         System.out.println("Testing content...");
         String html = Jsoup.connect(Scrapper.TROPICAL_LINK).get().text();
 
-        for (String head : sample) {
-            assertTrue(html.contains(head));
+        for (Song song : sample) {
+            assertTrue(html.contains(song.getAuthor()));
+            assertTrue(html.contains(song.getSong()));
         }
     }
 
     @Test
     public void correctNumberOfChartTest() {
         System.out.println("Testing number of chart entries...");
-        Elements nodes = doc.select("div#site-news-forum");
-        int count = 0;
-        for (Element el : nodes.select("article.chart-row")) {
-            count++;
-        }
-        assertEquals(count, sample.size());
+        Elements nodes = doc.select("div.chart-data");
+        int count = nodes.select("article.chart-row").size();
+
+        assertTrue((count > sample.size() && sample.size() == 10) || (count == sample.size()));
     }
 
 }
