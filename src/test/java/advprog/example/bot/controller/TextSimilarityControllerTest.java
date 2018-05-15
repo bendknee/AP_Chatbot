@@ -62,6 +62,17 @@ public class TextSimilarityControllerTest {
     }
 
     @Test
+    void testTextSimilarityCatchError() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/docs_sim asd asd");
+
+        TextMessage reply = textSimilarityController.handleTextMessageEvent(event);
+
+        assertEquals("ERROR! Untuk membandingan 2 text dokumen, balas dengan "
+                + "/docs_sim 'TEXT1' 'TEXT2' atau /docs_sim URL1 URL2", reply.getText());
+    }
+
+    @Test
     void testTextSimilarityFalse() {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/docs_sim");
