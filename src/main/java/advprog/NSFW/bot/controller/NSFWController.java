@@ -1,5 +1,6 @@
 package advprog.NSFW.bot.controller;
 
+import com.google.common.io.ByteStreams;
 import com.linecorp.bot.client.MessageContentResponse;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -17,17 +18,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.UUID;
 import java.util.logging.Logger;
+
+
 
 @LineMessageHandler
 public class NSFWController {
@@ -60,17 +65,25 @@ public class NSFWController {
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
         String id = event.getMessage().getId();
-        return new TextMessage(id);
-//        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-//        try {
-//            String reply = checker(url);
-//            return new TextMessage(reply);
-//        }catch (IOException e){
-//            return new TextMessage("Ea");
-//        }
-//        catch (JSONException e) {
-//            return new TextMessage("Json Not Found");
-//        }
+        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+        try {
+            String reply = checker(url);
+            return new TextMessage(reply);
+        }
+        catch (JSONException e) {
+            return new TextMessage("nsfw");
+        }
+    }
+
+    public static class DownloadedContent {
+        Path path;
+        String uri;
+    }
+
+    private static String createUri(String path) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(path).build()
+                .toUriString();
     }
 
     public void auth(){
