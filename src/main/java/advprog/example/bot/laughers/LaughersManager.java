@@ -5,7 +5,6 @@ import com.linecorp.bot.client.LineMessagingClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,8 +42,8 @@ public class LaughersManager {
         }
     }
 
-    private List<Laughers> getTop5ActiveLaughers(char groupType,
-                                                 String groupId) {
+    private List<Laughers> getActiveLaughers(char groupType,
+                                             String groupId) {
         List<Laughers> laughersList =
             laughersRepository.findByGroupIdOrderByNumberOfLaughDesc(groupId);
         List<Laughers> activeUser = new ArrayList<>();
@@ -77,7 +76,7 @@ public class LaughersManager {
             }
         }
 
-        return activeUser.stream().limit(5).collect(Collectors.toList());
+        return activeUser;
     }
 
     private int[] getTop5Percentage(List<Laughers> laughersList) {
@@ -125,7 +124,7 @@ public class LaughersManager {
 
     public String getTop5Laughers(String groupId) {
         char groupType = groupId.charAt(0);
-        List<Laughers> laughersList = getTop5ActiveLaughers(groupType, groupId);
+        List<Laughers> laughersList = getActiveLaughers(groupType, groupId);
         int[] percentage = getTop5Percentage(laughersList);
 
         StringBuilder stringBuilder = new StringBuilder();
