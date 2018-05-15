@@ -67,14 +67,14 @@ public class NSFWController {
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
         //auth(url);
-        restGetMethod(url);
-        try {
-            String reply = checker(url);
-            return new TextMessage(reply);
-        }
-        catch (JSONException e) {
-            return new TextMessage("nsfw");
-        }
+        return new TextMessage(restGetMethod(url));
+//        try {
+//            String reply = checker(url);
+//            return new TextMessage(reply);
+//        }
+//        catch (JSONException e) {
+//            return new TextMessage("nsfw");
+//        }
     }
 
     public static class DownloadedContent {
