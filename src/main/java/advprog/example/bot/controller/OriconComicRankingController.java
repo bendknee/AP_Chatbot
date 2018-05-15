@@ -7,8 +7,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
 import org.apache.http.HttpResponse;
@@ -23,76 +21,61 @@ import org.jsoup.select.Elements;
 @LineMessageHandler
 public class OriconComicRankingController {
 
-    private static final Logger LOGGER = 
-            Logger.getLogger(OriconComicRankingController.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(OriconComicRankingController.class.getName());
 
-    @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
-            throws Exception {
-        LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
-                event.getTimestamp(), event.getMessage()));
-        TextMessageContent content = event.getMessage();
-        String contentText = content.getText();
+	@EventMapping
+	public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
+		LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", event.getTimestamp(),
+				event.getMessage()));
+		TextMessageContent content = event.getMessage();
+		String contentText = content.getText();
 
-        if (contentText.startsWith("/echo")) {
-            return new TextMessage("echo dari oricon");
-        }
-        if (!contentText.startsWith("/oricon books weekly")) {
-            return new TextMessage("Wrong input, use /oricon books weekly "
-                    + "<date(YYYY-MM-DD)> to access the feature");
-        }
-        
-        String replyText = contentText.replace("/oricon books weekly", "");
-        return new TextMessage(getBook(replyText.substring(1)));
-    }
+		if (contentText.startsWith("/echo")) {
+			return new TextMessage("echo dari oricon");
+		} else if (contentText.startsWith("/oricon comic ")) {
+			String replyText = contentText.replace("/oricon comic ", "");
+			return new TextMessage(oriconResponse(replyText.substring(0)));
+		} else if (contentText.startsWith("/")) {
+			return new TextMessage("Command doesn't exist, try: \n" + "/oricon comic <date YYYY-MM-DD or YYYY-MM>");
+		}
+		return null;
+	}
 
-    @EventMapping
-    public void handleDefaultMessage(Event event) {
-        LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
-                event.getTimestamp(), event.getSource()));
-    }
-    
-    public static String getBook(String date) throws Exception {
-        Elements elements = screenScrapeGetBooks(makeGetCall(date));
+	@EventMapping
+	public void handleDefaultMessage(Event event) {
+		LOGGER.fine(String.format("Event(timestamp='%s',source='%s')", event.getTimestamp(), event.getSource()));
+	}
 
-        for (Element e: elements) {
-            String chartPosition = e.getElementsByClass("num").text();
-            String title = e.getElementsByClass("title").text();
-            String author = e.getElementsByClass("name").text();
-            Elements list = e.getElementsByClass("list");
-            String releaseMonth = list.get(1).text();
-            String estimatedSales = list.get(3).text();
-            
-        }
+	public static String oriconResponse(String date) throws Exception {
+		String url = "https://www.oricon.co.jp/rank/cbm/";
+		if (date.split("-").length == 2)
+			url += "m/" + date + "/";
+		else
+			url += "w/" + date + "/";
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet get = new HttpGet(url);
 
-        return "Your artist is not on the top 50 Hot Country Songs list";
-    }
+		HttpResponse response = client.execute(get);
+		if (response.getStatusLine().getStatusCode() != 200)
+			return "Invalid Parameter, either your date is not available or you have given a wrong input";
+		Document html = Jsoup.connect(url).get();
 
-    public static String makeGetCall(String date) throws Exception {
-        String url = "https://www.oricon.co.jp/rank/obc/w/";
-        url += date + "/";
-        final HttpClient client = HttpClientBuilder.create().build();
-        final HttpGet get = new HttpGet(url);
+		return scrapeComicRanking(html);
 
-        HttpResponse response = client.execute(get);
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+	}
 
-        BufferedReader rd = new BufferedReader(new 
-                InputStreamReader(response.getEntity().getContent()));
-        StringBuffer result = new StringBuffer();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
+	public static String scrapeComicRanking(Document html) {
+		String result = "";
+		Elements contents = html.select(".box-rank-entry");
+		
+		for (Element content : contents) {
+            String chartPosition = content.getElementsByClass("num").text();
+            String title = content.getElementsByClass("title").text();
+            String author = content.getElementsByClass("artist-name").text();           
+            result += "(" + chartPosition + ") " + title + " - " + author + "\n";
         }
 
-        System.out.println(result.toString());
-        return result.toString();
-    }
-
-    public static Elements screenScrapeGetBooks(String html) {
-        Document doc = Jsoup.parse(html);
-        Elements content = doc.select(".box-rank-entry");
-        return content;
-    }
+		
+		return result;
+	}
 }
