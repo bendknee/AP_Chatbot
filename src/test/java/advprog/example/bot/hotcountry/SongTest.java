@@ -37,7 +37,7 @@ public class SongTest {
 
     @org.junit.jupiter.api.Test
     public void songDataTest() {
-        Assertions.assertEquals("My artist\nMy song\n3"  , song.songData());
+        Assertions.assertEquals("My artist\nMy song\n3", song.songData());
     }
 
 }
