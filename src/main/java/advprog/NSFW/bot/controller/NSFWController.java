@@ -66,13 +66,14 @@ public class NSFWController {
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-        try {
-            String reply = checker(url);
-            return new TextMessage(reply);
-        }
-        catch (JSONException e) {
-            return new TextMessage(e.getMessage());
-        }
+        return new TextMessage(url);
+//        try {
+//            String reply = checker(url);
+//            return new TextMessage(reply);
+//        }
+//        catch (JSONException e) {
+//            return new TextMessage(e.getMessage());
+//        }
     }
 
     public static class DownloadedContent {
