@@ -23,6 +23,8 @@ public class BotExampleApplication {
         return "";
     }
 
+    public VideoData getVideo
+
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
         SpringApplication.run(BotExampleApplication.class, args);
