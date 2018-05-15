@@ -1,14 +1,22 @@
 package advprog.NSFW.bot.controller;
 
+import com.linecorp.bot.client.MessageContentResponse;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.ImageMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.ImageMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +24,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -46,6 +56,30 @@ public class NSFWController {
             return new TextMessage("Json Not Found");
         }
     }
+
+    @EventMapping
+    public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
+        String id = event.getMessage().getId();
+        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+        try {
+            String reply = checker(url);
+            return new TextMessage(reply);
+        } catch (JSONException e) {
+            return new TextMessage("Json Not Found");
+        }
+    }
+
+    public void auth(){
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//
+//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+//
+//        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+    }
+
+
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
