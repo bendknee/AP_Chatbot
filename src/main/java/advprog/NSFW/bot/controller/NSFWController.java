@@ -58,15 +58,12 @@ public class NSFWController {
         } catch (IOException e) {
             return new TextMessage("Web Not Found");
         } catch (JSONException e) {
-            return new TextMessage("Json Not Found");
+            return new TextMessage("Inputan tidak tersedia coba /is_sfw atau masukan gambar");
         }
     }
 
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
-        int min = 0;
-        int max = 1;
-        int randomNum = ThreadLocalRandom.current().nextInt(min, max);
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
         //auth(url);
@@ -79,17 +76,8 @@ public class NSFWController {
             return new TextMessage(reply);
         }
         catch (JSONException e) {
-            if (randomNum == 0){
-                return  new TextMessage("sfw");
-            }
-            else return new TextMessage("nsfw");
+            return new TextMessage("nsfw");
         }
-    }
-
-    private static String createUri(String path) {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(path).build()
-                .toUriString();
     }
 
     static String getBasicAuth(String username, String password) {
@@ -139,16 +127,7 @@ public class NSFWController {
         //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
         return restTemplate.getForObject(url, String.class, header);
     }
-
-    private String restPostMethod(String url) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.APPLICATION_JSON);
-        header.set("Authorization", "Bearer "+ url);
-        HttpEntity<String> entity = new HttpEntity<String>(header);
-        return restTemplate.postForObject(url, entity, String.class);
-    }
-
+    
     @EventMapping
     public void handleDefaultMessage(Event event) {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
@@ -161,7 +140,6 @@ public class NSFWController {
 
         String endpoint_url = "https://api.imagga.com/v1/categorizations/nsfw_beta";
         //String image_url = "https://cdn.pornpics.com/pics1/2017-08-06/474907_16big.jpg";  //Porn
-        //String image_url = "https://cdn.britannica.com/700x450/48/106048-120-A097ADC4.jpg"; //Sand Dunes
         String image_url = input;
 
         String url = endpoint_url + "?url=" + image_url;
