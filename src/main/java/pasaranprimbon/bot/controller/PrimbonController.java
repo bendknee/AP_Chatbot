@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class PrimbonController {
 
     private static final Logger LOGGER =
-            Logger.getLogger(pasaranprimbon.bot.controller.PrimbonController.class.getName());
+            Logger.getLogger(PrimbonController.class.getName());
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
