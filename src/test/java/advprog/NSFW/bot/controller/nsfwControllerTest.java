@@ -1,4 +1,4 @@
-package advprog.NSFW.bot.controller;
+package advprog.nsfw.bot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 
-import advprog.NSFW.bot.EventTestUtil;
+import advprog.nsfw.bot.EventTestUtil;
 import advprog.nsfw.bot.controller.NsfwController;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;

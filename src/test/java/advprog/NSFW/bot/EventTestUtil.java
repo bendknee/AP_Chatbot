@@ -1,4 +1,4 @@
-package advprog.NSFW.bot;
+package advprog.nsfw.bot;
 
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
