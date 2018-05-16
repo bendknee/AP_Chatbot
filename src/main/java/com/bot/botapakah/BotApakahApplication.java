@@ -243,7 +243,7 @@ public class BotApakahApplication extends SpringBootServletInitializer {
 //    }
 
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     class Response {
         Result[] results;
     }
@@ -267,7 +267,7 @@ public class BotApakahApplication extends SpringBootServletInitializer {
 
     class Context{
         private HashMap<String,String> penyimpan;
-        
+
     }
 
     @EventMapping
