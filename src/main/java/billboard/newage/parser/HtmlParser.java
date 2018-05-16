@@ -1,4 +1,4 @@
-package billboard.hot100.parser;
+package billboard.newage.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
