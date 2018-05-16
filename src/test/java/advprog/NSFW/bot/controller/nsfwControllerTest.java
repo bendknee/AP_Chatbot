@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 
 
 import advprog.NSFW.bot.EventTestUtil;
+import advprog.nsfw.bot.controller.NsfwController;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
@@ -26,7 +27,7 @@ import java.io.IOException;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-public class NSFWControllerTest {
+public class nsfwControllerTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
@@ -34,7 +35,7 @@ public class NSFWControllerTest {
     }
 
     @Autowired
-    private NSFWController nsfwController;
+    private NsfwController nsfwController;
 
     @Test
     void testContextLoads() {

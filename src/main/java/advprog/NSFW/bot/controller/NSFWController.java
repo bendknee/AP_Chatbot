@@ -1,33 +1,27 @@
-package advprog.NSFW.bot.controller;
-
+package advprog.nsfw.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.ImageMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.logging.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 @LineMessageHandler
-public class NSFWController {
+public class NsfwController {
 
-    private static final Logger LOGGER = Logger.getLogger(NSFWController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(NsfwController.class.getName());
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -42,8 +36,7 @@ public class NSFWController {
             String url = content.getText().replace("/is_sfw ", "");
             String reply = checker(url);
             return new TextMessage(reply);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e){
             return new TextMessage("Inputan tidak tersedia nih, coba /is_sfw atau masukan gambar");
         } catch (IOException e) {
             return new TextMessage("Web Not Found");
@@ -53,9 +46,10 @@ public class NSFWController {
     }
 
     @EventMapping
-    public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
+    public TextMessage handleImageMessageEvent(
+            MessageEvent<ImageMessageContent> event) throws IOException {
         String id = event.getMessage().getId();
-        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+        String url = "https://api.line.me/v2/bot/message/" + id + "/content";
         try {
             String reply = checker(url);
             return new TextMessage(reply);
@@ -120,14 +114,16 @@ public class NSFWController {
     }
 
     public String checker(String input) throws IOException, JSONException {
-        String credentialsToEncode = "acc_0e29e261d8dc785" + ":" + "c9cb9ad5c23de1757e2d1c614e703939";
-        String basicAuth = java.util.Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
+        String credentialsToEncode = "acc_0e29e261d8dc785" + ":"
+                + "c9cb9ad5c23de1757e2d1c614e703939";
+        String basicAuth = java.util.Base64.getEncoder().encodeToString(
+                credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
-        String endpoint_url = "https://api.imagga.com/v1/categorizations/nsfw_beta";
+        String endpointUrl = "https://api.imagga.com/v1/categorizations/nsfw_beta";
         //String image_url = "https://cdn.pornpics.com/pics1/2017-08-06/474907_16big.jpg";  //Porn
-        String image_url = input;
+        String imageUrl = input;
 
-        String url = endpoint_url + "?url=" + image_url;
+        String url = endpointUrl + "?url=" + imageUrl;
         URL urlObject = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
 
@@ -138,7 +134,8 @@ public class NSFWController {
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
 
-        BufferedReader connectionInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader connectionInput = new BufferedReader(
+                new InputStreamReader(connection.getInputStream()));
 
         String jsonResponse = connectionInput.readLine();
 
@@ -150,9 +147,11 @@ public class NSFWController {
     public String json(String inputjson) throws JSONException {
 
         JSONObject json = new JSONObject(inputjson);
-        String hasil = json.getJSONArray("results").getJSONObject(0).getJSONArray("categories").getJSONObject(0).getString("name");
-        if (hasil.equalsIgnoreCase("safe")) return "sfw";
-        else {
+        String hasil = json.getJSONArray("results").getJSONObject(0).getJSONArray("categories")
+                .getJSONObject(0).getString("name");
+        if(hasil.equalsIgnoreCase("safe")) {
+            return "sfw";
+        } else {
             return "nsfw";
         }
     }
