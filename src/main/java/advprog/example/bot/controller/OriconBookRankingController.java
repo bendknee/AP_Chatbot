@@ -59,7 +59,7 @@ public class OriconBookRankingController {
 			return "Invalid Parameter, either your date is not available or you have given a wrong input";
 		Document html = Jsoup.connect(url).get();
 
-		return scrapeComicRanking(html);
+		return scrapeBookRanking(html);
 
 	}
 
