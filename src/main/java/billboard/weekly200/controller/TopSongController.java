@@ -1,6 +1,6 @@
-package billboard.hot100.controller;
+package billboard.weekly200.controller;
 
-import billboard.hot10.parser.HtmlParser;
+import billboard.weekly200.parser.HtmlParser;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -27,7 +27,7 @@ public class TopSongController {
     }
 
     private TextMessage stringBuilderForEvents(String contentText) {
-        if (contentText.equals("/billboard hot100")) {
+        if (contentText.equals("/billboard bill200")) {
             HtmlParser parser = new HtmlParser();
             ArrayList<String> arrArtist = parser.getArrayArtist();
             ArrayList<String> arrSong = parser.getArraySong();

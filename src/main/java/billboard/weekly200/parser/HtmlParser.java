@@ -1,4 +1,4 @@
-package billboard.hot100.parser;
+package billboard.weekly200.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class HtmlParser {
     Document doc;
 
     public HtmlParser() {
-        doc = getHtml("https://www.billboard.com/charts/hot-100");
+        doc = getHtml("https://www.billboard.com/charts/billboard-200");
         Elements artists = doc.select("article.chart-row");
         for (Element artist: artists) {
             String song = artist.select("h2.chart-row__song").text();
