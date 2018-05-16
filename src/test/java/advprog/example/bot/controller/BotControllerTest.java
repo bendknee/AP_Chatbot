@@ -45,6 +45,16 @@ public class BotControllerTest {
     }
 
     @Test
+    void testHandleInvalidTextMessageEvent() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/ampas gan");
+
+        TextMessage reply = botController.handleTextMessageEvent(event);
+
+        assertEquals("Command is invalid. Check again!", reply.getText());
+    }
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
