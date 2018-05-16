@@ -30,12 +30,12 @@ public class OriconComicRankingController {
 		TextMessageContent content = event.getMessage();
 		String contentText = content.getText();
 
-		if (contentText.startsWith("/echo")) {
-			return new TextMessage("echo dari oricon");
-		} else if (contentText.startsWith("/oricon comic ")) {
+		if (contentText.startsWith("/oricon comic ")) {
 			String replyText = contentText.replace("/oricon comic ", "");
 			return new TextMessage(oriconResponse(replyText.substring(0)));
-		} else if (contentText.startsWith("/")) {
+		} else if (contentText.matches("/oricon comic")) {
+			return new TextMessage("/oricon comic function needs a date as a parameter");
+		}else if (contentText.startsWith("/")) {
 			return new TextMessage("Command doesn't exist, try: \n" + "/oricon comic <date YYYY-MM-DD or YYYY-MM>");
 		}
 		return null;
