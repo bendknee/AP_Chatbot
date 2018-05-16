@@ -28,8 +28,7 @@ public class PrimbonController {
         String newContentText = contentText.replace("/primbon ", "");
         String replyText;
 
-        System.out.println(contentText.substring(0,8));
-        if (contentText.substring(0,8).equals("/primbon")) {
+        if (contentText.length()>8 && contentText.substring(0,8).equals("/primbon")) {
             try {
                 String[] tanggalan = newContentText.split("-");
                 LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]),
