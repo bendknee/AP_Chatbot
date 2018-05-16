@@ -35,7 +35,7 @@ public class YoutubeInfoController {
             String noOfLikes = body.getElementsByAttributeValue("title", "I like this").get(0).text();
             String noOfDislikes = body.getElementsByAttributeValue("title", "I dislike this").get(0).text();
 //            VideoData videoData = new VideoData(videoTitle,channelName,noOfLikes,noOfDislikes);
-            return new TextMessage(videoTitle + "" + channelName + "" + noOfLikes + "" + noOfDislikes);
+            return new TextMessage(videoTitle + " " + channelName + " " + noOfLikes + " " + noOfDislikes);
         }
         String error = "Sorry, your Command is wrong, Try /URL [Youtube URL]";
         return new TextMessage(error);
