@@ -34,7 +34,6 @@ public class RecentTweetsControllerTest {
 
         TextMessage reply = botController.handleTextMessageEvent(event);
         String[] arrayOfTweets = reply.getText().split("\r\n");
-        Arrays.stream(arrayOfTweets).forEach(i -> System.out.println(i));
         assertEquals(5, arrayOfTweets.length);
     }
 

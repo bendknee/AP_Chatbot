@@ -80,7 +80,10 @@ public class TwitterApiHelper {
     public List<Tweet> getRecentTweets(String username) {
         String response = requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json?"
                 + "screen_name=" + username + "&count=5");
-        System.out.println(response);
+        if (response == null) {
+            return null;
+        }
+
         JSONArray json = new JSONArray(response);
         return Tweet.parseJsonList(json);
     }

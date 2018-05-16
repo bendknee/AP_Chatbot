@@ -55,7 +55,7 @@ public class TwitterApiHelperTest {
         TwitterApiHelper instance = TwitterApiHelper.getInstance();
         List<Tweet> response = instance.getRecentTweets("GanAmpas");
         String rawSecondResponse = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json"
-                + "?screen_name=TheObsessivePr1");
+                + "?screen_name=GanAmpas");
         List<Tweet> secondResponse = Tweet.parseJsonList(new JSONArray(rawSecondResponse));
 
         assertEquals(secondResponse.size(), response.size());

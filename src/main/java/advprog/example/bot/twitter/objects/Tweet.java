@@ -25,7 +25,6 @@ public class Tweet {
     }
 
     public static Tweet parseJson(JSONObject json) {
-        System.out.println(json.toString());
         String text = json.getString("text");
         String timeStamp = json.getString("created_at");
         return new Tweet(text, timeStamp);

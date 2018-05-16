@@ -32,14 +32,13 @@ public class BotController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        TextMessage reply = null;
         for (String pattern : textCommands.keySet()) {
             if (contentText.matches(pattern)) {
-                reply = (TextMessage) textCommands.get(pattern).produceMessage(content);
+                return (TextMessage) textCommands.get(pattern).produceMessage(content);
             }
         }
 
-        return reply;
+        return new TextMessage("Command is invalid. Check again!");
     }
 
     @EventMapping
