@@ -17,8 +17,11 @@ public static class PicAnalyze
     static final String subscriptionKey = "6c6d2bacea154229bb8972c7c33303cb";
     static final String uriBase = "southeastasia.api.cognitive.microsoft.com/vision/v1.0/analyze";
 
-    public static void analyze(String imageUrl)
+    public static boolean flag = false;
+
+    public static String analyze(String imageUrl)
     {
+        flag = false;
         HttpClient httpclient = new DefaultHttpClient();
 
         try

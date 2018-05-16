@@ -23,20 +23,28 @@ public class EchoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        //asumsi input bisa merupakan url,
-        String reply = PicAnalyze.analyze(contentText);
-        return new TextMessage(reply);
-        /*
+        if (contentText.equalsIgnoreCase("analyse_picture")) {
+            PicAnalyze.flag = true;
+            return new TextMessage("give us the image you want to analyze pls");
+        }
+        else PicAnalyze.flag = false;
+
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
-        */
     }
 
     @EventMapping
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) {
         LOGGER.fine(String.format("ImageMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
-        return null;
+
+        String message = event.getMessage();
+
+        if(PicAnalyze.flag == true){
+            return new TextMessage(PicAnalyze.analyze(message));
+        }
+
+
     }
 
     @EventMapping
