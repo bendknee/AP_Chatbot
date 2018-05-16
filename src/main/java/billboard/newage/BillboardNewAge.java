@@ -1,4 +1,4 @@
-package billboard.top10;
+package billboard.newage;
 
 import java.util.logging.Logger;
 
@@ -6,12 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Billboard100 {
+public class BillboardNewAge {
 
-    private static final Logger LOGGER = Logger.getLogger(Billboard100.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(BillboardNewAge.class.getName());
 
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
-        SpringApplication.run(Billboard100.class, args);
+        SpringApplication.run(BillboardNewAge.class, args);
     }
 }

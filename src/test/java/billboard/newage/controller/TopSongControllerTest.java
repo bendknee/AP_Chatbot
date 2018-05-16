@@ -1,4 +1,4 @@
-package billboard.hot100.controller;
+package billboard.newage.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,8 +7,8 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import billboard.hot100.Billboard100Test;
-import billboard.hot100.controller.TopSongController;
+import billboard.newage.Billboard100Test;
+import billboard.newage.controller.TopSongController;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -42,7 +42,7 @@ public class TopSongControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/billboard hot100");
+                EventTestUtil.createDummyTextMessage("/billboard newage");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
