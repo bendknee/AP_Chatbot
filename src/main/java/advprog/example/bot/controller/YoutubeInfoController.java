@@ -26,8 +26,8 @@ public class YoutubeInfoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        if (contentText.contains("/url ")){
-            String replyText = contentText.replace("/url", "");
+        if (contentText.contains("/youtube ")){
+            String replyText = contentText.replace("/youtube", "");
             Document doc = Jsoup.connect(replyText).header("User-Agent", "Chrome").get();
             Element body = doc.body();
             String videoTitle = body.getElementById("eow-title").attr("title");
@@ -35,9 +35,10 @@ public class YoutubeInfoController {
             String noOfLikes = body.getElementsByAttributeValue("title", "I like this").get(0).text();
             String noOfDislikes = body.getElementsByAttributeValue("title", "I dislike this").get(0).text();
 //            VideoData videoData = new VideoData(videoTitle,channelName,noOfLikes,noOfDislikes);
-            return new TextMessage(videoTitle + " " + channelName + " " + noOfLikes + " " + noOfDislikes);
+            return new TextMessage("Title: "videoTitle + "\n" + "Channel: " + channelName + "\n" + "Number of Likes: " + noOfLikes
+                    + "\n" + "Number of Dislikes: " + noOfDislikes);
         }
-        String error = "Sorry, your Command is wrong, Try /URL [Youtube URL]";
+        String error = "Sorry, your Command is wrong, Try /youtube [Youtube URL]";
         return new TextMessage(error);
     }
 
