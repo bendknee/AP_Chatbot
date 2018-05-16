@@ -29,6 +29,8 @@ public class EchoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
+
+
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
     }
@@ -40,12 +42,7 @@ public class EchoController {
     }
 
     @EventMapping
-    public void handleTextContentPublic (String replyToken, Event event, TextMessage content) throws Exception {
-        handleTextContent(replyToken, event, content);
-    }
-
-    @EventMapping
-    private ArrayList<String> scrapping(String mode, String date) throws IOException {
+    private String scrapping(String mode, String date) throws IOException {
         String offset = "";
         ArrayList<String> val = new ArrayList<>();
         if (mode.toLowerCase().equals("daily")) {
@@ -55,9 +52,7 @@ public class EchoController {
             offset = "https://www.oricon.co.jp/rank/bd/w/"+date+"/";
         }
         else {
-            val.clear();
-            val.add("Input Mode Salah!!!\n\n\nFormat input\n/oricon bluray <weekly|daily> YYYY-MM-DD");
-            return val;
+            return "Input Mode Salah!!!\n\n\nFormat input\n/oricon bluray <weekly|daily> YYYY-MM-DD";
         }
         try {
             Document dc = Jsoup.connect(offset).timeout(3000).get();
@@ -73,20 +68,23 @@ public class EchoController {
                 val.add(format("(%d) %s - %s - %s", i, title, artist, release));
                 i++;
             }
-            return val;
+
+            String top10 = "";
+            for (String e : val) {
+                top10 = top10 + e + "\n";
+            }
+            return top10;
         }
         catch (IOException e) {
-            val.clear();
-            val.add("Input tanggal salah atau tidak ditemukan!!!\n\n\nFormat input\n/oricon bluray <weekly|daily> YYYY-MM-DD");
-            return val;
+            return "Input tanggal salah atau tidak ditemukan!!!\n\n\nFormat input\n/oricon bluray <weekly|daily> YYYY-MM-DD";
         }
     }
 
-    @EventMapping
-    private void handleTextContent(String replyToken, Event event, TextMessage content)
-            throws Exception {
-        String text = content.getText();
-
+//    @EventMapping
+//    public void handleTextContent(String replyToken, Event event, TextMessage content)
+//            throws Exception {
+//        String text = content.getText();
+//
 //        log.info("Got text message from {}: {}", replyToken, text);
 //        switch (text) {
 //            case "profile": {
@@ -114,159 +112,5 @@ public class EchoController {
 //                }
 //                break;
 //            }
-//            case "bye": {
-//                Source source = event.getSource();
-//                if (source instanceof GroupSource) {
-//                    this.replyText(replyToken, "Leaving group");
-//                    lineMessagingClient.leaveGroup(((GroupSource) source).getGroupId()).get();
-//                } else if (source instanceof RoomSource) {
-//                    this.replyText(replyToken, "Leaving room");
-//                    lineMessagingClient.leaveRoom(((RoomSource) source).getRoomId()).get();
-//                } else {
-//                    this.replyText(replyToken, "Bot can't leave from 1:1 chat");
-//                }
-//                break;
-//            }
-//            case "confirm": {
-//                ConfirmTemplate confirmTemplate = new ConfirmTemplate(
-//                        "Do it?",
-//                        new MessageAction("Yes", "Yes!"),
-//                        new MessageAction("No", "No!")
-//                );
-//                TemplateMessage templateMessage = new TemplateMessage("Confirm alt text", confirmTemplate);
-//                this.reply(replyToken, templateMessage);
-//                break;
-//            }
-//            case "buttons": {
-//                String imageUrl = createUri("/static/buttons/1040.jpg");
-//                ButtonsTemplate buttonsTemplate = new ButtonsTemplate(
-//                        imageUrl,
-//                        "My button sample",
-//                        "Hello, my button",
-//                        Arrays.asList(
-//                                new URIAction("Go to line.me",
-//                                        "https://line.me"),
-//                                new PostbackAction("Say hello1",
-//                                        "hello こんにちは"),
-//                                new PostbackAction("言 hello2",
-//                                        "hello こんにちは",
-//                                        "hello こんにちは"),
-//                                new MessageAction("Say message",
-//                                        "Rice=米")
-//                        ));
-//                TemplateMessage templateMessage = new TemplateMessage("Button alt text", buttonsTemplate);
-//                this.reply(replyToken, templateMessage);
-//                break;
-//            }
-//            case "carousel": {
-//                String imageUrl = createUri("/static/buttons/1040.jpg");
-//                CarouselTemplate carouselTemplate = new CarouselTemplate(
-//                        Arrays.asList(
-//                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-//                                        new URIAction("Go to line.me",
-//                                                "https://line.me"),
-//                                        new URIAction("Go to line.me",
-//                                                "https://line.me"),
-//                                        new PostbackAction("Say hello1",
-//                                                "hello こんにちは")
-//                                )),
-//                                new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-//                                        new PostbackAction("言 hello2",
-//                                                "hello こんにちは",
-//                                                "hello こんにちは"),
-//                                        new PostbackAction("言 hello2",
-//                                                "hello こんにちは",
-//                                                "hello こんにちは"),
-//                                        new MessageAction("Say message",
-//                                                "Rice=米")
-//                                )),
-//                                new CarouselColumn(imageUrl, "Datetime Picker", "Please select a date, time or datetime", Arrays.asList(
-//                                        new DatetimePickerAction("Datetime",
-//                                                "action=sel",
-//                                                "datetime",
-//                                                "2017-06-18T06:15",
-//                                                "2100-12-31T23:59",
-//                                                "1900-01-01T00:00"),
-//                                        new DatetimePickerAction("Date",
-//                                                "action=sel&only=date",
-//                                                "date",
-//                                                "2017-06-18",
-//                                                "2100-12-31",
-//                                                "1900-01-01"),
-//                                        new DatetimePickerAction("Time",
-//                                                "action=sel&only=time",
-//                                                "time",
-//                                                "06:15",
-//                                                "23:59",
-//                                                "00:00")
-//                                ))
-//                        ));
-//                TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-//                this.reply(replyToken, templateMessage);
-//                break;
-//            }
-//            case "image_carousel": {
-//                String imageUrl = createUri("/static/buttons/1040.jpg");
-//                ImageCarouselTemplate imageCarouselTemplate = new ImageCarouselTemplate(
-//                        Arrays.asList(
-//                                new ImageCarouselColumn(imageUrl,
-//                                        new URIAction("Goto line.me",
-//                                                "https://line.me")
-//                                ),
-//                                new ImageCarouselColumn(imageUrl,
-//                                        new MessageAction("Say message",
-//                                                "Rice=米")
-//                                ),
-//                                new ImageCarouselColumn(imageUrl,
-//                                        new PostbackAction("言 hello2",
-//                                                "hello こんにちは",
-//                                                "hello こんにちは")
-//                                )
-//                        ));
-//                TemplateMessage templateMessage = new TemplateMessage("ImageCarousel alt text", imageCarouselTemplate);
-//                this.reply(replyToken, templateMessage);
-//                break;
-//            }
-//            case "imagemap":
-//                this.reply(replyToken, new ImagemapMessage(
-//                        createUri("/static/rich"),
-//                        "This is alt text",
-//                        new ImagemapBaseSize(1040, 1040),
-//                        Arrays.asList(
-//                                new URIImagemapAction(
-//                                        "https://store.line.me/family/manga/en",
-//                                        new ImagemapArea(
-//                                                0, 0, 520, 520
-//                                        )
-//                                ),
-//                                new URIImagemapAction(
-//                                        "https://store.line.me/family/music/en",
-//                                        new ImagemapArea(
-//                                                520, 0, 520, 520
-//                                        )
-//                                ),
-//                                new URIImagemapAction(
-//                                        "https://store.line.me/family/play/en",
-//                                        new ImagemapArea(
-//                                                0, 520, 520, 520
-//                                        )
-//                                ),
-//                                new MessageImagemapAction(
-//                                        "URANAI!",
-//                                        new ImagemapArea(
-//                                                520, 520, 520, 520
-//                                        )
-//                                )
-//                        )
-//                ));
-//                break;
-//            default:
-//                log.info("Returns echo message {}: {}", replyToken, text);
-//                this.replyText(
-//                        replyToken,
-//                        text
-//                );
-//                break;
-//        }
-    }
+//    }
 }
