@@ -20,18 +20,17 @@ public class YoutubeInfoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText);
+
         if (contentText.contains("/url ")){
-            String replyText = contentText.replace("/echo", "");
+            String replyText = contentText.replace("/url", "");
             Document doc = Jsoup.connect(replyText).header("User-Agent", "Chrome").get();
             Elements body = doc.body();
             String videoTitle = body.getElementById("eow-title").attr("title");
             String channelName = body.getElementById("watch7-user-header").getElementsByClass("yt-user-info").get(0).child(0).wholeText();
             String noOfLikes = body.getElementsByAttributeValue("title", "I like this").get(0).text();
             String noOfDislikes = body.getElementsByAttributeValue("title", "I dislike this").get(0).text();
-            VideoData videoData = new VideoData(videoTitle,channelName,noOfLikes,noOfDislikes);
-            return new TextMessage(videoData);
+//            VideoData videoData = new VideoData(videoTitle,channelName,noOfLikes,noOfDislikes);
+            return new TextMessage(videoTitle + "" + channelName + "" + noOfLikes + "" + noOfDislikes);
         }
         String error = "Sorry, your Command is wrong, Try /URL [Youtube URL]";
         return new TextMessage(error);

@@ -45,7 +45,7 @@ public class EchoControllerTest {
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals("", reply.getText());
     }
 
     @Test
