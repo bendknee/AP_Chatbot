@@ -30,41 +30,105 @@ public class OriconComicRankingControllerTest extends TestCase {
     }
 
     @Autowired
-    private OriconComicRankingController oriconController = new OriconComicRankingController();
+    public OriconComicRankingController oriconComicRankingController = new OriconComicRankingController();
 
     @Test
     public void testContextLoads() {
-        assertNotNull(oriconController);
+        assertNotNull(oriconComicRankingController);
     }
 
     @Test
-    public void testHandleTextMessageEvent() throws Exception {
+    public void testHandleTextMessageEventValidInputWithDate() throws Exception {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon 2018-05-11");
+                EventTestUtil.createDummyTextMessage("/oricon comic 2018-05-14");
 
-        TextMessage reply = oriconController.handleTextMessageEvent(event);
-
-        assertEquals("2018-05-11", "2018-05-11");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        String[] lines = reply.getText().split("\n");
+        assertEquals(10, lines.length);
     }
+    
+    @Test
+    public void testHandleTextMessageEventValidInputWithoutDate() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic 2018-04");
 
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        String[] lines = reply.getText().split("\n");
+        assertEquals(10, lines.length);
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidInputWithDate() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic 2018-05-13");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidInputWithoutDate() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic 2018-06");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidParameter1() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic 2018-48-12-10");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidParameter2() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic hehe");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventWithoutParameter() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon comic");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "/oricon comic function needs a date as a parameter");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventUnknownMethod() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/random");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Command doesn't exist, try: \n" + "/oricon comic <date YYYY-MM-DD or YYYY-MM>");
+    }     
+    
+    public void testHandleTextMessageEventNonMethod() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("random");
+        TextMessage reply = oriconComicRankingController.handleTextMessageEvent(event);
+        assertEquals(reply , null);
+    }
+    
     @Test
     public void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        oriconController.handleDefaultMessage(event);
+        oriconComicRankingController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
-
-    @Test
-    public void testMakeGetCall() throws Exception {
-    	assertEquals(null, null);
-    }
-    
-    @Test
-    public void testScreenScrapeGetBooks() {
-    	assertNotNull(oriconController.screenScrapeGetBooks("<html></html>"));
-    }
-
 }
