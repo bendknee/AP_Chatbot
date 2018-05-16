@@ -22,14 +22,18 @@ public class EchoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
+        String reply;
 
         if (contentText.equalsIgnoreCase("analyse_picture")) {
             PicAnalyze.flag = true;
-            return new TextMessage("give us the image you want to analyze pls");
+            reply = "give us the image you want to analyze pls";
         }
-        else PicAnalyze.flag = false;
+        else {
+            PicAnalyze.flag = false;
+            reply = "";
+        }
 
-        String replyText = contentText.replace("/echo", "");
+        String replyText = contentText.replace("/echo", reply);
         return new TextMessage(replyText.substring(1));
     }
 
