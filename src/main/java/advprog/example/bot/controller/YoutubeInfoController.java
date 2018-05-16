@@ -28,7 +28,7 @@ public class YoutubeInfoController {
         if (contentText.contains("/url ")){
             String replyText = contentText.replace("/url", "");
             Document doc = Jsoup.connect(replyText).header("User-Agent", "Chrome").get();
-            Elements body = doc.body();
+            Element body = doc.body();
             String videoTitle = body.getElementById("eow-title").attr("title");
             String channelName = body.getElementById("watch7-user-header").getElementsByClass("yt-user-info").get(0).child(0).wholeText();
             String noOfLikes = body.getElementsByAttributeValue("title", "I like this").get(0).text();
