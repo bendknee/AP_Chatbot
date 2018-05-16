@@ -34,7 +34,7 @@ public class JapanController {
             return new TextMessage(reply);
         }
         catch (IllegalArgumentException e){
-            return new TextMessage("Command Not Found");
+            return new TextMessage("Inputan tidak tersedia, coba /billboard japan100");
         } catch (IOException e) {
             return new TextMessage("Web Not Found");
         }

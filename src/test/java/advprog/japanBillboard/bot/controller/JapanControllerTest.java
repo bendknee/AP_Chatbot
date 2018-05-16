@@ -58,6 +58,16 @@ public class JapanControllerTest {
     }
 
     @Test
+    void testHandleTextMessageEventInput(){
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/testestes");
+
+        TextMessage reply = japanController.handleTextMessageEvent(event);
+
+        assertEquals("Inputan tidak tersedia, coba /billboard japan100", reply.getText());
+    }
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
