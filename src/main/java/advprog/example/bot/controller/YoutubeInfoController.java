@@ -20,7 +20,8 @@ public class YoutubeInfoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-
+        String replyText = contentText.replace("/echo", "");
+        return new TextMessage(replyText);
         if (contentText.contains("/url ")){
             String replyText = contentText.replace("/echo", "");
             Document doc = Jsoup.connect(replyText).header("User-Agent", "Chrome").get();
