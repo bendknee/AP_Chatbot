@@ -1,6 +1,6 @@
 package billboard.hot100.controller;
 
-import billboard.hot10.parser.HtmlParser;
+import billboard.hot100.parser.HtmlParser;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;

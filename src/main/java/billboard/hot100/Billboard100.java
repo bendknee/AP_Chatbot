@@ -1,4 +1,4 @@
-package billboard.top10;
+package billboard.hot100;
 
 import java.util.logging.Logger;
 
