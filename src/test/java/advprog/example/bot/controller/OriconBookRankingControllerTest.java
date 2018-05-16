@@ -40,10 +40,10 @@ public class OriconBookRankingControllerTest extends TestCase {
     @Test
     public void testHandleTextMessageEventValidInput() throws Exception {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-05-14");
+                EventTestUtil.createDummyTextMessage("/oricon books weekly 2018-05-14");
 
         TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
-        String[] lines = reply.getText().split("\n");
+        String[] lines = reply.getText().split("\n");        
         assertEquals(10, lines.length);
     }
       
@@ -51,7 +51,7 @@ public class OriconBookRankingControllerTest extends TestCase {
     @Test
     public void testHandleTextMessageEventInvalidInputWithDate() throws Exception {
     	MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-05-13");
+                EventTestUtil.createDummyTextMessage("/oricon books weekly 2018-05-13");
         TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
         assertEquals(reply.getText(),
                 "Invalid Parameter, either your date is not available "
@@ -61,7 +61,7 @@ public class OriconBookRankingControllerTest extends TestCase {
     @Test
     public void testHandleTextMessageEventInvalidParameter1() throws Exception {
     	MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-48-12-10");
+                EventTestUtil.createDummyTextMessage("/oricon books weekly 2018-48-12-10");
         TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
         assertEquals(reply.getText(),
                 "Invalid Parameter, either your date is not available "
@@ -71,7 +71,7 @@ public class OriconBookRankingControllerTest extends TestCase {
     @Test
     public void testHandleTextMessageEventInvalidParameter2() throws Exception {
     	MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon book weekly hehe");
+                EventTestUtil.createDummyTextMessage("/oricon books weekly hehe");
         TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
         assertEquals(reply.getText(),
                 "Invalid Parameter, either your date is not available "
@@ -81,10 +81,10 @@ public class OriconBookRankingControllerTest extends TestCase {
     @Test
     public void testHandleTextMessageEventWithoutParameter() throws Exception {
     	MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon book weekly");
+                EventTestUtil.createDummyTextMessage("/oricon books weekly");
         TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
         assertEquals(reply.getText(),
-                "/oricon book weekly function needs a date as a parameter");
+                "/oricon books weekly function needs a date as a parameter");
     }
     
     @Test

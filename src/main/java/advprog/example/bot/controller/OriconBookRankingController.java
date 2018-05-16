@@ -36,8 +36,8 @@ public class OriconBookRankingController {
 			String replyText = contentText.replace("/oricon books weekly ", "");
 			return new TextMessage(oriconResponse(replyText.substring(0)));
 		}
-		else if (contentText.matches("/oricon book weekly")) {
-			return new TextMessage("/oricon book weekly function needs a date as a parameter");
+		else if (contentText.matches("/oricon books weekly")) {
+			return new TextMessage("/oricon books weekly function needs a date as a parameter");
 		}
 		else if (contentText.startsWith("/")) {
 			return new TextMessage("Command doesn't exist, try: \n" + "/oricon books weekly <date YYYY-MM-DD>");
