@@ -1,8 +1,6 @@
 package advprog.NSFW.bot.controller;
 
-import com.google.common.io.ByteStreams;
-import com.linecorp.bot.client.MessageContentResponse;
-import org.apache.tomcat.util.codec.binary.Base64;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
@@ -23,16 +21,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
-
-
 
 @LineMessageHandler
 public class NSFWController {
@@ -54,11 +44,11 @@ public class NSFWController {
             return new TextMessage(reply);
         }
         catch (IllegalArgumentException e){
-            return new TextMessage("Command Not Found");
+            return new TextMessage("Inputan tidak tersedia nih, coba /is_sfw atau masukan gambar");
         } catch (IOException e) {
             return new TextMessage("Web Not Found");
         } catch (JSONException e) {
-            return new TextMessage("Inputan tidak tersedia coba /is_sfw atau masukan gambar");
+            return new TextMessage("Link yang kamu masukkan tidak benar, masukkan link yang benar ya :)");
         }
     }
 
@@ -66,11 +56,6 @@ public class NSFWController {
     public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException{
         String id = event.getMessage().getId();
         String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-        //auth(url);
-        //System.out.println(restGetMethod(url));
-        //return new TextMessage(restGetMethod(url));
-        //String url = restPostMethod(api);
-        //return new TextMessage(url);
         try {
             String reply = checker(url);
             return new TextMessage(reply);
@@ -80,54 +65,54 @@ public class NSFWController {
         }
     }
 
-    static String getBasicAuth(String username, String password) {
-        String auth = username + ":" + password;
-        String auth64 = new String(org.apache.tomcat.util.codec.binary.Base64.encodeBase64(auth.getBytes()));
+//    static String getBasicAuth(String username, String password) {
+//        String auth = username + ":" + password;
+//        String auth64 = new String(org.apache.tomcat.util.codec.binary.Base64.encodeBase64(auth.getBytes()));
+//
+//        return "Basic " + auth64;
+//    }
+//
+//    public String nembakApi(String id) {
+//        String basic = getBasicAuth("uname", "password");
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
+//
+//        UriComponentsBuilder uri = UriComponentsBuilder
+//                .fromUriString("https://api.imagga.com/v1/colors")
+//                .queryParam("url", url);
+//        LOGGER.info(uri.toUriString());
+//
+//        HttpHeaders header = new HttpHeaders();
+//        header.add("Authorization", basic);
+//
+//        HttpEntity<String> request = new HttpEntity<String>(String.valueOf(header));
+//        ResponseEntity<String> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, String.class);
+//
+//        LOGGER.info(response.getBody());
+//        return response.getBody();
+//        //jsonnode
+//    }
+//
+//    public void auth(String url){
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//
+//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+//
+//        //return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+//        restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+//    }
+//
+//    private String restGetMethod(String url) {
+//        String basic = getBasicAuth("uname", "password");
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders header = new HttpHeaders();
+//        header.add("Authorization", basic);
+//        //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
+//        return restTemplate.getForObject(url, String.class, header);
+//    }
 
-        return "Basic " + auth64;
-    }
-
-    public String nembakApi(String id) {
-        String basic = getBasicAuth("uname", "password");
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.line.me/v2/bot/message/"+id+"/content";
-
-        UriComponentsBuilder uri = UriComponentsBuilder
-                .fromUriString("https://api.imagga.com/v1/colors")
-                .queryParam("url", url);
-        LOGGER.info(uri.toUriString());
-
-        HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", basic);
-
-        HttpEntity<String> request = new HttpEntity<String>(String.valueOf(header));
-        ResponseEntity<String> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, String.class);
-
-        LOGGER.info(response.getBody());
-        return response.getBody();
-        //jsonnode
-    }
-
-    public void auth(String url){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
-        //return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-    }
-
-    private String restGetMethod(String url) {
-        String basic = getBasicAuth("uname", "password");
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", basic);
-        //HttpEntity<String> entity = new HttpEntity<>("parameters", header);
-        return restTemplate.getForObject(url, String.class, header);
-    }
-    
     @EventMapping
     public void handleDefaultMessage(Event event) {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",

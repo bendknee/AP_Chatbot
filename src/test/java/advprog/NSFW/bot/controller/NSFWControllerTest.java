@@ -51,15 +51,35 @@ public class NSFWControllerTest {
         assertEquals("nsfw", reply.getText());
     }
 
-//    @Test
-//    void testHandleImageMessageEvent() throws IOException {
-//        MessageEvent<ImageMessageContent> event =
-//                EventTestUtil.createDummyImageMessage();
-//
-//        TextMessage reply = nsfwController.handleImageMessageEvent(event);
-//
-//        assertEquals("sfw", reply.getText());
-//    }
+    @Test
+    void testHandleTextMessageEventInput(){
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/tes");
+
+        TextMessage reply = nsfwController.handleTextMessageEvent(event);
+
+        assertEquals("Inputan tidak tersedia nih, coba /is_sfw atau masukan gambar", reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventLink(){
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/is_sfw test");
+
+        TextMessage reply = nsfwController.handleTextMessageEvent(event);
+
+        assertEquals("Link yang kamu masukkan tidak benar, masukkan link yang benar ya :)", reply.getText());
+    }
+
+    @Test
+    void testHandleImageMessageEvent() throws IOException {
+        MessageEvent<ImageMessageContent> event =
+                EventTestUtil.createDummyImageMessage();
+
+        TextMessage reply = nsfwController.handleImageMessageEvent(event);
+
+        assertEquals("nsfw", reply.getText());
+    }
 
     @Test
     void testHandleDefaultMessage() {
