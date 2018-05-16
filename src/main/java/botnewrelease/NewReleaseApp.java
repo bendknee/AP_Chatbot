@@ -1,4 +1,4 @@
-package botnewrelease.controller;
+package botnewrelease;
 
 import java.util.logging.Logger;
 
