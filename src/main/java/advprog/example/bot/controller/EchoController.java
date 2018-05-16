@@ -26,10 +26,13 @@ public class EchoController {
 
         if (contentText.equalsIgnoreCase("analyse_picture")) {
             PicAnalyze.flag = true;
-            return new TextMessage("give us the image you want to analyze pls");
+            return new TextMessage("Mau analyse gambar apa niih");
         }
         else {
-            PicAnalyze.flag = false;
+            if (PicAnalyze.flag) {
+                PicAnalyze.flag = false;
+                return new TextMessage(PicAnalyze.analyze(contentText));
+            }
             return new TextMessage("kenapa beeb?");
         }
     }
@@ -41,7 +44,7 @@ public class EchoController {
 
         String message = event.getMessage().toString();
 
-        if(PicAnalyze.flag == true){
+        if(PicAnalyze.flag){
             return new TextMessage(PicAnalyze.analyze(message));
         }
         else return new TextMessage("please put the command first");
