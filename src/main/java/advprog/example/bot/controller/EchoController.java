@@ -26,15 +26,12 @@ public class EchoController {
 
         if (contentText.equalsIgnoreCase("analyse_picture")) {
             PicAnalyze.flag = true;
-            reply = "give us the image you want to analyze pls";
+            return new TextMessage("give us the image you want to analyze pls");
         }
         else {
             PicAnalyze.flag = false;
-            reply = "";
+            return new TextMessage("kenapa beeb?");
         }
-
-        String replyText = contentText.replace("/echo", reply);
-        return new TextMessage(replyText.substring(1));
     }
 
     @EventMapping
