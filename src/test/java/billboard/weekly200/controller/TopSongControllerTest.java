@@ -7,7 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import billboard.weekly200.Billboard100Test;
+import billboard.weekly200.Billboard200Test;
 import billboard.weekly200.controller.TopSongController;
 
 import com.linecorp.bot.model.event.Event;
@@ -42,7 +42,7 @@ public class TopSongControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/billboard bill200");
+                Billboard200Test.createDummyTextMessage("/billboard bill200");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
