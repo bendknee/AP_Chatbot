@@ -1,4 +1,4 @@
-package advprog.billboard-newage.bot;
+package billboard.hot100;
 
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -6,9 +6,9 @@ import com.linecorp.bot.model.event.source.UserSource;
 
 import java.time.Instant;
 
-public class BotBillboardNewAgeTest {
+public class Billboard100Test {
 
-    private BotBillboardNewAgeTest {
+    private Billboard100Test() {
         // Default private constructor
     }
 
