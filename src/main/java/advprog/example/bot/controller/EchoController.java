@@ -28,7 +28,16 @@ public class EchoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        
+
+        String[] input = contentText.split(" ");
+        switch (input[0].toLowerCase()) {
+            case "/oricon":
+                switch (input[1].toLowerCase()) {
+                    case "bluray":
+                        contentText = scrapping(input[2], input[3]);
+                }
+        }
+
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
     }
@@ -40,7 +49,7 @@ public class EchoController {
     }
 
     @EventMapping
-    private String scrapping(String mode, String date) throws IOException {
+    private String scrapping(String mode, String date) {
         String offset = "";
         ArrayList<String> val = new ArrayList<>();
         if (mode.toLowerCase().equals("daily")) {
