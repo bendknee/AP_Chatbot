@@ -1,4 +1,4 @@
-package advprog.billboard-100.bot.controller;
+package billboard.hot100.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,7 +7,8 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import advprog.billboard-100.bot.BotBillboard100Test;
+import billboard.hot100.Billboard100Test;
+import billboard.hot100.controller.TopSongController;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -23,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-public class TopSongFinderTest {
+public class TopSongControllerTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
@@ -31,42 +32,29 @@ public class TopSongFinderTest {
     }
 
     @Autowired
-    private TopSongFinder topSongFinder;
+    private TopSongController echoController;
 
     @Test
     void testContextLoads() {
-        assertNotNull(topSongFinder);
+        assertNotNull(echoController);
     }
 
     @Test
-    void testHandleTextMessageEventSuccess() {
-        MessageEvent<TextMessageContent> event = BotBillboard100Test
-                .createDummyTextMessage("/billboard hot100");
+    void testHandleTextMessageEvent() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/billboard hot100");
 
-        TextMessage reply = topSongFinder.handleTextMessageEvent(event);
+        TextMessage reply = echoController.handleTextMessageEvent(event);
 
-        assertEquals("(1) Darude - Sandstorm\r\n" 
-                + "(2) Simon & Garfunkel - Scarborough Fair\r\n"
-                + "(3) Lazy Town - We Are Number One\r\n" + "...\r\n" 
-                + "(10) Christopher Tin - Sogno di Volare\r\n"
-                + "", reply.getText());
-    }
-    
-    @Test
-    void testHandleTextMessageEventError() {
-        MessageEvent<TextMessageContent> event = BotBillboard100Test
-                .createDummyTextMessage("/billboard hothot");
-
-        TextMessage reply = topSongFinder.handleTextMessageEvent(event);
-
-        assertEquals("error", reply.getText());
+        int numOfLines = reply.getText().split("\\r?\\n").length;
+        assertEquals(10, numOfLines);
     }
 
     @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        topSongFinder.handleDefaultMessage(event);
+        echoController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
