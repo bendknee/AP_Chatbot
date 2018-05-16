@@ -1,4 +1,4 @@
-package advprog.japanBillboard.bot;
+package advprog.japanbillboard.bot;
 
 import java.util.logging.Logger;
 

@@ -1,4 +1,4 @@
-package advprog.japanBillboard.bot.controller;
+package advprog.japanbillboard.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -6,15 +6,12 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import java.io.IOException;
+import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 
 @LineMessageHandler
 public class JapanController {
@@ -32,8 +29,7 @@ public class JapanController {
             }
             String reply = japanScrapper();
             return new TextMessage(reply);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return new TextMessage("Inputan tidak tersedia, coba /billboard japan100");
         } catch (IOException e) {
             return new TextMessage("Web Not Found");
@@ -46,13 +42,13 @@ public class JapanController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    public String japanScrapper() throws IOException{
+    public String japanScrapper() throws IOException {
         Document dc = Jsoup.connect("https://www.billboard.com/charts/japan-hot-100").get();
         Elements body = dc.select("div.chart-row__main-display");
         StringBuilder sb = new StringBuilder();
-        int i=0;
+        int i = 0;
 
-        for (Element step : body){
+        for (Element step : body) {
             String position = step.select(".chart-row__current-week").text();
             String method = step.select(".chart-row__song").text();
             String singer = step.select(".chart-row__artist").text();
@@ -60,7 +56,7 @@ public class JapanController {
             sb.append("(").append(position).append(")").append(" ").append(method)
                     .append(" - ").append(singer).append("\n");
             i++;
-            if (i==10){
+            if (i == 10) {
                 break;
             }
         }
