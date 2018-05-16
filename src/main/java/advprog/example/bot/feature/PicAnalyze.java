@@ -7,11 +7,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-public static class PicAnalyze
+public class PicAnalyze
 {
 
     static final String subscriptionKey = "6c6d2bacea154229bb8972c7c33303cb";
@@ -22,7 +22,7 @@ public static class PicAnalyze
     public static String analyze(String imageUrl)
     {
         flag = false;
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpclient = HttpClientBuilder.create().build();
 
         try
         {
@@ -56,6 +56,7 @@ public static class PicAnalyze
                 System.out.println("REST Response:\n");
                 return json.toString(2);
             }
+            else return "no entity";
         }
         catch (Exception e)
         {

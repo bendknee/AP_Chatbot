@@ -38,11 +38,12 @@ public class EchoController {
         LOGGER.fine(String.format("ImageMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
 
-        String message = event.getMessage();
+        String message = event.getMessage().toString();
 
         if(PicAnalyze.flag == true){
             return new TextMessage(PicAnalyze.analyze(message));
         }
+        else return new TextMessage("please put the command first");
 
 
     }
