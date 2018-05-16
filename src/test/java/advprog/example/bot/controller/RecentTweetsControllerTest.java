@@ -28,7 +28,7 @@ public class RecentTweetsControllerTest {
     private BotController botController;
 
     @Test
-    void testHandleTextMessageEvent() {
+    void testValidAccountInput() {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/tweet recent twitterapi");
 
@@ -36,5 +36,23 @@ public class RecentTweetsControllerTest {
         String[] arrayOfTweets = reply.getText().split("\r\n");
         Arrays.stream(arrayOfTweets).forEach(i -> System.out.println(i));
         assertEquals(5, arrayOfTweets.length);
+    }
+
+    @Test
+    void testEmptyAccountInput() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/tweet recent GanAmpas");
+
+        TextMessage reply = botController.handleTextMessageEvent(event);
+        assertEquals("Hmm... seems like this account has no tweets yet.", reply.getText());
+    }
+
+    @Test
+    void testInvalidAccountInput() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/tweet recent aioefhey8wagruesfdskj");
+
+        TextMessage reply = botController.handleTextMessageEvent(event);
+        assertEquals("Sorry, this username is not available!", reply.getText());
     }
 }

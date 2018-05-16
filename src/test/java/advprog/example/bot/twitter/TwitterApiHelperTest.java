@@ -1,5 +1,6 @@
 package advprog.example.bot.twitter;
 
+import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -47,5 +48,23 @@ public class TwitterApiHelperTest {
         List<Tweet> secondResponse = Tweet.parseJsonList(new JSONArray(rawSecondResponse));
 
         assertEquals(secondResponse.size(), response.size());
+    }
+
+    @Test
+    public void getTweetsFromValidAccountButEmptyTest() {
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
+        List<Tweet> response = instance.getRecentTweets("GanAmpas");
+        String rawSecondResponse = instance.requestGet("https://api.twitter.com/1.1/statuses/user_timeline.json"
+                + "?screen_name=TheObsessivePr1");
+        List<Tweet> secondResponse = Tweet.parseJsonList(new JSONArray(rawSecondResponse));
+
+        assertEquals(secondResponse.size(), response.size());
+    }
+
+    @Test
+    public void getTweetsFromInvalidAccountTest() {
+        TwitterApiHelper instance = TwitterApiHelper.getInstance();
+        List<Tweet> response = instance.getRecentTweets("aioefhey8wagruesfdskjzuewuifbes");
+        assertNull(response);
     }
 }
