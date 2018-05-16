@@ -37,22 +37,6 @@ public class EchoController {
     }
 
     @EventMapping
-    public TextMessage handleImageMessageEvent(MessageEvent<ImageMessageContent> event) {
-        LOGGER.fine(String.format("ImageMessageContent(timestamp='%s',content='%s')",
-                event.getTimestamp(), event.getMessage()));
-
-        String message = event.getMessage().toString();
-
-        if (PicAnalyze.flag) {
-            return new TextMessage(PicAnalyze.analyze(message));
-        } else {
-            return new TextMessage("please put the command first");
-        }
-
-
-    }
-
-    @EventMapping
     public void handleDefaultMessage(Event event) {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
                 event.getTimestamp(), event.getSource()));
