@@ -42,7 +42,7 @@ public class TopSongControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/billboard hot100");
+                Billboard100Test.createDummyTextMessage("/billboard hot100");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
