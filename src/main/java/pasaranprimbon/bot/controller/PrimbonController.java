@@ -28,17 +28,22 @@ public class PrimbonController {
         String newContentText = contentText.replace("/primbon ", "");
         String replyText;
 
-        try {
-            String[] tanggalan = newContentText.split("-");
-            LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]),
-                    Integer.parseInt(tanggalan[2]));
+        System.out.println(contentText.substring(0,8));
+        if (contentText.substring(0,8).equals("/primbon")) {
+            try {
+                String[] tanggalan = newContentText.split("-");
+                LocalDate.of(Integer.parseInt(tanggalan[0]) - 2000, Integer.parseInt(tanggalan[1]),
+                        Integer.parseInt(tanggalan[2]));
 
-            int dayDifference = dayDifferenceGetter(newContentText);
-            String dayName = dayGetter(dayDifference);
-            String pasaranName = pasaranGetter(dayDifference);
-            replyText = dayName + " " + pasaranName;
-        } catch (Exception e) {
-            replyText = "Please insert the correct date format (yyyy-MM-dd)";
+                int dayDifference = dayDifferenceGetter(newContentText);
+                String dayName = dayGetter(dayDifference);
+                String pasaranName = pasaranGetter(dayDifference);
+                replyText = dayName + " " + pasaranName;
+            } catch (Exception e) {
+                replyText = "Please insert the correct date format (yyyy-MM-dd)";
+            }
+        } else {
+            replyText = "Please use the format /primbon DATE";
         }
 
         return new TextMessage(replyText);

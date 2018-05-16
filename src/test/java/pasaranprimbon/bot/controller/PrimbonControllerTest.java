@@ -39,6 +39,16 @@ public class PrimbonControllerTest {
     }
 
     @Test
+    void testRandomInput() {
+        MessageEvent<TextMessageContent> event =
+                PrimbonTestUtil.createDummyTextMessage("Mengapa saya tampan?");
+
+        TextMessage reply = primbonController.handleTextMessageEvent(event);
+
+        assertEquals("Please use the format /primbon DATE", reply.getText());
+    }
+
+    @Test
     void testIncorrectInput() {
         MessageEvent<TextMessageContent> event =
                 PrimbonTestUtil.createDummyTextMessage("/primbon jodoh dan pekerjaan");
