@@ -1,4 +1,6 @@
-package advprog.billboard-200.bot.controller;
+package billboard.hot100.controller;
+
+import billboard.hot10.parser.HtmlParser;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -7,12 +9,13 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 @LineMessageHandler
-public class TopSongFinder {
+public class TopSongController {
 
-    private static final Logger LOGGER = Logger.getLogger(TopSongFinder.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TopSongController.class.getName());
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -20,16 +23,22 @@ public class TopSongFinder {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        if (contentText.equalsIgnoreCase("/billboard bill200")) {
-            return new TextMessage("(1) Darude - Sandstorm\r\n" 
-                    + "(2) Simon & Garfunkel - Scarborough Fair\r\n"
-                    + "(3) Lazy Town - We Are Number One\r\n" + "...\r\n" 
-                    + "(10) Christopher Tin - Sogno di Volare\r\n"
-                    + "");  
-        } else {
-            return new TextMessage("error");            
+        return stringBuilderForEvents(contentText);
+    }
+
+    private TextMessage stringBuilderForEvents(String contentText) {
+        if (contentText.equals("/billboard hot100")) {
+            HtmlParser parser = new HtmlParser();
+            ArrayList<String> arrArtist = parser.getArrayArtist();
+            ArrayList<String> arrSong = parser.getArraySong();
+            String builder = "";
+            for (int i = 0; i < 10; i++) {
+                builder += "(" + (i + 1) + ") " + arrArtist.get(i) + " - "
+                        + arrSong.get(i) + "\n";
+            }
+            return new TextMessage(builder);
         }
-        //process contentText to get the top 10 songs
+        return new TextMessage("");
     }
 
     @EventMapping
