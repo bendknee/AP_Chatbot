@@ -63,7 +63,7 @@ public class OriconBookRankingController {
 
 	}
 
-	public static String scrapeComicRanking(Document html) {
+	public static String scrapeBookRanking(Document html) {
 		String result = "";
 		Elements contents = html.select(".box-rank-entry");
 		
