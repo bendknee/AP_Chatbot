@@ -12,6 +12,7 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
 
 import java.util.logging.Logger;
+import java.io.IOException;
 
 @LineMessageHandler
 public class YoutubeInfoController {
@@ -19,7 +20,7 @@ public class YoutubeInfoController {
     private static final Logger LOGGER = Logger.getLogger(YoutubeInfoController.class.getName());
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
