@@ -32,12 +32,14 @@ public class OriconBookRankingController {
 		TextMessageContent content = event.getMessage();
 		String contentText = content.getText();
 
-		if (contentText.startsWith("/echo")) {
-			return new TextMessage("echo dari oricon");
-		} else if (contentText.startsWith("/oricon books weekly ")) {
+		if (contentText.startsWith("/oricon books weekly ")) {
 			String replyText = contentText.replace("/oricon books weekly ", "");
 			return new TextMessage(oriconResponse(replyText.substring(0)));
-		} else if (contentText.startsWith("/")) {
+		}
+		else if (contentText.matches("/oricon book weekly")) {
+			return new TextMessage("/oricon book weekly function needs a date as a parameter");
+		}
+		else if (contentText.startsWith("/")) {
 			return new TextMessage("Command doesn't exist, try: \n" + "/oricon books weekly <date YYYY-MM-DD>");
 		}
 		return null;

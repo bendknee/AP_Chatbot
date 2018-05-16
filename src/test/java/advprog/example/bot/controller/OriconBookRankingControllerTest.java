@@ -30,41 +30,86 @@ public class OriconBookRankingControllerTest extends TestCase {
     }
 
     @Autowired
-    private OriconBookRankingController oriconController = new OriconBookRankingController();
+    public OriconBookRankingController oriconBookRankingController = new OriconBookRankingController();
 
     @Test
     public void testContextLoads() {
-        assertNotNull(oriconController);
+        assertNotNull(oriconBookRankingController);
     }
 
     @Test
-    public void testHandleTextMessageEvent() throws Exception {
+    public void testHandleTextMessageEventValidInput() throws Exception {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/oricon 2018-05-11");
+                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-05-14");
 
-        TextMessage reply = oriconController.handleTextMessageEvent(event);
-
-        assertEquals("2018-05-11", "2018-05-11");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        String[] lines = reply.getText().split("\n");
+        assertEquals(10, lines.length);
     }
-
+      
+    
+    @Test
+    public void testHandleTextMessageEventInvalidInputWithDate() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-05-13");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidParameter1() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon book weekly 2018-48-12-10");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventInvalidParameter2() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon book weekly hehe");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Invalid Parameter, either your date is not available "
+                + "or you have given a wrong input");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventWithoutParameter() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/oricon book weekly");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "/oricon book weekly function needs a date as a parameter");
+    }
+    
+    @Test
+    public void testHandleTextMessageEventUnknownMethod() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/random");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply.getText(),
+                "Command doesn't exist, try: \n" + "/oricon books weekly <date YYYY-MM-DD>");
+    }     
+    
+    public void testHandleTextMessageEventNonMethod() throws Exception {
+    	MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("random");
+        TextMessage reply = oriconBookRankingController.handleTextMessageEvent(event);
+        assertEquals(reply , null);
+    }
+    
     @Test
     public void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        oriconController.handleDefaultMessage(event);
+        oriconBookRankingController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
-
-    @Test
-    public void oriconResponse() throws Exception {
-    	assertEquals(null, null);
-    }
-    
-    @Test
-    public void scrapeBookRanking() {
-    	assertNull(null);
-    }
-
 }
