@@ -28,9 +28,7 @@ public class EchoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-
-
-
+        
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
     }
@@ -79,38 +77,4 @@ public class EchoController {
             return "Input tanggal salah atau tidak ditemukan!!!\n\n\nFormat input\n/oricon bluray <weekly|daily> YYYY-MM-DD";
         }
     }
-
-//    @EventMapping
-//    public void handleTextContent(String replyToken, Event event, TextMessage content)
-//            throws Exception {
-//        String text = content.getText();
-//
-//        log.info("Got text message from {}: {}", replyToken, text);
-//        switch (text) {
-//            case "profile": {
-//                String userId = event.getSource().getUserId();
-//                if (userId != null) {
-//                    lineMessagingClient
-//                            .getProfile(userId)
-//                            .whenComplete((profile, throwable) -> {
-//                                if (throwable != null) {
-//                                    this.replyText(replyToken, throwable.getMessage());
-//                                    return;
-//                                }
-//
-//                                this.reply(
-//                                        replyToken,
-//                                        Arrays.asList(new TextMessage(
-//                                                        "Display name: " + profile.getDisplayName()),
-//                                                new TextMessage("Status message: "
-//                                                        + profile.getStatusMessage()))
-//                                );
-//
-//                            });
-//                } else {
-//                    this.replyText(replyToken, "Bot can't use profile API without user ID");
-//                }
-//                break;
-//            }
-//    }
 }
