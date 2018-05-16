@@ -3,31 +3,49 @@ package advprog.example.bot.controller;
 import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
+import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TemplateMessage;
+import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.template.ImageCarouselColumn;
 import com.linecorp.bot.model.message.template.ImageCarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.logging.Logger;
 
 @LineMessageHandler
 public class NearbyPhotosController {
 
     private static final Logger LOGGER = Logger.getLogger(NearbyPhotosController.class.getName());
-    private final String BASE_URL = "https://api.flickr.com/services/rest/?method=";
-    private final String API_KEY = "4847f0e678f60a5f7e213521c263deef";
-    private final String API_METHOD = "flickr.photos.search";
-    private final String EXTENSION_PARAM = "&radius=3&per_page=5&format=json&nojsoncallback=1";
-    private HashSet<String> requests;
+    private final String baseUrl = "https://api.flickr.com/services/rest";
+    private final String apiKey = "4847f0e678f60a5f7e213521c263deef";
+    private final String apiMethod = "/?method=flickr.photos.search";
+    private final String extensionParam = "&radius=2&per_page=5&format=json&nojsoncallback=1";
+
+    @EventMapping
+    public List<TextMessage> handleKeywordTrigger(MessageEvent<TextMessageContent> event) {
+        LOGGER.fine(String.format("TextMessageContent(timestamp='%s',text='%s')",
+                event.getTimestamp(), event.getMessage().getText()));
+
+        if (event.getMessage().getText().toLowerCase().equals("nearby photos")) {
+            TextMessage textMessage = new TextMessage("To use this bot, simply submit a "
+                    + "location straightaway with the 'Share location' feature below.");
+            return Collections.singletonList(textMessage);
+        } else {
+            return Collections.singletonList(null);
+        }
+    }
 
     @EventMapping
     public List<Message> handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
@@ -38,17 +56,21 @@ public class NearbyPhotosController {
         String latitude = Double.toString(content.getLatitude());
         String longitude = Double.toString(content.getLongitude());
 
-        String flickrRestUrl =  BASE_URL + API_METHOD + "&api_key=" + API_KEY + "&lat="
-                + latitude + "&lon=" + longitude + EXTENSION_PARAM;
+        String flickrRestUrl =  baseUrl + apiMethod + "&api_key=" + apiKey + "&lat="
+                + latitude + "&lon=" + longitude + extensionParam;
 
         String stringifiedJson = restGetMethod(flickrRestUrl);
-        List<Map<String, String>> allPhotosData = stringToJson(stringifiedJson);
+        List<Map<String, String>> allPhotosData = jsonToMap(stringifiedJson);
         List<ImageCarouselColumn> carouselColumns = carouselColumnsGenerator(allPhotosData);
-
-
-        TemplateMessage templateMessage = new TemplateMessage("Found " + carouselColumns.size()
-                + " images", new ImageCarouselTemplate(carouselColumns));
-        return Collections.singletonList(templateMessage);
+        if (carouselColumns.size() == 0) {
+            String errorMessage = "No image found. Perhaps select a more populous location.";
+            TextMessage textMessage = new TextMessage(errorMessage);
+            return Collections.singletonList(textMessage);
+        } else {
+            TemplateMessage templateMessage = new TemplateMessage("Found " + carouselColumns.size()
+                    + " images", new ImageCarouselTemplate(carouselColumns));
+            return Collections.singletonList(templateMessage);
+        }
     }
 
     private String restGetMethod(String url) {
@@ -57,7 +79,7 @@ public class NearbyPhotosController {
         return restTemplate.getForObject(url, String.class, header);
     }
 
-    private List<Map<String, String>> stringToJson(String string) {
+    private List<Map<String, String>> jsonToMap(String string) {
         try {
             List<Map<String, String>> allObjects = new ArrayList<>();
             JSONObject parsedJson = new JSONObject(string);
@@ -74,7 +96,8 @@ public class NearbyPhotosController {
         }
     }
 
-    private List<ImageCarouselColumn> carouselColumnsGenerator(List<Map<String, String>> allImages) {
+    private List<ImageCarouselColumn> carouselColumnsGenerator(
+            List<Map<String, String>> allImages) {
         ArrayList<ImageCarouselColumn> carouselColumns = new ArrayList<>();
         for (Map<String, String> image : allImages) {
             String flickrSourceUrl = String.format(
@@ -85,14 +108,14 @@ public class NearbyPhotosController {
             );
             String title;
             if (image.get("title").length() == 0) {
-                title = "...";
-            }
-            else if (image.get("title").length() > 12) {
+                title = "Untitled";
+            } else if (image.get("title").length() > 12) {
                 title = image.get("title").substring(0,9) + "...";
             } else {
                 title = image.get("title");
             }
-            carouselColumns.add(new ImageCarouselColumn(flickrSourceUrl, new URIAction(title, flickrWebUrl)));
+            carouselColumns.add(new ImageCarouselColumn(flickrSourceUrl,
+                    new URIAction(title, flickrWebUrl)));
         }
         return carouselColumns;
     }
