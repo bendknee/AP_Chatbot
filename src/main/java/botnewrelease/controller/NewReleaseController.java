@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -30,7 +31,7 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
 
     public static void main(String[] args) throws IOException {
-        System.out.println(cekNewRelease());
+        cekNewRelease();
     }
 
     @EventMapping
@@ -66,12 +67,22 @@ public class NewReleaseController {
 
     // To do method
     public static String cekNewRelease() throws IOException {
+        String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
-
+            String title = element.select("li > a.albumtitle.album-game").attr("title");
+            String value[] = element.child(1).text().split(" | ");
+            if (title.toLowerCase().contains("original") && title.toLowerCase().contains("soundtrack")) {
+                convertHarga(value[2], value[3]);
+            }
         }
-        String hasil = "";
         return hasil;
+    }
+
+    public static double convertHarga(String price, String typeMoney) {
+        int harga = 0;
+
+        return 0.0;
     }
 }
