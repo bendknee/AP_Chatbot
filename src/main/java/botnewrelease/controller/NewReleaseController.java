@@ -18,7 +18,20 @@ import java.util.logging.Logger;
 @LineMessageHandler
 public class NewReleaseController {
 
+    static {
+        System.setProperty("line.bot.channelSecret", "6d36e276040"
+                + "357906dc55e6910be12fc");
+        System.setProperty("line.bot.channelToken", "QpMXcgUuMTdYJ1SkPA6JOH5NmAC"
+                + "87qulDl/RM5haiibS7pBq69Za1Z7RkWzLERjTTOz0c4FTK2eiMKbabg/0"
+                + "1pwRv6HSxWOcbfmfZEzqIh+7V7Tq7bOFXk/MA/cQPBp0C5sSY"
+                + "fjnFKyHnL9B155ogwdB04t89/1O/w1cDnyilFU=");
+    }
+
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(cekNewRelease());
+    }
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
@@ -27,7 +40,7 @@ public class NewReleaseController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         /* To do method process (Stub)*/
-        if (contentText.length() < 21) {
+        if (contentText.length() < 22) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
         }
@@ -36,7 +49,7 @@ public class NewReleaseController {
             if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
                 throw new IllegalArgumentException();
             }
-            String result = cekNewRelease(parser);
+            String result = cekNewRelease();
             return new TextMessage(result.substring(0));
 
         } catch (IllegalArgumentException e) {
@@ -52,7 +65,13 @@ public class NewReleaseController {
     }
 
     // To do method
-    public static String cekNewRelease(String command) throws IOException {
-        return "";
+    public static String cekNewRelease() throws IOException {
+        Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
+        Elements containers = doc.getElementsByClass("album_infobit_detail");
+        for (Element element : containers) {
+
+        }
+        String hasil = "";
+        return hasil;
     }
 }
