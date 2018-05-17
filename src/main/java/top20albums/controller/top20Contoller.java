@@ -47,7 +47,7 @@ public class top20Contoller {
         }
         String parser = contentText.substring(0, 18);
         try {
-            if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
+            if (!parser.equalsIgnoreCase("/vgmdb most_popular")) {
                 throw new IllegalArgumentException();
             }
             String result = cektop20();
