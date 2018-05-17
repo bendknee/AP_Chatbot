@@ -11,6 +11,7 @@ buildscript {
 
     repositories {
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -48,6 +49,7 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.2.0"
     compile 'junit:junit:4.12'
     compile 'org.jsoup:jsoup:1.11.3'
+    compile 'com.github.Ritaja:java-exchange-rates:1.0'
 }
 
 // Configure Checkstyle plugin

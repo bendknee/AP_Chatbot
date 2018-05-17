@@ -1,10 +1,4 @@
-package com.ritaja.xchangerate.api;
-
-import com.ritaja.xchangerate.endpoint.CurrencyLayerEndpoint;
-import com.ritaja.xchangerate.endpoint.YahooEndpoint;
-import com.ritaja.xchangerate.storage.DiskStore;
-import com.ritaja.xchangerate.storage.FileStore;
-import com.ritaja.xchangerate.util.Strategy;
+package botnewrelease.controller;
 
 /**
  * Created by rsengupta on 06/09/15.
@@ -20,10 +14,7 @@ public class CurrencyConverterBuilder {
 	public CurrencyConverter buildConverter() {
 		if (_strategy == null) {
 			throw new IllegalArgumentException("No Strategy defined to create Currency converter");
-		} else if (_strategy.equals(Strategy.YAHOO_FINANCE_FILESTORE)) {
-			diskStore = new FileStore("yahoo");
-			return new CurrencyConverter(diskStore, new YahooEndpoint(diskStore));
-		} else if (_strategy.equals(Strategy.CURRENCY_LAYER_FILESTORE) && _accessKey != null) {
+		}  else if (_strategy.equals(Strategy.CURRENCY_LAYER_FILESTORE) && _accessKey != null) {
 			diskStore = new FileStore("currencyLayer");
 			return new CurrencyConverter(diskStore, new CurrencyLayerEndpoint(diskStore, _accessKey));
 		}

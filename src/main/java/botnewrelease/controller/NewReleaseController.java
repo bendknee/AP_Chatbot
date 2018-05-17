@@ -1,5 +1,9 @@
 package botnewrelease.controller;
 
+import botnewrelease.controller.CurrencyConverter;
+import botnewrelease.controller.CurrencyConverterBuilder;
+import botnewrelease.controller.Strategy;
+
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -7,13 +11,15 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import com.ritaja.xchangerate.util.Currency;
+import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.SocketException;
+import java.math.BigDecimal;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -29,6 +35,7 @@ public class NewReleaseController {
     }
 
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
+    private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
     public static void main(String[] args) throws IOException {
         cekNewRelease();
@@ -66,7 +73,7 @@ public class NewReleaseController {
     }
 
     // To do method
-    public static String cekNewRelease() throws IOException {
+    public static String cekNewRelease() throws IOException, JSONException {
         String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
@@ -74,15 +81,31 @@ public class NewReleaseController {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
             String value[] = element.child(1).text().split(" | ");
             if (title.toLowerCase().contains("original") && title.toLowerCase().contains("soundtrack")) {
-                convertHarga(value[2], value[3]);
+                BigDecimal realPrice = convertHarga(value[2], value[3]);
+                hasil += (title + " : " + realPrice + " IDR");
             }
         }
         return hasil;
     }
 
-    public static double convertHarga(String price, String typeMoney) {
-        int harga = 0;
+    public static BigDecimal convertHarga(String price, String typeMoney) throws JSONException {
+        CurrencyConverter converter = new CurrencyConverterBuilder()
+                .strategy(Strategy.CURRENCY_LAYER_FILESTORE)
+                .accessKey(API_KEY)
+                .buildConverter();
 
-        return 0.0;
+        converter.setRefreshRateSeconds(100000);
+        if (typeMoney.equalsIgnoreCase("JPY")) {
+            return converter.convertCurrency(new BigDecimal(price), Currency.JPY, Currency.IDR);
+        } else if (typeMoney.equalsIgnoreCase("USD")) {
+            return converter.convertCurrency(new BigDecimal(price), Currency.USD, Currency.IDR);
+        } else if (typeMoney.equalsIgnoreCase("EUR")) {
+            return converter.convertCurrency(new BigDecimal(price), Currency.EUR, Currency.IDR);
+        } else if (typeMoney.equalsIgnoreCase("GBP")) {
+            return converter.convertCurrency(new BigDecimal(price), Currency.GBP, Currency.IDR);
+        }
+        else {
+            return null;
+        }
     }
 }

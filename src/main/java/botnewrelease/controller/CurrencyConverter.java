@@ -1,4 +1,4 @@
-package com.ritaja.xchangerate.api;
+package botnewrelease.controller;
 
 import java.math.BigDecimal;
 
