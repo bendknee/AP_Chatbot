@@ -18,7 +18,6 @@ import com.linecorp.bot.model.message.TextMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -48,6 +47,18 @@ public class NewReleaseTester {
     void testHandleTextMessageEvent() throws IOException {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/VJBEVEVVFN");
+
+        TextMessage reply = newReleaseController.handleTextMessageEvent(event);
+
+        assertEquals("Sorry your input is not valid "
+                + "the format should be /vgmdb OST this month", reply.getText());
+    }
+
+    @Test
+    void testillegalArgument() throws IOException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/uiweiwuebwbcw"
+                        + "cuwehjwehcuewvubevwv");
 
         TextMessage reply = newReleaseController.handleTextMessageEvent(event);
 
