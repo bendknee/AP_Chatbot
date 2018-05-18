@@ -24,7 +24,7 @@ public class ScrapperCDOriconSingleTest {
         assertEquals(monthly, monthlyTest);
 
         String yearly = "(1) 願いごとの持ち腐れ - AKB48 - 2017-05-31\n(2) #好きなんだ - AKB48 - 2017-08-30\n(3) 11月のアンクレット - AKB48 - 2017-11-22\n(4) シュートサイン - AKB48 - 2017-03-15\n(5) 逃げ水 - 乃木坂46 - 2017-08-09\n(6) インフルエンサー - 乃木坂46 - 2017-03-22\n(7) いつかできるから今日できる - 乃木坂46 - 2017-10-11\n(8) 不協和音 - 欅坂46 - 2017-04-05\n(9) 風に吹かれても - 欅坂46 - 2017-10-25\n(10) Doors 〜勇気の軌跡〜 - 嵐 - 2017-11-08\n";
-        String dateYearly = "2018-04";
+        String dateYearly = "2017";
         String yearlyTest = ScrapperCDOriconSingle.scrapping("weekly", dateYearly);
         assertEquals(yearly, yearlyTest);
     }
