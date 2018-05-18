@@ -1,4 +1,4 @@
-package advprog.example.bot.controller;
+package java.advprog.bibleBot.bot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -7,7 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import advprog.example.bot.EventTestUtil;
+import advprog.quran.bot.EventTestUtil;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-public class EchoControllerTest {
+public class BibleControllerTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
@@ -31,7 +31,7 @@ public class EchoControllerTest {
     }
 
     @Autowired
-    private EchoController echoController;
+    private BibleController echoController;
 
     @Test
     void testContextLoads() {
@@ -41,16 +41,17 @@ public class EchoControllerTest {
     @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+                EventTestUtil.createDummyTextMessage("/bible GENESIS 1:1");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals("In the beginning God created the heavens and the earth.", reply.getText());
     }
 
     @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
+
         echoController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
