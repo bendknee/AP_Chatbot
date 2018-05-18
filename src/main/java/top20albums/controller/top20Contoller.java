@@ -78,10 +78,7 @@ public class top20Contoller {
     public static String cektop20() throws IOException, JSONException {
         String hasil = "";
         int i = 0;
-        File file = new File("C:\\Users\\acer\\Downloads\\1.html");
-        Document doc = Jsoup.parse(file, "UTF-8", "https://vgmdb.net/db"
-                + "/statistics.php?do=top_rated");
-        //Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
+        Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
         Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
         int id = 14;
         int hrefl = 22;
@@ -92,13 +89,11 @@ public class top20Contoller {
             Document link = Jsoup.connect(url).get();
             Element elem = link.select("td").get(22);
             String[] harga = elem.text().split(" ");
-            System.out.println(((i + 1) + " - " + judul + " - " + rating + " (" + " IDR)" + "\n"));
+            //BigDecimal value = convertHarga(harga[0], harga[1]);
+            hasil += ((i + 1) + " - " + judul + " - " + rating + " (" + " IDR)" + "\n");
             i++;
             id+=4;
             hrefl++;
-            System.out.println(hasil);
-
-            //hasil += (judul +" "+elem.text()+ "\n");
         }
         return hasil;
     }
