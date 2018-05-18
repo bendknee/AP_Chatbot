@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 public class EnterkomputerTest {
     @Test
     public void findPriceTest(){
-        assertEquals("name desc price",Enterkomputer.findPrice());
+        String category = "VGA";
+        String name = "Geforce GTX 1080";
+        assertEquals("name desc price",Enterkomputer.findPrice(category, name));
     }
 }

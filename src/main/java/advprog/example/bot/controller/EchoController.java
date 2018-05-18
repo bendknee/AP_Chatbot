@@ -1,5 +1,6 @@
 package advprog.example.bot.controller;
 
+import advprog.example.bot.feature.Enterkomputer;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -22,6 +23,9 @@ public class EchoController {
         String contentText = content.getText();
 
         String[] tempInput = contentText.split(" ");
+        if(tempInput[0].equalsIgnoreCase("/enterkomputer") && tempInput.length == 3) {
+            Enterkomputer.findPrice(tempInput[1].toLowerCase(),tempInput[2].toLowerCase());
+        }
 
         String replyText = contentText.replace("/echo", "");
         return new TextMessage(replyText.substring(1));
