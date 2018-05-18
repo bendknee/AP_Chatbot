@@ -1,6 +1,7 @@
 package advprog.example.bot.controller;
 
 import advprog.example.bot.anime.AnimeBot;
+import advprog.example.bot.anime.ListAnimeBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -37,6 +38,9 @@ public class EchoController {
         } else if (command.equals("/is_airing")) {
             AnimeBot ab = new AnimeBot(input);
             return new TextMessage(ab.getStatusMessage());
+        } else if (command.equals("hari ini nonton apa?")) {
+            ListAnimeBot lab = new ListAnimeBot();
+            return new TextMessage(lab.getListAnime());
         }
 
         return handleDefaultMessage(event);
