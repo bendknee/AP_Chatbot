@@ -9,27 +9,23 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import com.ritaja.xchangerate.api.CurrencyConverter;
 import com.ritaja.xchangerate.api.CurrencyConverterBuilder;
-import com.ritaja.xchangerate.util.Currency;
 import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
 import com.ritaja.xchangerate.endpoint.EndpointException;
 import com.ritaja.xchangerate.service.ServiceException;
 import com.ritaja.xchangerate.storage.StorageException;
-import com.ritaja.xchangerate.storage.FileStore;
+import com.ritaja.xchangerate.util.Currency;
 import com.ritaja.xchangerate.util.Strategy;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
+import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
-
-import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.SocketTimeoutException;
-import java.util.logging.Logger;
 
 @LineMessageHandler
 public class NewReleaseController {
@@ -46,17 +42,18 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException
-            , ServiceException, EndpointException, StorageException {
+    public static void main(String[] args)
+            throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         String hasil = cekNewRelease();
         System.out.println(hasil);
     }
 
     @EventMapping
     public TextMessage
-    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws IOException, JSONException, CurrencyNotSupportedException
-            , ServiceException, EndpointException, StorageException {
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+            throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -88,27 +85,27 @@ public class NewReleaseController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    // To do method
     public static String cekNewRelease()
-            throws IOException, JSONException, CurrencyNotSupportedException
-            , ServiceException, EndpointException, StorageException {
+            throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
-            String value[] = element.child(1).text().split(" | ");
-            if (title.toLowerCase().contains("original") && title.toLowerCase().contains("soundtrack")) {
-                BigDecimal realPrice = convertHarga(value[2], value[3]);
-                hasil += (title + " : "+realPrice+" IDR"+ "\n");
+            String[] value = element.child(1).text().split(" | ");
+            if (title.toLowerCase().contains("original")
+                    && title.toLowerCase().contains("soundtrack")) {
+                int realPrice = convertHarga(value[2], value[3]).intValueExact();
+                hasil += (title + " : " + realPrice + " IDR" + "\n");
             }
         }
         return hasil;
     }
 
     public static BigDecimal convertHarga(String price, String typeMoney)
-            throws JSONException, CurrencyNotSupportedException
-            , ServiceException, EndpointException, StorageException {
+            throws JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         CurrencyConverter converter = new CurrencyConverterBuilder()
                 .strategy(Strategy.CURRENCY_LAYER_FILESTORE)
                 .accessKey(API_KEY)
