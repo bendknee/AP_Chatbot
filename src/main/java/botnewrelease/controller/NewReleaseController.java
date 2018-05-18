@@ -15,8 +15,8 @@ import com.ritaja.xchangerate.endpoint.EndpointException;
 import com.ritaja.xchangerate.service.ServiceException;
 import com.ritaja.xchangerate.storage.StorageException;
 import com.ritaja.xchangerate.storage.FileStore;
-
 import com.ritaja.xchangerate.util.Strategy;
+
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -55,13 +55,12 @@ public class NewReleaseController {
     @EventMapping
     public TextMessage
     handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws IOException, JSONException, SocketTimeoutException, CurrencyNotSupportedException
+            throws IOException, JSONException, CurrencyNotSupportedException
             , ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        /* To do method process (Stub)*/
         if (contentText.length() < 22) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
@@ -91,19 +90,17 @@ public class NewReleaseController {
 
     // To do method
     public static String cekNewRelease()
-            throws IOException, JSONException, SocketTimeoutException, CurrencyNotSupportedException
+            throws IOException, JSONException, CurrencyNotSupportedException
             , ServiceException, EndpointException, StorageException {
-        File file = new File("C:\\Users\\acer\\Downloads\\vgmdb.html");
         String hasil = "";
-        Document doc = Jsoup.parse(file,"UTF-8","https://vgmdb.net/db/calendar.php?year=2018&month=5");
-        //Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").timeout(30000).get();
+        Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
             String value[] = element.child(1).text().split(" | ");
             if (title.toLowerCase().contains("original") && title.toLowerCase().contains("soundtrack")) {
                 BigDecimal realPrice = convertHarga(value[2], value[3]);
-                hasil += (title+" " + value[2]+" "+value[3]+"\n"/*+ " : "+ " IDR"*/);
+                hasil += (title + " : "+realPrice+" IDR"+ "\n");
             }
         }
         return hasil;
