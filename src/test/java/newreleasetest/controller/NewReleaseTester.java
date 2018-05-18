@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
+import botnewrelease.NewReleaseApp;
 import botnewrelease.controller.NewReleaseController;
 
 import com.linecorp.bot.model.event.Event;
@@ -83,5 +84,10 @@ public class NewReleaseTester {
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
+    }
+
+    @Test
+    public void applicationContextTest() {
+        NewReleaseApp.main(new String[]{});
     }
 }
