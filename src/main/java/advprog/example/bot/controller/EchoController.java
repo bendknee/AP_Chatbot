@@ -1,5 +1,6 @@
 package advprog.example.bot.controller;
 
+import advprog.example.bot.anime.AnimeBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -18,16 +19,37 @@ public class EchoController {
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
+
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        String[] splitContent = contentText.split(" ", 2);
+        String command = splitContent[0];
+
+        if (splitContent.length < 2) {
+            return handleDefaultMessage(event);
+        }
+
+        String input = splitContent[1];
+
+        if(command.equals("/echo")) {
+            return new TextMessage(input);
+        } else if (command.equals("/is_airing")) {
+            AnimeBot ab = new AnimeBot(input);
+            return new TextMessage(ab.getStatusMessage());
+        }
+
+        return handleDefaultMessage(event);
+
     }
 
     @EventMapping
-    public void handleDefaultMessage(Event event) {
+    public TextMessage handleDefaultMessage(Event event) {
         LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
                 event.getTimestamp(), event.getSource()));
+
+        System.out.println("default handle event: " + event);
+
+        return new TextMessage("Invalid command");
     }
 }

@@ -57,4 +57,14 @@ public class EchoControllerTest {
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
     }
+
+    @Test
+    void testHadleTextForNewAge() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/is_airing Akkun to Kanojo");
+
+        TextMessage reply = echoController.handleTextMessageEvent(event);
+
+        assertEquals("ANIME is airing from April,6 2018 until unknown", reply.getText());
+    }
 }
