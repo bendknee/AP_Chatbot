@@ -39,13 +39,38 @@ public class EchoControllerTest {
     }
 
     @Test
-    void testHandleTextMessageEvent() {
+    void testHandleCommandUber() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+                EventTestUtil.createDummyTextMessage("/uber");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
+        String correctAnswer = "Destination: Plumpang (5 kilomerters from current position)\n"
+                              + "Estimated travel time and fares for each Uber services:\n\n"
+                              + "UberX (10 minutes, 10 rupiah)\n"
+                              + "UberPool (10 minutes, 15 rupiah)\n"
+                              + "UberBlack (10 minutes, 20 rupiah)\n"
+                              + "UberMotor (10 minutes, 15 rupiah)\n\n"
+                              + "Data provided by [Uber](https://www.uber.com)";
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals(correctAnswer, reply.getText());
+    }
+
+    @Test
+    void testHandleCommandRemoveDestination() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/remove_destination");
+
+        TextMessage reply = echoController.handleTextMessageEvent(event);
+        assertEquals("Destination removed", reply.getText());
+    }
+
+    @Test
+    void testHandleCommandAddDestination() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/add_destination");
+
+        TextMessage reply = echoController.handleTextMessageEvent(event);
+        assertEquals("Destination added", reply.getText());
     }
 
     @Test
