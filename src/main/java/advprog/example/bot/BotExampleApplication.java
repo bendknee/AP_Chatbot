@@ -13,5 +13,6 @@ public class BotExampleApplication {
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
         SpringApplication.run(BotExampleApplication.class, args);
+        System.out.println("Hello World");
     }
 }
