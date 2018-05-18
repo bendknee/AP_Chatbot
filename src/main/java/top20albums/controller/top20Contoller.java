@@ -13,8 +13,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -32,10 +34,15 @@ public class top20Contoller {
     private static final Logger LOGGER = Logger.getLogger(top20Contoller.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
+    public static void main(String[] args) throws IOException, JSONException {
+        String hasil = cektop20();
+        System.out.println(hasil);
+    }
+
     @EventMapping
     public TextMessage
-        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws IOException, JSONException {
+    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+            throws IOException, JSONException, SocketTimeoutException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -56,6 +63,8 @@ public class top20Contoller {
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
+        } catch (SocketTimeoutException e) {
+            return new TextMessage("Sorry there is timeout cause vgmdb.net is slow, please try again later");
         }
     }
 
@@ -68,15 +77,33 @@ public class top20Contoller {
     // To do method
     public static String cektop20() throws IOException, JSONException {
         String hasil = "";
-        Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
-        Elements containers = doc.getElementsByClass("");
+        int i = 0;
+        File file = new File("C:\\Users\\acer\\Downloads\\1.html");
+        Document doc = Jsoup.parse(file, "UTF-8", "https://vgmdb.net/db"
+                + "/statistics.php?do=top_rated");
+        //Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
+        Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
+        int id = 14;
+        int hrefl = 22;
         for (Element element : containers) {
+            String judul = element.text();
+            String rating = doc.select("td").get(id).text().substring(0, 4);
+            String url = doc.select("a[href]").get(hrefl).attr("href");
+            Document link = Jsoup.connect(url).get();
+            Element elem = link.select("td").get(22);
+            String[] harga = elem.text().split(" ");
+            System.out.println(((i + 1) + " - " + judul + " - " + rating + " (" + " IDR)" + "\n"));
+            i++;
+            id+=4;
+            hrefl++;
+            System.out.println(hasil);
 
+            //hasil += (judul +" "+elem.text()+ "\n");
         }
         return hasil;
     }
 
-    public static BigDecimal convertHarga(String price, String typeMoney) throws JSONException {
+    /*public static BigDecimal convertHarga(String price, String typeMoney) throws JSONException {
         CurrencyConverter converter = new CurrencyConverterBuilder()
                 .strategy(Strategy.CURRENCY_LAYER_FILESTORE)
                 .accessKey(API_KEY)
@@ -94,5 +121,5 @@ public class top20Contoller {
         } else {
             return null;
         }
-    }
+    }*/
 }
