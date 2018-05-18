@@ -42,13 +42,6 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args)
-            throws IOException, JSONException, CurrencyNotSupportedException,
-            ServiceException, EndpointException, StorageException {
-        String hasil = cekNewRelease();
-        System.out.println(hasil);
-    }
-
     @EventMapping
     public TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
@@ -58,11 +51,11 @@ public class NewReleaseController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        if (contentText.length() < 22) {
+        if (contentText.length() < 21) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
         }
-        String parser = contentText.substring(0, 21);
+        String parser = contentText.substring(0, 20);
         try {
             if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
                 throw new IllegalArgumentException();
