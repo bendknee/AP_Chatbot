@@ -39,13 +39,33 @@ public class FakeNewsControllerTest {
     }
 
     @Test
-    void testHandleTextMessageEvent() {
+    void testHandleTextMessageEventSatire() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+                EventTestUtil.createDummyTextMessage("/echo is_satire");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 
-        assertEquals("Lorem Ipsum", reply.getText());
+        assertEquals("is_satire", reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventFake() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo is_fake");
+
+        TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
+
+        assertEquals("is_fake", reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventConspiracy() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/echo is_conspiracy");
+
+        TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
+
+        assertEquals("is_conspiracy", reply.getText());
     }
 
     @Test
