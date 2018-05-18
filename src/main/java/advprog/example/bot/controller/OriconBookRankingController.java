@@ -23,12 +23,14 @@ import org.jsoup.select.Elements;
 @LineMessageHandler
 public class OriconBookRankingController {
 
-	private static final Logger LOGGER = Logger.getLogger(OriconBookRankingController.class.getName());
+    private static final Logger LOGGER = 
+                Logger.getLogger(OriconBookRankingController.class.getName());
 
-	@EventMapping
-	public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
-		LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", event.getTimestamp(),
-				event.getMessage()));
+    @EventMapping
+    public TextMessage 
+                handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
+        LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", 
+                event.getTimestamp(), event.getMessage()));
 		TextMessageContent content = event.getMessage();
 		String contentText = content.getText();
 

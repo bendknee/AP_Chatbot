@@ -23,7 +23,6 @@ import junit.framework.TestCase;
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
 public class OriconBookRankingControllerTest extends TestCase {
-
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
         System.setProperty("line.bot.channelToken", "TOKEN");
