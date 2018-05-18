@@ -20,9 +20,28 @@ public class EchoController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
+        String reply = "";
+        if (contentText == "/uber") {
+          reply = uberCommand();
+        } else if (contentText == "/add_destination") {
+          reply = addDestinationCommand();
+        } else if (contentText == "remove_destination") {
+          reply = removeDestinationCommand();
+        }
 
-        String replyText = contentText.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        return new TextMessage("");
+    }
+
+    private String uberCommand() {
+      return "";
+    }
+
+    private String addDestinationCommand() {
+      return "";
+    }
+
+    private String removeDestinationCommand() {
+      return "";
     }
 
     @EventMapping
