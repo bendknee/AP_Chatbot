@@ -1,9 +1,5 @@
 package botnewrelease.controller;
 
-import botnewrelease.controller.CurrencyConverter;
-import botnewrelease.controller.CurrencyConverterBuilder;
-import botnewrelease.controller.Strategy;
-
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -11,15 +7,28 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import com.ritaja.xchangerate.api.CurrencyConverter;
+import com.ritaja.xchangerate.api.CurrencyConverterBuilder;
 import com.ritaja.xchangerate.util.Currency;
+import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
+import com.ritaja.xchangerate.endpoint.EndpointException;
+import com.ritaja.xchangerate.service.ServiceException;
+import com.ritaja.xchangerate.storage.StorageException;
+import com.ritaja.xchangerate.storage.FileStore;
+
+import com.ritaja.xchangerate.util.Strategy;
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import org.springframework.boot.autoconfigure.web.ResourceProperties;
+
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 @LineMessageHandler
@@ -37,12 +46,17 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException {
-        cekNewRelease();
+    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException
+            , ServiceException, EndpointException, StorageException {
+        String hasil = cekNewRelease();
+        System.out.println(hasil);
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws IOException {
+    public TextMessage
+    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+            throws IOException, JSONException, SocketTimeoutException, CurrencyNotSupportedException
+            , ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -63,6 +77,9 @@ public class NewReleaseController {
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
+        } catch (SocketTimeoutException e) {
+            return new TextMessage("Sorry there is a commection "
+                    + "timeout please try again");
         }
     }
 
@@ -73,22 +90,28 @@ public class NewReleaseController {
     }
 
     // To do method
-    public static String cekNewRelease() throws IOException, JSONException {
+    public static String cekNewRelease()
+            throws IOException, JSONException, SocketTimeoutException, CurrencyNotSupportedException
+            , ServiceException, EndpointException, StorageException {
+        File file = new File("C:\\Users\\acer\\Downloads\\vgmdb.html");
         String hasil = "";
-        Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
+        Document doc = Jsoup.parse(file,"UTF-8","https://vgmdb.net/db/calendar.php?year=2018&month=5");
+        //Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").timeout(30000).get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
             String value[] = element.child(1).text().split(" | ");
             if (title.toLowerCase().contains("original") && title.toLowerCase().contains("soundtrack")) {
                 BigDecimal realPrice = convertHarga(value[2], value[3]);
-                hasil += (title + " : " + realPrice + " IDR");
+                hasil += (title+" " + value[2]+" "+value[3]+"\n"/*+ " : "+ " IDR"*/);
             }
         }
         return hasil;
     }
 
-    public static BigDecimal convertHarga(String price, String typeMoney) throws JSONException {
+    public static BigDecimal convertHarga(String price, String typeMoney)
+            throws JSONException, CurrencyNotSupportedException
+            , ServiceException, EndpointException, StorageException {
         CurrencyConverter converter = new CurrencyConverterBuilder()
                 .strategy(Strategy.CURRENCY_LAYER_FILESTORE)
                 .accessKey(API_KEY)
@@ -103,8 +126,7 @@ public class NewReleaseController {
             return converter.convertCurrency(new BigDecimal(price), Currency.EUR, Currency.IDR);
         } else if (typeMoney.equalsIgnoreCase("GBP")) {
             return converter.convertCurrency(new BigDecimal(price), Currency.GBP, Currency.IDR);
-        }
-        else {
+        } else {
             return null;
         }
     }

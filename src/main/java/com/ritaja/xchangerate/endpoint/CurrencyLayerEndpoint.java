@@ -1,11 +1,11 @@
-package botnewrelease.controller;
+package com.ritaja.xchangerate.endpoint;
 
 import java.math.BigDecimal;
 
 import org.json.JSONException;
 
 import com.ritaja.xchangerate.storage.DiskStore;
-import botnewrelease.controller.Currency;
+import com.ritaja.xchangerate.util.Currency;
 
 /**
  * Created by rsengupta on 03/09/15.
