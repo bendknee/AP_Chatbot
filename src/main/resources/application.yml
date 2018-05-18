@@ -1,0 +1,3 @@
+line.bot.channel-secret: FILL_WITH_LINE_SECRET
+line.bot.channel-token: FILL_WITH_LINE_TOKEN
+line.bot.handler.path: /callback
