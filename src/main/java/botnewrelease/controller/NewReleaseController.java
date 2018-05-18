@@ -57,7 +57,7 @@ public class NewReleaseController {
         }
         String parser = contentText.substring(0, 21);
         try {
-            if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
+            if (!parser.equalsIgnoreCase("/vgmdb OST this month") && parser.length() > 21) {
                 throw new IllegalArgumentException();
             }
             String result = cekNewRelease();
