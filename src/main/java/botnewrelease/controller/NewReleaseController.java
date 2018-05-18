@@ -55,7 +55,7 @@ public class NewReleaseController {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
         }
-        String parser = contentText.substring(0, 20);
+        String parser = contentText.substring(0, 21);
         try {
             if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
                 throw new IllegalArgumentException();
