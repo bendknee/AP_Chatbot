@@ -31,7 +31,7 @@ public class EchoControllerTest {
     }
 
     @Autowired
-    private EchoController echoController;
+    private BotController echoController;
 
     @Test
     void testContextLoads() {
