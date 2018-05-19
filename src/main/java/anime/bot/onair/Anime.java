@@ -8,6 +8,15 @@ public class Anime {
     private String title;
     private String synopsis;
 
+    public List<String> getGenre() {
+        return genre;
+    }
+
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
     public Anime(String title, List<String> genre, String synopsis){
         this.title = title;
         this.genre = genre;
@@ -19,8 +28,10 @@ public class Anime {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+
+    @Override
+    public String toString() {
+        return title + " \n " + synopsis;
     }
 
 }

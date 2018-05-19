@@ -14,38 +14,49 @@ import org.jsoup.select.Elements;
 
 
 public class AnimeOnAir {
-    private String animeUrl;
     private List<Anime> animeList;
 
-    public AnimeOnAir(String animeUrl){
-        this.animeUrl = animeUrl;
+    public AnimeOnAir(){
         animeList = new ArrayList<Anime>();
     }
 
+
     public void getAnimeOnAir(String url) {
         try {
-            Document doc = Jsoup.connect("https://www.livechart.me/spring-2018/tv").get();
+            Document doc = Jsoup.connect(url).get();
             Elements element = doc.getElementsByClass("anime-card");
             for (Element e: element) {
                 String title = e.getElementsByClass("main-title").html();
                 List<String> genre = new ArrayList<>();
                 Elements elementGenre = e.getElementsByClass("anime-tags");
                 for (Element es : elementGenre) {
-                    genre.add(es.html());
+                    //System.out.println(es.select("li>a").html()+"hehe");
+                    genre.add(es.select("li>a").html());
                 }
                 String synopsis = e.select(".anime-synopsis > p").html();
 
                 Anime anime = new Anime(title, genre, synopsis);
                 animeList.add(anime);
-
-                System.out.println(title);
-                System.out.println(synopsis);
-
             }
 
         } catch (IOException e) {
             System.out.println("Url tidak ada");
         }
+    }
+
+
+    public String returnAnimeBasedOnGenreYearAndSeason(String genre){
+        StringBuilder stringBuilder = new StringBuilder();
+        String string = "Sorry but the specification you have entered was no longer in our Chart!";
+        //String string = animeList.size()+"hehe";
+        if (!animeList.isEmpty()){
+            for (Anime anime : animeList) {
+                if (anime.getGenre().toString().contains(genre)){
+                    string = stringBuilder.append(format("%s\n", anime.toString())).toString();
+                }
+            }
+        }
+        return string;
     }
 
     public List<Anime> getAnimeList() {
@@ -54,21 +65,6 @@ public class AnimeOnAir {
 
     public void setAnimeList(List<Anime> animeList) {
         this.animeList = animeList;
-    }
-
-
-    public String getAnimeUrl() {
-        return animeUrl;
-    }
-
-    public void setAnimeUrl(String animeUrl) {
-        this.animeUrl = animeUrl;
-    }
-
-
-
-    private void getASetOfAnimes() {
-
     }
 
     public String returnAnime () {

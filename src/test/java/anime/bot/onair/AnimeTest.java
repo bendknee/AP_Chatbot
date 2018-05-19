@@ -4,39 +4,34 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnimeTest {
     Anime anime;
 
     @Before
     public void setUp() {
-        anime = new Anime("Khatya The W", "romance", "2030", "Winter");
+        List<String> genre = new ArrayList<>();
+        genre.add("Romance");
+        anime = new Anime("Khatya The W", genre, "Story about a girl who likes Miku");
     }
 
-    @Test
-    public void getGenreTest() {
-        String genre = anime.getGenre();
-        assertEquals(genre, "romance");
-
-    }
 
     @Test
     public void  getTitleTest() {
         String title = anime.getTitle();
         assertEquals(title, "Khatya The W");
-
     }
 
     @Test
-    public void getYearTest() {
-        String year = anime.getYear();
-        assertEquals(year, "2030");
-
+    public void getSynopsis() {
+        String synopsis = anime.getSynopsis();
+        assertEquals("Story about a girl who likes Miku", synopsis);
     }
 
-    @Test
-    public void seasonTest() {
-        String season = anime.getSeason();
-        assertEquals(season, "Winter");
-    }
+
+
+
 
 }
