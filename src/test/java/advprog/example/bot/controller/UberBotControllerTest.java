@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
-public class EchoControllerTest {
+public class UberBotControllerTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
@@ -31,11 +31,11 @@ public class EchoControllerTest {
     }
 
     @Autowired
-    private EchoController echoController;
+    private UberBotController uberBotController;
 
     @Test
     void testContextLoads() {
-        assertNotNull(echoController);
+        assertNotNull(uberBotController);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class EchoControllerTest {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/uber");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = uberBotController.handleTextMessageEvent(event);
         String correctAnswer = "Destination: Plumpang (5 kilomerters from current position)\n"
                               + "Estimated travel time and fares for each Uber services:\n\n"
                               + "UberX (10 minutes, 10 rupiah)\n"
@@ -60,7 +60,7 @@ public class EchoControllerTest {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/remove_destination");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = uberBotController.handleTextMessageEvent(event);
         assertEquals("Destination removed", reply.getText());
     }
 
@@ -69,7 +69,7 @@ public class EchoControllerTest {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/add_destination");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = uberBotController.handleTextMessageEvent(event);
         assertEquals("Destination added", reply.getText());
     }
 
@@ -77,7 +77,7 @@ public class EchoControllerTest {
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
-        echoController.handleDefaultMessage(event);
+        uberBotController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
         verify(event, atLeastOnce()).getTimestamp();
