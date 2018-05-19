@@ -52,8 +52,7 @@ public class NewReleaseController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         if (contentText.length() < 21) {
-            return new TextMessage("Sorry your input is not valid "
-                    + "the format should be /vgmdb OST this month");
+            return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
         try {
