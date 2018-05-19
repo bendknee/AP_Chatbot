@@ -88,6 +88,7 @@ public class UberBotController {
         lineMessagingClient.replyMessage(new ReplyMessage(replyToken, Arrays.asList(message)));
     }
 
+    @SuppressWarnings("unchecked")
     private void addDestination(String name) throws Exception {
         JSONObject data = getData();
         data.put("nama", name);
@@ -101,6 +102,7 @@ public class UberBotController {
         file.close();
     }
 
+    @SuppressWarnings("unchecked")
     private JSONObject getData() throws Exception {
         try {
             return (JSONObject) new JSONParser().parse(new FileReader("data.json"));
