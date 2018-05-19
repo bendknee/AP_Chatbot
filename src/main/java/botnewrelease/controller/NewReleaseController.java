@@ -42,12 +42,6 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
-            ServiceException, EndpointException, StorageException {
-        String result = cekNewRelease();
-        System.out.println(result);
-    }
-
     @EventMapping
     public TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
