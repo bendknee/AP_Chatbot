@@ -18,7 +18,6 @@ import com.ritaja.xchangerate.util.Strategy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
@@ -43,7 +42,7 @@ public class NewReleaseController {
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
     @EventMapping
-    public TextMessage
+    public static TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
@@ -56,7 +55,7 @@ public class NewReleaseController {
         }
         String parser = contentText.substring(0, 21);
         try {
-            if (!parser.equalsIgnoreCase("/vgmdb OST this month") || contentText.length() > 21) {
+            if (!parser.equalsIgnoreCase("/vgmdb OST this month")) {
                 throw new IllegalArgumentException();
             }
             String result = cekNewRelease();
