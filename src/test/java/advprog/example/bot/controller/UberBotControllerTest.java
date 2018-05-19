@@ -11,6 +11,7 @@ import advprog.example.bot.EventTestUtil;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 
@@ -39,11 +40,11 @@ public class UberBotControllerTest {
     }
 
     @Test
-    void testHandleCommandUber() {
+    void testHandleCommandUber() throws Exception {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/uber");
 
-        TextMessage reply = uberBotController.handleTextMessageEvent(event);
+        String reply = uberBotController.handleTextMessageEvent(event);
         String correctAnswer = "Destination: Plumpang (5 kilomerters from current position)\n"
                               + "Estimated travel time and fares for each Uber services:\n\n"
                               + "UberX (10 minutes, 10 rupiah)\n"
@@ -52,25 +53,37 @@ public class UberBotControllerTest {
                               + "UberMotor (10 minutes, 15 rupiah)\n\n"
                               + "Data provided by [Uber](https://www.uber.com)";
 
-        assertEquals(correctAnswer, reply.getText());
+        assertEquals(correctAnswer, reply);
     }
 
     @Test
-    void testHandleCommandRemoveDestination() {
+    void testHandleCommandRemoveDestination() throws Exception {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/remove_destination");
 
-        TextMessage reply = uberBotController.handleTextMessageEvent(event);
-        assertEquals("Destination removed", reply.getText());
+        String reply = uberBotController.handleTextMessageEvent(event);
+        assertEquals("Destination removed", reply);
     }
 
     @Test
-    void testHandleCommandAddDestination() {
+    void testHandleCommandAddDestination() throws Exception {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/add_destination");
 
-        TextMessage reply = uberBotController.handleTextMessageEvent(event);
-        assertEquals("Destination added", reply.getText());
+        String reply = uberBotController.handleTextMessageEvent(event);
+        assertEquals("Perintah /add_destination diterima, silahkan kirim lokasi anda", reply);
+
+        MessageEvent<LocationMessageContent> event2 =
+                EventTestUtil.createDummyLocationMessage();
+        reply = uberBotController.handleLocationMessageEvent(event2);
+        assertEquals("Lokasi diterima, silahkan beri nama lokasi tersebut (Contoh: Wisma Rossela)", reply);
+
+        MessageEvent<TextMessageContent> event3 =
+                EventTestUtil.createDummyTextMessage("Wisma Rosella");
+
+        reply = uberBotController.handleTextMessageEvent(event3);
+        assertEquals("Lokasi telah berhasil disimpan", reply);
+
     }
 
     @Test
