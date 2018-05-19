@@ -29,16 +29,17 @@ public class UberBotController {
 
     private LocationMessageContent locationMessageContent;
 
-    private final static int STATE_GENERAL = 0;
-    private final static int STATE_ADD_LOCATION = 1;
-    private final static int STATE_DESTINATION = 2;
-    private final static int STATE_CONFIRMATION = 3;
-    private final static int STATE_NAME_LOCATION = 4;
-    private final static int STATE_DELETE_LOCATION = 1;
+    private static final int STATE_GENERAL = 0;
+    private static final int STATE_ADD_LOCATION = 1;
+    private static final int STATE_DESTINATION = 2;
+    private static final int STATE_CONFIRMATION = 3;
+    private static final int STATE_NAME_LOCATION = 4;
+    private static final int STATE_DELETE_LOCATION = 1;
 
     private static int state = STATE_GENERAL;
 
     private static final Logger LOGGER = Logger.getLogger(UberBotController.class.getName());
+
     @EventMapping
     public String handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
@@ -54,7 +55,8 @@ public class UberBotController {
                 replyMessage = uberCommand();
             } else if (contentText == "/add_destination") {
                 state = STATE_ADD_LOCATION;
-                replyMessage = "Perintah /add_destination diterima, silahkan kirim lokasi anda";
+                replyMessage = "Perintah /add_destination diterima, "
+                        + "silahkan kirim lokasi anda";
                 reply(replyToken, new TextMessage(replyMessage));
             } else if (contentText == "/remove_destination") {
                 replyMessage = removeDestinationCommand();
@@ -77,7 +79,8 @@ public class UberBotController {
         if (state == STATE_ADD_LOCATION) {
             locationMessageContent = event.getMessage();
             state = STATE_NAME_LOCATION;
-            replyMessage = "Lokasi diterima, silahkan beri nama lokasi tersebut (Contoh: Wisma Rossela)";
+            replyMessage = "Lokasi diterima, silahkan beri nama lokasi tersebut "
+                    + "(Contoh: Wisma Rossela)";
             reply(replyToken, new TextMessage(replyMessage));
         }
 
