@@ -42,6 +42,12 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
+    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
+        String result = cekNewRelease();
+        System.out.println(result);
+    }
+
     @EventMapping
     public TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
@@ -66,6 +72,9 @@ public class NewReleaseController {
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
+        } catch (SocketTimeoutException e) {
+            return new TextMessage("Sorry there is a commection "
+                    + "timeout please try again with the same format");
         } catch (IOException e) {
             return new TextMessage("Sorry there is a commection "
                     + "timeout please try again with the same format");
