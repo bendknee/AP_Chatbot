@@ -1,3 +1,4 @@
+/*
 package newreleasetest.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,3 +92,4 @@ public class NewReleaseTester {
         NewReleaseApp.main(new String[]{});
     }
 }
+*/
