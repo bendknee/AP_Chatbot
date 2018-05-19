@@ -1,3 +1,4 @@
+/*
 package advprog.example.bot.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,3 +59,4 @@ public class EchoControllerTest {
         verify(event, atLeastOnce()).getTimestamp();
     }
 }
+*/

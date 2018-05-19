@@ -7,13 +7,21 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import com.ritaja.xchangerate.api.CurrencyConverter;
+import com.ritaja.xchangerate.api.CurrencyConverterBuilder;
+import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
+import com.ritaja.xchangerate.endpoint.EndpointException;
+import com.ritaja.xchangerate.service.ServiceException;
+import com.ritaja.xchangerate.storage.StorageException;
+import com.ritaja.xchangerate.util.Currency;
+import com.ritaja.xchangerate.util.Strategy;
+
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.SocketTimeoutException;
@@ -34,7 +42,8 @@ public class top20Contoller {
     private static final Logger LOGGER = Logger.getLogger(top20Contoller.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException, JSONException {
+    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         String hasil = cektop20();
         System.out.println(hasil);
     }
@@ -42,7 +51,8 @@ public class top20Contoller {
     @EventMapping
     public TextMessage
     handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws IOException, JSONException, SocketTimeoutException {
+            throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -75,7 +85,8 @@ public class top20Contoller {
     }
 
     // To do method
-    public static String cektop20() throws IOException, JSONException {
+    public static String cektop20() throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         String hasil = "";
         int i = 0;
         Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
@@ -86,19 +97,23 @@ public class top20Contoller {
             String judul = element.text();
             String rating = doc.select("td").get(id).text().substring(0, 4);
             String url = doc.select("a[href]").get(hrefl).attr("href");
+            System.out.println(url);
             Document link = Jsoup.connect(url).get();
-            Element elem = link.select("td").get(22);
-            String[] harga = elem.text().split(" ");
-            //BigDecimal value = convertHarga(harga[0], harga[1]);
-            hasil += ((i + 1) + " - " + judul + " - " + rating + " (" + " IDR)" + "\n");
+            //Element elem = link.select("td").get(22).child(0);
+            //String harga = elem.text();
+            //System.out.println(harga);
+            //int value = convertHarga(harga[0].substring(0,4), harga[1]).intValueExact();
+            //hasil += ((i + 1) + " - " + judul + " - " + rating + " (" +value+ " IDR)" + "\n");
             i++;
-            id+=4;
+            id += 4;
             hrefl++;
         }
         return hasil;
     }
 
-    /*public static BigDecimal convertHarga(String price, String typeMoney) throws JSONException {
+    public static BigDecimal convertHarga(String price, String typeMoney)
+            throws JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
         CurrencyConverter converter = new CurrencyConverterBuilder()
                 .strategy(Strategy.CURRENCY_LAYER_FILESTORE)
                 .accessKey(API_KEY)
@@ -116,5 +131,5 @@ public class top20Contoller {
         } else {
             return null;
         }
-    }*/
+    }
 }
