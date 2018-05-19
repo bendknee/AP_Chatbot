@@ -66,9 +66,9 @@ public class NewReleaseController {
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
-        } catch (SocketTimeoutException e) {
+        } catch (IOException e) {
             return new TextMessage("Sorry there is a commection "
-                    + "timeout please try again");
+                    + "timeout please try again with the same format");
         }
     }
 
@@ -113,6 +113,8 @@ public class NewReleaseController {
             return converter.convertCurrency(new BigDecimal(price), Currency.EUR, Currency.IDR);
         } else if (typeMoney.equalsIgnoreCase("GBP")) {
             return converter.convertCurrency(new BigDecimal(price), Currency.GBP, Currency.IDR);
+        } else if (typeMoney.equalsIgnoreCase("TWD")) {
+            return converter.convertCurrency(new BigDecimal(price), Currency.TWD, Currency.IDR);
         } else {
             return null;
         }
