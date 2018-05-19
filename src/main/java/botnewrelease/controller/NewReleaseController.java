@@ -45,7 +45,7 @@ public class NewReleaseController {
     @EventMapping
     public TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws IOException, JSONException, CurrencyNotSupportedException,
+            throws JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
@@ -60,14 +60,11 @@ public class NewReleaseController {
                 throw new IllegalArgumentException();
             }
             String result = cekNewRelease();
-            return new TextMessage(result.substring(0));
+            return new TextMessage(result);
 
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
-        } catch (SocketTimeoutException e) {
-            return new TextMessage("Sorry there is a commection "
-                    + "timeout please try again with the same format");
         } catch (IOException e) {
             return new TextMessage("Sorry there is a commection "
                     + "timeout please try again with the same format");
