@@ -45,8 +45,7 @@ public class NewReleaseController {
 
     /*public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
-        String result = cekNewRelease();
-        System.out.println(result);
+        System.out.println(cekNewRelease().substring(0,2036));
     }*/
 
     @EventMapping
@@ -66,7 +65,7 @@ public class NewReleaseController {
                 contentText.length() > 22) {
             throw new IllegalArgumentException();
         }
-        return new TextMessage(cekNewRelease());
+        return new TextMessage(cekNewRelease().substring(0, 2036));
     }
 
     @EventMapping
