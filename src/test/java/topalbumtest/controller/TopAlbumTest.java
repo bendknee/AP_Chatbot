@@ -8,13 +8,22 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
-import topalbumpac.TopAlbumPac;
+import org.json.JSONException;
+
 import topalbumpac.controller.TopAlbumsControl;
+import topalbumpac.TopAlbumPac;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
+
+import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
+import com.ritaja.xchangerate.endpoint.EndpointException;
+import com.ritaja.xchangerate.service.ServiceException;
+import com.ritaja.xchangerate.storage.StorageException;
+
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,5 +50,45 @@ public class TopAlbumTest {
     @Test
     void testContextLoads() {
         assertNotNull(control);
+    }
+
+    @Test
+    void testHandleTextMessageEvent() throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/VJBEVEVVFN");
+
+        TextMessage reply = control.handleTextMessageEvent(event);
+
+        assertEquals("Sorry your input is not valid "
+                + "the format should be /vgmdb most_popular", reply.getText());
+    }
+
+    @Test
+    void testillegalArgument() throws IOException, JSONException, CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/wvevuyebverbver"
+                        + "vervcerverbeverv");
+
+        TextMessage reply = control.handleTextMessageEvent(event);
+
+        assertEquals("Sorry your input is not valid "
+                + "the format should be /vgmdb most_popular", reply.getText());
+    }
+
+    @Test
+    void testHandleDefaultMessage() {
+        Event event = mock(Event.class);
+
+        control.handleDefaultMessage(event);
+
+        verify(event, atLeastOnce()).getSource();
+        verify(event, atLeastOnce()).getTimestamp();
+    }
+
+    @Test
+    public void applicationContextTest() {
+        TopAlbumPac.main(new String[]{});
     }
 }
