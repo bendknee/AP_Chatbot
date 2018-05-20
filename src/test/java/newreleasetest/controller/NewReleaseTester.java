@@ -1,4 +1,3 @@
-/*
 package newreleasetest.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@SpringBootTest(properties = "line.bot.handler.enabled=false")
+@SpringBootTest(properties = "line.bot.handler.eaabled=false", classes = NewReleaseApp.class)
 @ExtendWith(SpringExtension.class)
 public class NewReleaseTester {
 
@@ -59,8 +58,8 @@ public class NewReleaseTester {
 
         TextMessage reply = newReleaseController.handleTextMessageEvent(event);
 
-        assertEquals("Sorry your input is not valid "
-                + "the format should be /vgmdb OST this month", reply.getText());
+        assertEquals("The format should be /vgmdb "
+                + "OST this month", reply.getText());
     }
 
     @Test
@@ -92,4 +91,3 @@ public class NewReleaseTester {
         NewReleaseApp.main(new String[]{});
     }
 }
-*/
