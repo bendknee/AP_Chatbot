@@ -39,6 +39,7 @@ public class TopAlbumsControl {
                 + "wBce9VP1hEtIoARacjxCQJu9hRj5iy3wd"
                 + "B04t89/1O/w1cDnyilFU=");
     }
+
     private static final Logger LOGGER = Logger.getLogger(TopAlbumsControl.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
@@ -51,7 +52,7 @@ public class TopAlbumsControl {
 
     @EventMapping
     public TextMessage
-    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
@@ -64,7 +65,8 @@ public class TopAlbumsControl {
         }
         String parser = contentText.substring(0, 19);
         try {
-            if (!parser.equalsIgnoreCase("/vgmdb most_popular")) {
+            if (!parser.equalsIgnoreCase("/vgmdb most_popular") ||
+                    contentText.length() > 20) {
                 throw new IllegalArgumentException();
             }
             String result = cektop20();
