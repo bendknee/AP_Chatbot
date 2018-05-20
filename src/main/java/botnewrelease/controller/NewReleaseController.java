@@ -66,7 +66,7 @@ public class NewReleaseController {
             throw new IllegalArgumentException();
         }
         String hasil = cekNewRelease().toString();
-        return new TextMessage(hasil.substring(0, 2000) + hasil.substring(2001, 2005));
+        return new TextMessage(hasil.substring(0, 2002));
     }
 
     @EventMapping
