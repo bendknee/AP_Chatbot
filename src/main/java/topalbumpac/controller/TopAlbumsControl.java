@@ -60,9 +60,9 @@ public class TopAlbumsControl {
         String contentText = content.getText();
         if (contentText.length() < 19) {
             return new TextMessage("Sorry your input is not valid "
-                    + "the format should be /vgmdb OST this month");
+                    + "the format should be /vgmdb most_popular");
         }
-        String parser = contentText.substring(0, 18);
+        String parser = contentText.substring(0, 19);
         try {
             if (!parser.equalsIgnoreCase("/vgmdb most_popular")) {
                 throw new IllegalArgumentException();
