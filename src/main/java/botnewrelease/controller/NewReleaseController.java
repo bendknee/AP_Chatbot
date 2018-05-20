@@ -43,11 +43,11 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    /*public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
+    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         String result = cekNewRelease();
         System.out.println(result);
-    }*/
+    }
 
     @EventMapping
     public static TextMessage
@@ -67,10 +67,13 @@ public class NewReleaseController {
                     contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
-            return new TextMessage(cekNewRelease().substring(0, 2005));
+            return new TextMessage(cekNewRelease().substring(0, 1996));
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry, your input is not valid it should be"
                     + "/vgmdb OST this month");
+        } catch (SocketTimeoutException e) {
+            return new TextMessage("Sorry the are connection problems "
+                    + "please try again later");
         }
     }
 
@@ -88,11 +91,11 @@ public class NewReleaseController {
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
-            String[] value = element.child(1).text().split(" | ");
+            String[] value = element.child(1).text().split("|");
             if (title.toLowerCase().contains("original")
                     && title.toLowerCase().contains("soundtrack")) {
                 int realPrice = convertHarga(value[2], value[3]).intValueExact();
-                hasil += (title + " : " + realPrice + " IDR");
+                hasil += (title + " : " + realPrice + " IDR" + "\n");
             }
         }
         return hasil;
