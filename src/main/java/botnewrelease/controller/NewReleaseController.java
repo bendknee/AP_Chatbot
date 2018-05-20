@@ -58,7 +58,7 @@ public class NewReleaseController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        if (contentText.length() < 22) {
+        if (contentText.length() < 21) {
             return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
@@ -76,7 +76,7 @@ public class NewReleaseController {
         } catch (IOException e) {
             return new TextMessage("Sorry there is a commection "
                     + "timeout please try again with the same format");
-        } 
+        }
     }
 
     @EventMapping
