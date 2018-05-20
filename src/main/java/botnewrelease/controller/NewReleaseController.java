@@ -45,7 +45,8 @@ public class NewReleaseController {
 
     /*public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
-        System.out.println(cekNewRelease().substring(0,2036));
+        String result = cekNewRelease();
+        System.out.println(result);
     }*/
 
     @EventMapping
@@ -61,11 +62,16 @@ public class NewReleaseController {
             return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
-        if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
-                contentText.length() > 22) {
-            throw new IllegalArgumentException();
+        try {
+            if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
+                    contentText.length() > 22) {
+                throw new IllegalArgumentException();
+            }
+            return new TextMessage(cekNewRelease().substring(0, 2000));
+        } catch (IllegalArgumentException e) {
+            return new TextMessage("Sorry, your input is not valid it should be"
+                    + "/vgmdb OST this month");
         }
-        return new TextMessage(cekNewRelease().substring(0, 2000));
     }
 
     @EventMapping
