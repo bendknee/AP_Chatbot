@@ -43,16 +43,16 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
+    /*public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         String result = cekNewRelease();
         System.out.println(result);
-    }
+    }*/
 
     @EventMapping
     public static TextMessage
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
-            throws JSONException, CurrencyNotSupportedException,
+            throws JSONException, IOException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
@@ -62,21 +62,12 @@ public class NewReleaseController {
             return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
-        try {
-            if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
-                    contentText.length() > 22) {
-                throw new IllegalArgumentException();
-            }
-            String result = cekNewRelease();
-            return new TextMessage(result.substring(0));
-
-        } catch (IllegalArgumentException e) {
-            return new TextMessage("Sorry your input is not valid "
-                    + "the format should be /vgmdb OST this month");
-        } catch (IOException e) {
-            return new TextMessage("Sorry there is a commection "
-                    + "timeout please try again with the same format");
+        if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
+                contentText.length() > 22) {
+            throw new IllegalArgumentException();
         }
+        String result = cekNewRelease();
+        return new TextMessage(result.substring(0));
     }
 
     @EventMapping
