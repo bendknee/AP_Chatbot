@@ -36,7 +36,7 @@ public class NewReleaseController {
                 + "HLnXoAvnwvB1zzVWmcHdHIQ/Hm1wmg55KuC1EOEqggMIOcuo2DNP8JL1tw"
                 + "3wh7kIl8R2gAOiKLTdVb7oLUHRDWSrKZo51y8EUrV+nDn1aF0ehWVM"
                 + "jw0AdB04t89/1O/w1cDnyilFU=");
-    }}
+    }
 
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
