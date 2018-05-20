@@ -67,7 +67,7 @@ public class NewReleaseController {
             throw new IllegalArgumentException();
         }
         String result = cekNewRelease();
-        return new TextMessage(result.substring(0));
+        return new TextMessage("Hello");
     }
 
     @EventMapping
