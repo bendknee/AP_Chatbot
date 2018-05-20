@@ -6,7 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TopAlbApp {
+public class TopAlbumPac {
+
+    private static final Logger LOGGER = Logger.getLogger(TopAlbumPac.class.getName());
 
     static {
         System.setProperty("line.bot.channelSecret", "9e514c1bbfd82d"
@@ -18,10 +20,8 @@ public class TopAlbApp {
                 + "B04t89/1O/w1cDnyilFU=");
     }
 
-    private static final Logger LOGGER = Logger.getLogger(TopAlbApp.class.getName());
-
     public static void main(String[] args) {
         LOGGER.info("Application starting ...");
-        SpringApplication.run(TopAlbApp.class, args);
+        SpringApplication.run(TopAlbumPac.class, args);
     }
 }

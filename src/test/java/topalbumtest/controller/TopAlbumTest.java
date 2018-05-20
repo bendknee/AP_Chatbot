@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
+import topalbumpac.TopAlbumPac;
 import topalbumpac.controller.TopAlbumsControl;
 
 import com.linecorp.bot.model.event.Event;
@@ -21,9 +22,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@SpringBootTest(properties = "line.bot.handler.enabled=false")
+@SpringBootTest(properties = "line.bot.handler.enabled=false", classes = TopAlbumPac.class)
 @ExtendWith(SpringExtension.class)
-public class TopAlbumsTester {
+public class TopAlbumTest {
 
     static {
         System.setProperty("line.bot.channelSecret", "9e514c1bbfd82d"
