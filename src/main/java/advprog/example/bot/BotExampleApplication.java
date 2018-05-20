@@ -1,4 +1,3 @@
-/*
 package advprog.example.bot;
 
 import java.util.logging.Logger;
@@ -16,4 +15,3 @@ public class BotExampleApplication {
         SpringApplication.run(BotExampleApplication.class, args);
     }
 }
-*/
