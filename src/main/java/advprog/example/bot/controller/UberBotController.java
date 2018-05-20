@@ -2,22 +2,28 @@ package advprog.example.bot.controller;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.template.CarouselColumn;
+import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +34,7 @@ public class UberBotController {
     private LineMessagingClient lineMessagingClient;
 
     private LocationMessageContent locationMessageContent;
+    private String location;
 
     private static final int STATE_GENERAL = 0;
     private static final int STATE_ADD_LOCATION = 1;
@@ -51,21 +58,51 @@ public class UberBotController {
         String replyMessage = "";
 
         if (state == STATE_GENERAL) {
-            if (contentText == "/uber") {
+            if (contentText.equals("/uber")) {
                 replyMessage = uberCommand();
-            } else if (contentText == "/add_destination") {
+            } else if (contentText.equals("/add_destination")) {
                 state = STATE_ADD_LOCATION;
                 replyMessage = "Perintah /add_destination diterima, "
                         + "silahkan kirim lokasi anda";
                 reply(replyToken, new TextMessage(replyMessage));
-            } else if (contentText == "/remove_destination") {
-                replyMessage = removeDestinationCommand();
+            } else if (contentText.equals("/remove_destination")) {
+                if (!dataIsEmpty()) {
+                    state = STATE_DELETE_LOCATION;
+                    replyMessage = "Perintah /remove_destination diterima, silahkan pilih "
+                            + "lokasi yang ingin dihapus";
+                    TextMessage textMessage = new TextMessage(replyMessage);
+                    TemplateMessage templateMessage = new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
+                    reply(replyToken, Arrays.asList(textMessage, templateMessage));
+                } else {
+                    replyMessage = "Data destination kosong! Silahkan jalankan command /add_destination";
+                    reply(replyToken, new TextMessage(replyMessage));
+                }
+
             }
         } else if (state == STATE_NAME_LOCATION) {
             addDestination(contentText);
             state = STATE_GENERAL;
             replyMessage = "Lokasi telah berhasil disimpan";
             reply(replyToken, new TextMessage(replyMessage));
+        } else if (state == STATE_DELETE_LOCATION) {
+            location = contentText;
+            state = STATE_CONFIRMATION;
+            replyMessage = "Apakah anda yakin ingin menhapus lokasi? (yes/no)";
+            reply(replyToken, new TextMessage(replyMessage));
+        } else if (state == STATE_CONFIRMATION) {
+            if (contentText.equalsIgnoreCase("yes")) {
+                state = STATE_GENERAL;
+                deleteDestination(location);
+                replyMessage = "Lokasi telah dihapus";
+                reply(replyToken, new TextMessage(replyMessage));
+            } else if (contentText.equalsIgnoreCase("no")) {
+                state = STATE_GENERAL;
+                replyMessage = "Lokasi tidak dihapus";
+                reply(replyToken, new TextMessage(replyMessage));
+            } else {
+                replyMessage = "Apakah anda yakin ingin menhapus lokasi? (yes/no)";
+                reply(replyToken, new TextMessage(replyMessage));
+            }
         }
 
         return replyMessage;
@@ -91,17 +128,26 @@ public class UberBotController {
         lineMessagingClient.replyMessage(new ReplyMessage(replyToken, Arrays.asList(message)));
     }
 
+    private void reply(String replyToken, List<Message> message) {
+        lineMessagingClient.replyMessage(new ReplyMessage(replyToken, message));
+    }
+
     @SuppressWarnings("unchecked")
     private void addDestination(String name) throws Exception {
-        JSONObject data = getData();
+        JSONObject data = new JSONObject();
         data.put("nama", name);
         JSONObject lokasi = new JSONObject();
         lokasi.put("latitude", locationMessageContent.getLatitude());
         lokasi.put("longitude", locationMessageContent.getLongitude());
         data.put("lokasi", lokasi);
 
+        JSONObject json = getData();
+        JSONArray arr = (JSONArray) json.get("data");
+        arr.add(data);
+        json.put("data", arr);
+
         FileWriter file = new FileWriter("data.json");
-        file.write(data.toJSONString());
+        file.write(json.toJSONString());
         file.close();
     }
 
@@ -116,13 +162,68 @@ public class UberBotController {
             lokasi.put("latitude", -6.362413);
             lokasi.put("longitude", 106.818845);
             data.put("lokasi", lokasi);
+            JSONObject json = new JSONObject();
+            JSONArray arr = new JSONArray();
+            arr.add(data);
+            json.put("data", arr);
 
             FileWriter file = new FileWriter("data.json");
-            file.write(data.toJSONString());
+            file.write(json.toJSONString());
             file.close();
 
             return getData();
         }
+    }
+
+    private CarouselTemplate getCarouselTemplateMessage() throws Exception {
+        JSONArray arr = (JSONArray) getData().get("data");
+        ArrayList<CarouselColumn> columns = new ArrayList<CarouselColumn>();
+
+        for (int i = 0; i < arr.size(); i++) {
+            JSONObject data = (JSONObject) arr.get(i);
+            String nama = (String) data.get("nama");
+            JSONObject lokasi = (JSONObject) data.get("lokasi");
+            String latitude = Double.toString((Double) lokasi.get("latitude"));
+            String longitude = Double.toString((Double) lokasi.get("longitude"));
+
+            MessageAction action = new MessageAction("Pilih " + nama, nama);
+            CarouselColumn column = new CarouselColumn(
+                    "https://cdn3.iconfinder.com/data/icons/map-pins-v-2/512/map_pin_"
+                            + "arrow_destination_four_points-256.png",
+                    nama,
+                    "Latitude: " + latitude + " | " + "Longitude: " + longitude,
+                    Arrays.asList(action)
+            );
+            columns.add(column);
+        }
+        return new CarouselTemplate(columns);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void deleteDestination(String nama) throws Exception {
+        JSONObject json = getData();
+        JSONArray arr = (JSONArray) json.get("data");
+        int index = 0;
+
+        for (int i = 0; i < arr.size(); i++) {
+            JSONObject data = (JSONObject) arr.get(i);
+            
+            if (((String) data.get("nama")).equals(nama)) {
+                index = i;
+                break;
+            }
+        }
+
+        arr.remove(index);
+        json.put("data", arr);
+
+        FileWriter file = new FileWriter("data.json");
+        file.write(json.toJSONString());
+        file.close();
+    }
+
+    private boolean dataIsEmpty() throws Exception {
+        return ((JSONArray) getData().get("data")).isEmpty();
     }
 
     private String uberCommand() {

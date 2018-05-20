@@ -15,15 +15,20 @@ import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.File;
+
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UberBotControllerTest {
 
     static {
@@ -39,6 +44,7 @@ public class UberBotControllerTest {
         assertNotNull(uberBotController);
     }
 
+    /*
     @Test
     void testHandleCommandUber() throws Exception {
         MessageEvent<TextMessageContent> event =
@@ -55,15 +61,7 @@ public class UberBotControllerTest {
 
         assertEquals(correctAnswer, reply);
     }
-
-    @Test
-    void testHandleCommandRemoveDestination() throws Exception {
-        MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/remove_destination");
-
-        String reply = uberBotController.handleTextMessageEvent(event);
-        assertEquals("Destination removed", reply);
-    }
+    */
 
     @Test
     void testHandleCommandAddDestination() throws Exception {
@@ -79,11 +77,72 @@ public class UberBotControllerTest {
         assertEquals("Lokasi diterima, silahkan beri nama lokasi tersebut (Contoh: Wisma Rossela)", reply);
 
         MessageEvent<TextMessageContent> event3 =
-                EventTestUtil.createDummyTextMessage("Wisma Rosella");
+                EventTestUtil.createDummyTextMessage("Wisma Rossela");
 
         reply = uberBotController.handleTextMessageEvent(event3);
         assertEquals("Lokasi telah berhasil disimpan", reply);
+    }
 
+    @Test
+    void testHandleCommandRemoveDestinationCancel() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/remove_destination");
+
+        String reply = uberBotController.handleTextMessageEvent(event);
+        assertEquals("Perintah /remove_destination diterima, silahkan pilih lokasi yang ingin dihapus", reply);
+
+        MessageEvent<TextMessageContent> event2 =
+                EventTestUtil.createDummyTextMessage("Wisma Rossela");
+        reply = uberBotController.handleTextMessageEvent(event2);
+        assertEquals("Apakah anda yakin ingin menhapus lokasi? (yes/no)", reply);
+
+        MessageEvent<TextMessageContent> event3 =
+                EventTestUtil.createDummyTextMessage("No");
+
+        reply = uberBotController.handleTextMessageEvent(event3);
+        assertEquals("Lokasi tidak dihapus", reply);
+    }
+
+    @Test
+    void testHandleCommandRemoveDestination() throws Exception {
+
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/remove_destination");
+
+        String reply = uberBotController.handleTextMessageEvent(event);
+        assertEquals("Perintah /remove_destination diterima, silahkan pilih lokasi yang ingin dihapus", reply);
+
+        MessageEvent<TextMessageContent> event2 =
+                EventTestUtil.createDummyTextMessage("Wisma Rossela");
+        reply = uberBotController.handleTextMessageEvent(event2);
+        assertEquals("Apakah anda yakin ingin menhapus lokasi? (yes/no)", reply);
+
+        MessageEvent<TextMessageContent> event3 =
+                EventTestUtil.createDummyTextMessage("apa ini");
+
+        reply = uberBotController.handleTextMessageEvent(event3);
+        assertEquals("Apakah anda yakin ingin menhapus lokasi? (yes/no)", reply);
+
+        MessageEvent<TextMessageContent> event4 =
+                EventTestUtil.createDummyTextMessage("yes");
+
+        reply = uberBotController.handleTextMessageEvent(event4);
+        assertEquals("Lokasi telah dihapus", reply);
+    }
+
+    @Test
+    void testHandleCommandRemoveDestinationDataIsEmpty() throws Exception {
+        testHandleCommandRemoveDestination();
+        testHandleCommandRemoveDestination();
+
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/remove_destination");
+
+        String reply = uberBotController.handleTextMessageEvent(event);
+
+        assertEquals("Data destination kosong! Silahkan jalankan command /add_destination", reply);
+
+        testHandleCommandAddDestination();
     }
 
     @Test
