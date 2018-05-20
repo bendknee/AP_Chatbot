@@ -65,8 +65,7 @@ public class NewReleaseController {
                 contentText.length() > 22) {
             throw new IllegalArgumentException();
         }
-        String hasil = cekNewRelease().toString();
-        return new TextMessage(hasil.substring(0, 2002));
+        return new TextMessage(cekNewRelease().substring(0, 2001));
     }
 
     @EventMapping
@@ -75,10 +74,10 @@ public class NewReleaseController {
                 event.getTimestamp(), event.getSource()));
     }
 
-    public static StringBuilder cekNewRelease()
+    public static String cekNewRelease()
             throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
-        StringBuilder hasil = new StringBuilder();
+        String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
@@ -87,8 +86,7 @@ public class NewReleaseController {
             if (title.toLowerCase().contains("original")
                     && title.toLowerCase().contains("soundtrack")) {
                 int realPrice = convertHarga(value[2], value[3]).intValueExact();
-                String hasill = title + " : " + realPrice + " IDR" + "\n";
-                hasil.append(hasill);
+                hasil += (title + " : " + realPrice + " IDR" + "\n");
             }
         }
         return hasil;
