@@ -71,9 +71,6 @@ public class NewReleaseController {
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry, your input is not valid it should be"
                     + "/vgmdb OST this month");
-        } catch (SocketTimeoutException e) {
-            return new TextMessage("Sorry the are connection problems "
-                    + "please try again later");
         }
     }
 
@@ -85,8 +82,7 @@ public class NewReleaseController {
 
     public static String cekNewRelease()
             throws IOException, JSONException, CurrencyNotSupportedException,
-            ServiceException, EndpointException, StorageException,
-            SocketTimeoutException {
+            ServiceException, EndpointException, StorageException {
         String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
