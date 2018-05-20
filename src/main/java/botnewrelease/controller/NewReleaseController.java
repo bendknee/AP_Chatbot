@@ -85,7 +85,8 @@ public class NewReleaseController {
 
     public static String cekNewRelease()
             throws IOException, JSONException, CurrencyNotSupportedException,
-            ServiceException, EndpointException, StorageException {
+            ServiceException, EndpointException, StorageException,
+            SocketTimeoutException {
         String hasil = "";
         Document doc = Jsoup.connect("https://vgmdb.net/db/calendar.php?year=2018&month=5").get();
         Elements containers = doc.getElementsByClass("album_infobit_detail");
