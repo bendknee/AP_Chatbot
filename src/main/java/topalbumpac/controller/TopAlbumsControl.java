@@ -74,7 +74,7 @@ public class TopAlbumsControl {
 
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
-                    + "the format should be /vgmdb OST this month");
+                    + "the format should be /vgmdb most_popular");
         } catch (SocketTimeoutException e) {
             return new TextMessage("Sorry there is timeout cause vgmdb.net is slow, please try again later");
         }
