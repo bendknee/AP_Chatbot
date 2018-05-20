@@ -18,6 +18,8 @@ import com.ritaja.xchangerate.util.Strategy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
@@ -56,7 +58,7 @@ public class NewReleaseController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        if (contentText.length() < 21) {
+        if (contentText.length() < 22) {
             return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
@@ -74,7 +76,7 @@ public class NewReleaseController {
         } catch (IOException e) {
             return new TextMessage("Sorry there is a commection "
                     + "timeout please try again with the same format");
-        }
+        } 
     }
 
     @EventMapping
