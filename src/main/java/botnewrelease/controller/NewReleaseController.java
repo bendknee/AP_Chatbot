@@ -62,11 +62,11 @@ public class NewReleaseController {
         String parser = contentText.substring(0, 21);
         try {
             if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
-                    contentText.length() > 21) {
+                    contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
             String result = cekNewRelease();
-            return new TextMessage(result);
+            return new TextMessage(result.substring(0));
 
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry your input is not valid "
