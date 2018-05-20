@@ -67,7 +67,7 @@ public class NewReleaseController {
                     contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
-            return new TextMessage(cekNewRelease().substring(0, 2000));
+            return new TextMessage(cekNewRelease());
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry, your input is not valid it should be"
                     + "/vgmdb OST this month");
@@ -92,7 +92,7 @@ public class NewReleaseController {
             if (title.toLowerCase().contains("original")
                     && title.toLowerCase().contains("soundtrack")) {
                 int realPrice = convertHarga(value[2], value[3]).intValueExact();
-                hasil += (title + " : " + realPrice + " IDR" + "\n");
+                hasil += (title + " : " + realPrice + " IDR" + ", ");
             }
         }
         return hasil;
