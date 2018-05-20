@@ -65,7 +65,7 @@ public class NewReleaseController {
                 contentText.length() > 22) {
             throw new IllegalArgumentException();
         }
-        return new TextMessage(cekNewRelease().substring(0, 1000));
+        return new TextMessage(cekNewRelease().substring(0, 2000));
     }
 
     @EventMapping
