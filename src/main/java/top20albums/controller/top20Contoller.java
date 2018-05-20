@@ -50,14 +50,13 @@ public class top20Contoller {
 
     @EventMapping
     public TextMessage
-    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
-        /* To do method process (Stub)*/
         if (contentText.length() < 19) {
             return new TextMessage("Sorry your input is not valid "
                     + "the format should be /vgmdb OST this month");
@@ -84,32 +83,57 @@ public class top20Contoller {
                 event.getTimestamp(), event.getSource()));
     }
 
-    // To do method
     public static String cektop20() throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         String hasil = "";
-        int i = 0;
-        Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
-        Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
-        int id = 14;
-        int hrefl = 22;
-        for (Element element : containers) {
-            String judul = element.text();
-            String rating = doc.select("td").get(id).text().substring(0, 4);
-            String url = doc.select("a[href]").get(hrefl).attr("href");
-            System.out.println(url);
-            Document link = Jsoup.connect(url).get();
-            //Element elem = link.select("td").get(22).child(0);
-            //String harga = elem.text();
-            //System.out.println(harga);
-            //int value = convertHarga(harga[0].substring(0,4), harga[1]).intValueExact();
-            //hasil += ((i + 1) + " - " + judul + " - " + rating + " (" +value+ " IDR)" + "\n");
-            i++;
-            id += 4;
-            hrefl++;
+        try {
+            int i = 0;
+            int ptrcount = 0;
+            Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
+            Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
+            int id = 14;
+            int hrefl = 22;
+            int[] pointer = new int[]
+                    {22, 24, 20, 23, 22, 26, 21, 16, 23, 19, 20, 21, 21, 21, 19, 23, 20, 19, 22, 18};
+            for (Element element : containers) {
+                String judul = element.text();
+                String rating = doc.select("td").get(id).text().substring(0, 4);
+                String url = doc.select("a[href]").get(hrefl).attr("href");
+                Document link = Jsoup.connect(url).get();
+                Element elem = link.select("td").get(pointer[ptrcount]);
+                //Elements elem = link.select("table").select("tr");
+                //String value = getHarga(elem);
+                //System.out.println(value);
+                String temp = elem.text();
+                if (temp.equalsIgnoreCase("Not for sale")) {
+                    hasil += ((i + 1) + " - " + judul + " - " + rating + " (Not for Sale)" + "\n");
+                } else {
+                    String[] harga = temp.split(" ");
+                    int value = convertHarga(harga[0], harga[1]).intValueExact();
+                    hasil += ((i + 1) + " - " + judul + " - " + rating + " (" + value + " IDR)" + "\n");
+                }
+                i++;
+                ptrcount++;
+                id += 4;
+                hrefl++;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return hasil += "Sorry, the rest are not available because "
+                    + "there are some mistakes please contact the admin (Winston Chandra).";
         }
         return hasil;
     }
+
+    /*public static String getHarga(Elements elem) {
+        String result = "";
+        for (Element table : elem) {
+            Elements tdss = table.getElementsByTag("td");
+            Elements tds = tdss.next();
+            result = tds.text();
+            return result;
+        }
+        return result;
+    }*/
 
     public static BigDecimal convertHarga(String price, String typeMoney)
             throws JSONException, CurrencyNotSupportedException,
