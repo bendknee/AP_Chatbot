@@ -1,9 +1,13 @@
 package botnewrelease.controller;
 
+import com.linecorp.bot.client.LineMessagingServiceBuilder;
+import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
@@ -18,13 +22,17 @@ import com.ritaja.xchangerate.util.Strategy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.assertj.core.util.Arrays;
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import retrofit2.Response;
 
 @LineMessageHandler
 public class NewReleaseController {
@@ -48,7 +56,7 @@ public class NewReleaseController {
     }
 
     @EventMapping
-    public static TextMessage
+    public static List<Message>
         handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws JSONException, IOException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
@@ -57,7 +65,7 @@ public class NewReleaseController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         if (contentText.length() < 21) {
-            return new TextMessage("The format should be /vgmdb OST this month");
+            //return new TextMessage("The format should be /vgmdb OST this month");
         }
         String parser = contentText.substring(0, 21);
         try {
@@ -65,11 +73,26 @@ public class NewReleaseController {
                     contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
-            return new TextMessage(cekNewRelease().substring(0, 1996));
+            /*ReplyMessage messages = Arrays.asList(new TextMessage(cekNewRelease()), new TextMessage(""));
+            Response<BotApiResponse> respon = LineMessagingServiceBuilder
+                    .create("zoSKZdAdyRLBZ5TMpmVf5VR/j0AVVaax1a"
+                    + "HLnXoAvnwvB1zzVWmcHdHIQ/Hm1wmg55KuC1EOEqggMIOcuo2DNP8JL1tw"
+                    + "3wh7kIl8R2gAOiKLTdVb7oLUHRDWSrKZo51y8EUrV+nDn1aF0ehWVM"
+                    + "jw0AdB04t89/1O/w1cDnyilFU=")
+                    .build()
+                    .replyMessage(messages)
+                    .execute();*/
+            String hasil = cekNewRelease();
+            List<Message> mess = new ArrayList<>();
+            mess.add(new TextMessage(hasil.substring(0,1996)));
+            mess.add(new TextMessage(hasil.substring(1997,2036)));
+            //return new TextMessage(cekNewRelease().substring(0, 1996));
+            return mess;
         } catch (IllegalArgumentException e) {
-            return new TextMessage("Sorry, your input is not valid it should be"
-                    + "/vgmdb OST this month");
+            /*return new TextMessage("Sorry, your input is not valid it should be"
+                    + "/vgmdb OST this month");*/
         }
+        return null;
     }
 
     @EventMapping
