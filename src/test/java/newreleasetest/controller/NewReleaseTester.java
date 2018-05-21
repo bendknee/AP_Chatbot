@@ -3,6 +3,7 @@ package newreleasetest.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -14,6 +15,7 @@ import botnewrelease.controller.NewReleaseController;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
 import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
@@ -22,6 +24,7 @@ import com.ritaja.xchangerate.service.ServiceException;
 import com.ritaja.xchangerate.storage.StorageException;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -56,10 +59,10 @@ public class NewReleaseTester {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/VJBEVEVVFN");
 
-        TextMessage reply = newReleaseController.handleTextMessageEvent(event);
+        List<TextMessage> reply = newReleaseController.handleTextMessageEvent(event);
 
         assertEquals("The format should be /vgmdb "
-                + "OST this month", reply.getText());
+                + "OST this month", reply.get(0).getText());
     }
 
     @Test
@@ -70,10 +73,10 @@ public class NewReleaseTester {
                 EventTestUtil.createDummyTextMessage("/uiweiwuebwbcw"
                         + "cuwehjwehcuewvubevwv");
 
-        TextMessage reply = newReleaseController.handleTextMessageEvent(event);
+        List<TextMessage> reply = newReleaseController.handleTextMessageEvent(event);
 
-        assertEquals("Sorry your input is not valid "
-                + "the format should be /vgmdb OST this month", reply.getText());
+        assertEquals("Sorry, your input is not valid "
+                + "it should be /vgmdb OST this month", reply.get(0).getText());
     }
 
     @Test

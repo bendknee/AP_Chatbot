@@ -48,23 +48,26 @@ public class NewReleaseController {
     private static final Logger LOGGER = Logger.getLogger(NewReleaseController.class.getName());
     private static final String API_KEY = "518f742dc253a41c314750f3ad70c03b";
 
-    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
+/*    public static void main(String[] args) throws IOException, JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         String result = cekNewRelease();
-        System.out.println(result);
-    }
+        System.out.println(result.substring(0, 1683));
+        System.out.println(result.length());
+    }*/
 
     @EventMapping
-    public static List<Message>
-        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+    public static List<TextMessage>
+    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws JSONException, IOException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
+        List<TextMessage> mess = new ArrayList<>();
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
         if (contentText.length() < 21) {
-            //return new TextMessage("The format should be /vgmdb OST this month");
+            mess.add(new TextMessage("The format should be /vgmdb OST this month"));
+            return mess;
         }
         String parser = contentText.substring(0, 21);
         try {
@@ -72,26 +75,15 @@ public class NewReleaseController {
                     contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
-            /*ReplyMessage messages = Arrays.asList(new TextMessage(cekNewRelease()), new TextMessage(""));
-            Response<BotApiResponse> respon = LineMessagingServiceBuilder
-                    .create("zoSKZdAdyRLBZ5TMpmVf5VR/j0AVVaax1a"
-                    + "HLnXoAvnwvB1zzVWmcHdHIQ/Hm1wmg55KuC1EOEqggMIOcuo2DNP8JL1tw"
-                    + "3wh7kIl8R2gAOiKLTdVb7oLUHRDWSrKZo51y8EUrV+nDn1aF0ehWVM"
-                    + "jw0AdB04t89/1O/w1cDnyilFU=")
-                    .build()
-                    .replyMessage(messages)
-                    .execute();*/
             String hasil = cekNewRelease();
-            List<Message> mess = new ArrayList<>();
-            mess.add(new TextMessage(hasil.substring(0,1996)));
-            mess.add(new TextMessage(hasil.substring(1997,2036)));
-            //return new TextMessage(cekNewRelease().substring(0, 1996));
+            mess.add(new TextMessage(hasil.substring(0, 1683)));
+            mess.add(new TextMessage(hasil.substring(1684, hasil.length() - 1)));
             return mess;
         } catch (IllegalArgumentException e) {
-            /*return new TextMessage("Sorry, your input is not valid it should be"
-                    + "/vgmdb OST this month");*/
+            mess.add(new TextMessage("Sorry, your input is not valid it should be"
+                            + " /vgmdb OST this month"));
+            return mess;
         }
-        return null;
     }
 
     @EventMapping
