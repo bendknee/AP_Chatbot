@@ -65,7 +65,7 @@ public class NewReleaseController {
                     contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
-            return new TextMessage(cekNewRelease().trim());
+            return new TextMessage(cekNewRelease().substring(0, 1996));
         } catch (IllegalArgumentException e) {
             return new TextMessage("Sorry, your input is not valid it should be"
                     + "/vgmdb OST this month");
