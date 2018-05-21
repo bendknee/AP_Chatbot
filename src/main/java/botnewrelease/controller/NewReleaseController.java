@@ -18,8 +18,6 @@ import com.ritaja.xchangerate.util.Strategy;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
@@ -88,17 +86,17 @@ public class NewReleaseController {
         Elements containers = doc.getElementsByClass("album_infobit_detail");
         for (Element element : containers) {
             String title = element.select("li > a.albumtitle.album-game").attr("title");
-            String[] value = element.child(1).text().split("|");
+            String[] value = element.child(1).text().split(" | ");
             if (title.toLowerCase().contains("original")
                     && title.toLowerCase().contains("soundtrack")) {
-                int realPrice = convertHarga(value[2], value[3]).intValueExact();
+                int realPrice = convertHarga(value[2], value[3]);
                 hasil += (title + " : " + realPrice + " IDR" + "\n");
             }
         }
         return hasil;
     }
 
-    public static BigDecimal convertHarga(String price, String typeMoney)
+    public static int convertHarga(String price, String typeMoney)
             throws JSONException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         CurrencyConverter converter = new CurrencyConverterBuilder()
@@ -108,17 +106,22 @@ public class NewReleaseController {
 
         converter.setRefreshRateSeconds(100000);
         if (typeMoney.equalsIgnoreCase("JPY")) {
-            return converter.convertCurrency(new BigDecimal(price), Currency.JPY, Currency.IDR);
+            return converter.convertCurrency(new BigDecimal(price),
+                    Currency.JPY, Currency.IDR).intValueExact();
         } else if (typeMoney.equalsIgnoreCase("USD")) {
-            return converter.convertCurrency(new BigDecimal(price), Currency.USD, Currency.IDR);
+            return converter.convertCurrency(new BigDecimal(price),
+                    Currency.USD, Currency.IDR).intValueExact();
         } else if (typeMoney.equalsIgnoreCase("EUR")) {
-            return converter.convertCurrency(new BigDecimal(price), Currency.EUR, Currency.IDR);
+            return converter.convertCurrency(new BigDecimal(price),
+                    Currency.EUR, Currency.IDR).intValueExact();
         } else if (typeMoney.equalsIgnoreCase("GBP")) {
-            return converter.convertCurrency(new BigDecimal(price), Currency.GBP, Currency.IDR);
+            return converter.convertCurrency(new BigDecimal(price),
+                    Currency.GBP, Currency.IDR).intValueExact();
         } else if (typeMoney.equalsIgnoreCase("TWD")) {
-            return converter.convertCurrency(new BigDecimal(price), Currency.TWD, Currency.IDR);
+            return converter.convertCurrency(new BigDecimal(price),
+                    Currency.TWD, Currency.IDR).intValueExact();
         } else {
-            return null;
+            return 0;
         }
     }
 }
