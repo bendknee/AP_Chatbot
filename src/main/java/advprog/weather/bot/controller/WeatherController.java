@@ -77,7 +77,7 @@ public class WeatherController {
         return null;
     }
 
-    private static ArrayList<String> fetchDataApiRequest(String url) {
+    private ArrayList<String> fetchDataApiRequest(String url) {
         ArrayList<String> data = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
@@ -93,30 +93,52 @@ public class WeatherController {
             data.add(parsedJson.getJSONObject("main").getString("temp"));   // Temperature (K)
             data.add(parsedJson.getJSONObject("main").getString("humidity"));   // Humidity
             return data;
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             data.clear();
             data.add("City not found. Try another city");
             return data;
         }
     }
 
-    private static String textResponseFormatter(ArrayList<String> datas) {
+    private String textResponseFormatter(ArrayList<String> datas) {
         if (datas.size() > 1) {
             StringBuilder sb = new StringBuilder();
             sb.append("Weather at your position (");
             sb.append(datas.get(0)).append(", ");
             sb.append(datas.get(1)).append("):\n");
-            sb.append(datas.get(2)).append(" *icon\n");
-            sb.append("Wind speed : ");
+            sb.append(datas.get(2)).append(emojiSelector(datas.get(2)));
+            sb.append("\nWind speed : ");
             sb.append(datas.get(3)).append(" meter/sec\n");
             sb.append("Temperature : ");
-            sb.append(datas.get(4)).append(" Kelvin\n");
+            sb.append(kelvinToCelcius(datas.get(4))).append("° Celcius\n");
             sb.append("Humidity : ");
             sb.append(datas.get(5)).append("%");
             return sb.toString();
         } else {
             return datas.get(0);
         }
+    }
+
+    private String kelvinToCelcius(String kelvin) {
+        double temperature = Double.parseDouble(kelvin);
+        temperature -= 273.15;
+        return Double.toString(temperature);
+    }
+
+    private char emojiSelector(String weather) {
+        if (weather.contains("clouds")) {
+            return (char) 0x1000AC;
+        } else if (weather.contains("clear")) {
+            return (char) 0x1000A9;
+        } else if (weather.contains("rain")) {
+            return (char) 0x1000AA;
+        } else if (weather.contains("thunderstorm")) {
+            return (char) 0x10003A;
+        } else if (weather.contains("snow")) {
+            return (char) 0x1000AB;
+        } else if (weather.contains("mist")) {
+            return (char) 0x10002A;
+        }
+        return (char) 0x1000A8;
     }
 }
