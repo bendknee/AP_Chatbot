@@ -13,6 +13,7 @@ import static java.lang.String.format;
 public class ScrapperCDOriconSingle {
     /**
      * untuk scrapping ke web oricon
+     *
      * @param mode untuk memilih daily, weekly, monthly, atau yearly
      * @param date untuk memilih tanggal, bulan, tahun
      * @return String yang berupa list dari top 10 bluray di oricon
@@ -21,18 +22,18 @@ public class ScrapperCDOriconSingle {
         // Membuat offset web
         String offset;
         ArrayList<String> val = new ArrayList<>();
-        if (mode.toLowerCase().equals("daily")) {
-            offset = "https://www.oricon.co.jp/rank/js/d/"+date+"/";
-        } else if (mode.toLowerCase().equals("weekly")) {
-            offset = "https://www.oricon.co.jp/rank/js/w/"+date+"/";
-        } else if (mode.toLowerCase().equals("monthly")) {
-            offset = "https://www.oricon.co.jp/rank/js/m/"+date+"/";
-        } else if (mode.toLowerCase().equals("yearly")) {
-            offset = "https://www.oricon.co.jp/rank/js/y/"+date+"/";
+        if ( mode.toLowerCase().equals("daily") ) {
+            offset = "https://www.oricon.co.jp/rank/js/d/" + date + "/";
+        } else if ( mode.toLowerCase().equals("weekly") ) {
+            offset = "https://www.oricon.co.jp/rank/js/w/" + date + "/";
+        } else if ( mode.toLowerCase().equals("monthly") ) {
+            offset = "https://www.oricon.co.jp/rank/js/m/" + date + "/";
+        } else if ( mode.toLowerCase().equals("yearly") ) {
+            offset = "https://www.oricon.co.jp/rank/js/y/" + date + "/";
         } else {
-            return "Input Mode Salah!!!\n\n\n" +
-                    "Format input\n" +
-                    "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
+            return "Input Mode Salah!!!\n\n\n"
+                    + "Format input\n"
+                    + "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
         }
 
         // scrapping data
@@ -41,7 +42,7 @@ public class ScrapperCDOriconSingle {
             Elements body = dc.select("section.box-rank-entry");
 
             int i = 1;
-            for (Element rank : body) {
+            for ( Element rank : body ) {
                 String title = rank.select("h2.title").text();
                 String artist = rank.select("p.name").text();
                 Elements list = rank.select("ul.list li");
@@ -53,15 +54,14 @@ public class ScrapperCDOriconSingle {
 
             // return
             String top10 = "";
-            for (String e : val) {
+            for ( String e : val ) {
                 top10 = top10 + e + "\n";
             }
             return top10;
-        }
-        catch (IOException e) {
-            return "Input tanggal salah atau tidak ditemukan!!!\n\n\n" +
-                    "Format input\n" +
-                    "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
+        } catch ( IOException e ) {
+            return "Input tanggal salah atau tidak ditemukan!!!\n\n\n"
+                    + "Format input\n"
+                    + "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
         }
     }
 }
