@@ -122,21 +122,21 @@ public class WeatherController {
     private String kelvinToCelcius(String kelvin) {
         double temperature = Double.parseDouble(kelvin);
         temperature -= 273.15;
-        return Double.toString(temperature);
+        return String.format ("%,.2f", temperature);
     }
 
     private int emojiSelector(String weather) {
-        if (weather.contains("clouds")) {
+        if (weather.contains("Clouds")) {
             return 0x1000AC;
-        } else if (weather.contains("clear")) {
+        } else if (weather.contains("Clear")) {
             return 0x1000A9;
-        } else if (weather.contains("rain")) {
+        } else if (weather.contains("Rain")) {
             return 0x1000AA;
-        } else if (weather.contains("thunderstorm")) {
+        } else if (weather.contains("Thunderstorm")) {
             return 0x10003A;
-        } else if (weather.contains("snow")) {
+        } else if (weather.contains("Snow")) {
             return 0x1000AB;
-        } else if (weather.contains("mist")) {
+        } else if (weather.contains("Mist")) {
             return 0x10002A;
         }
         return 0x1000A8;
