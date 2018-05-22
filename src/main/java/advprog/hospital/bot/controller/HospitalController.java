@@ -54,71 +54,61 @@ public class HospitalController {
         hospitalData.put("7", sentraMedika); hospitalData.put("8", mitraKeluarga);
         hospitalData.put("9", harapanDepok); hospitalData.put("0", puriCinere);
 
-        herminaDepok.put("picture", "https://lh4.googleusercontent.com/JMRDkWUi5e_PqhExsxDibKXVt8UCubeL8axp9z" +
-                "fZo_rxq0mGmxiHptqK1CI4hpjg-r152TegxH8jHd-edjiW=w1366-h639");
+        herminaDepok.put("picture", "https://drive.google.com/open?id=1fxJGoGbnMrelMq220ZGoCgg446SQ8mRx");
         herminaDepok.put("location", "-6.399851, 106.825205");
         herminaDepok.put("address", "Jl. Raya Siliwangi No. 50 Pancoran Mas Depok");
         herminaDepok.put("name", "Rumah Sakit Hermina Depok");
         herminaDepok.put("description", "Rumah sakit Umum");
 
-        tuguIbu.put("picture", "https://lh3.googleusercontent.com/m0aFp3T9Iom2f6Ko0rblB85evk_GL622UOsuLUYuE1x" +
-                "qwt8cS2Qngqu0BCiZGUG5R4B3Rpkc46tkl-bvQDSn=w1366-h639");
+        tuguIbu.put("picture", "https://drive.google.com/open?id=1lmjw3RaKsj83OGNXpHsPAxj511iF-2W1");
         tuguIbu.put("location", "-6.356472, 106.859890");
         tuguIbu.put("address", "Jl. Raya Bogor Km 29 Cimanggis - Depok");
         tuguIbu.put("name", "Rumah Sakit Tugu Ibu");
         tuguIbu.put("description", "Rumah sakit Umum");
 
-        meilia.put("picture", "https://lh3.googleusercontent.com/ej8rxtxAVAvmbuFnoBABzuR_RzLWqQUlbBkRrB5st_0m" +
-                "ErGKffGgGw2xTQzEOEfrSFmn8uDc99_IkOzdwf5z=w1366-h639");
+        meilia.put("picture", "https://drive.google.com/open?id=1Eycs92dic0WTp-DTk5UIws5tJGKLP9VS");
         meilia.put("location", "-6.376019, 106.902071");
         meilia.put("address", "Jl. Alternatif Cibubur KM. 1, Kel. Harjamukti, Cimanggis, Kota Depok");
         meilia.put("name", "Rumah Sakit Meilia");
         meilia.put("description", "Rumah sakit Umum");
 
-        grhaPermata.put("picture", "https://lh6.googleusercontent.com/vm5pp62UiZV14wj8YXNSFBnRuuulsdxgFdUUQn1" +
-                "Ga-c5u8DevzmqEop6Xapz3HkklZ5ybcoQ7hGy_XTuirew=w1366-h639");
+        grhaPermata.put("picture", "https://drive.google.com/open?id=1_7ehc7fex1gVWBX3nXfAUf76IPQGU7D0");
         grhaPermata.put("location", "-6.370648, 106.813218");
         grhaPermata.put("address", "Jl. KH. M. Usman No 168 Kukusan Depok");
         grhaPermata.put("name", "Rumah Sakit Grha Permata Ibu");
         grhaPermata.put("description", "Rumah sakit Umum");
 
-        bhaktiYudha.put("picture", "https://lh4.googleusercontent.com/iAZVDMspAW6uJbB4VybQQfb_kbWeOvhO5qF4mUB" +
-                "IgKn4ATT3pEnC-4EGYPpAne4SVFbDh0P9lua-YQVRNJRG=w1366-h639");
+        bhaktiYudha.put("picture", "https://drive.google.com/open?id=1ioYyNNDhKjlvpC4FJnXew6ZXmkdPuZmZ");
         bhaktiYudha.put("location", "-6.397400, 106.806116");
         bhaktiYudha.put("address", "Jl. Raya Sawangan No. 2A Depok");
         bhaktiYudha.put("name", "Rumah Sakit Bhakti Yudha");
         bhaktiYudha.put("description", "Rumah sakit Umum");
 
-        hasanahAfiah.put("picture", "https://lh3.googleusercontent.com/UC4gOhtUxCcPolzDLOLlknQHozHEYNCkUoa4WC" +
-                "t1qbP6SR6pMMWFdw8IfISJ4YPTRVVqzPFDwtkSeW7EV4JQ=w1366-h639");
+        hasanahAfiah.put("picture", "https://drive.google.com/open?id=1250G3EDx_oCUbG_AdM2l7qMjAgxeBj-R");
         hasanahAfiah.put("location", "-6.408340, 106.840459");
         hasanahAfiah.put("address", "Jl. Raden Saleh No.42 (Studio Alam TVRI) Depok");
         hasanahAfiah.put("name", "Rumah Sakit Hasanah Graha Afiah");
         hasanahAfiah.put("description", "Rumah sakit Umum");
 
-        sentraMedika.put("picture", "https://lh5.googleusercontent.com/4QxYtPlVDbOcgPa1N6B0q1GP1c3WTnvwnY09UE" +
-                "mID61CC_g0_OJWKwXy9I89LVlohsH70oZt5rcpYA=w1366-h639");
+        sentraMedika.put("picture", "https://drive.google.com/open?id=1OGihl3xV5CW3eVoxcSoHp9qRCwggJxCv");
         sentraMedika.put("location", "-6.391011, 106.865672");
         sentraMedika.put("address", "Jl. Raya Bogor KM. 33 Cisalak, Sukmajaya, Depok");
         sentraMedika.put("name", "Rumah Sakit Sentra Medika");
         sentraMedika.put("description", "Rumah sakit Umum");
 
-        mitraKeluarga.put("picture", "https://lh6.googleusercontent.com/_Eq0bKST7iIw-acPtIR4lLRT_rqi-57YfzErC" +
-                "G-NjUZhhq6MZFoVvd1z-U5OV-OxjbDMrW0g5qOBMA=w1366-h639");
+        mitraKeluarga.put("picture", "https://drive.google.com/open?id=1Wg02D1cL2eIHp8RECGBcLdlIYIW9gEp0");
         mitraKeluarga.put("location", "-6.394259, 106.823679");
         mitraKeluarga.put("address", "Jl. Margonda Raya, Pancoran Mas, Depok, Jawa Barat");
         mitraKeluarga.put("name", "Rumah Sakit Mitra Keluarga Depok");
         mitraKeluarga.put("description", "Rumah sakit Umum");
 
-        harapanDepok.put("picture", "https://lh4.googleusercontent.com/b7SH30UHHSRUw8eoXIfCtpkRczWzWP37RFvHsK" +
-                "hJltUG3E1WE-mGO-YbJEYWk9KfJFoglt_-Oo3CIw=w1366-h639");
+        harapanDepok.put("picture", "https://drive.google.com/open?id=1uMh1oE3WY_Vplp5-L7vXO3jUZX_xCbQo");
         harapanDepok.put("location", "-6.402518, 106.819878");
         harapanDepok.put("address", "Jl. Pemuda No.10 Depok");
         harapanDepok.put("name", "Rumah Sakit Harapan Depok");
         harapanDepok.put("description", "Rumah sakit Umum");
 
-        puriCinere.put("picture", "https://lh5.googleusercontent.com/rzy-sPEddg9wI160E1F1ucplz0kFqBij2ngWUCv4" +
-                "CE6EMU0ZzgDXg0aPacMkwroc2xPcb-KiI-43jQ=w1366-h639");
+        puriCinere.put("picture", "https://drive.google.com/open?id=1KeX_1XIdefDjo0K4O5E7btkKc_lILokk");
         puriCinere.put("location", "-6.321839, 106.782051");
         puriCinere.put("address", "Jl. Maribaya No.1 Puri Cinere,Depok");
         puriCinere.put("name", "Rumah Sakit Puri Cinere");
@@ -192,7 +182,7 @@ public class HospitalController {
             String stringified = Integer.toString(randomNum.get(i));
             HashMap<String, String> hospital =  HOSPITAL_DATA.get(stringified);
 
-            MessageAction action = new MessageAction(hospital.get("name"), "/get " + randomNum.get(i));
+            MessageAction action = new MessageAction(hospital.get("name").substring(12), "/get " + randomNum.get(i));
             CarouselColumn column = new CarouselColumn(
                     hospital.get("picture"), hospital.get("name"), hospital.get("address"),
                     Arrays.asList(action)
