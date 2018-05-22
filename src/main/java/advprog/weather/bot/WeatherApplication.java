@@ -1,4 +1,4 @@
-package advprog.weather.bot.controller;
+package advprog.weather.bot;
 
 import java.util.logging.Logger;
 
