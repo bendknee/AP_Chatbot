@@ -14,11 +14,7 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +26,7 @@ public class HospitalController {
     private LineMessagingClient lineMessagingClient;
 
     private static final Logger LOGGER = Logger.getLogger(HospitalController.class.getName());
-    private static final HashMap<String, HashMap<String, String>> HOSPITAL_DATA = getData();
+    private static final Map<String, HashMap<String, String>> HOSPITAL_DATA = getData();
 
     private static final int STATE_GENERAL = 0;
     private static final int STATE_ADD_LOCATION = 1;
@@ -38,7 +34,7 @@ public class HospitalController {
     private static int state = STATE_GENERAL;
 
 
-    private static HashMap<String, HashMap<String, String>> getData() {
+    private static Map<String, HashMap<String, String>> getData() {
         HashMap<String, HashMap<String, String>> hospitalData = new HashMap<String, HashMap<String, String>>();
 
         HashMap<String, String> herminaDepok = new HashMap<String, String>();
@@ -128,7 +124,7 @@ public class HospitalController {
         puriCinere.put("name", "Rumah Sakit Puri Cinere");
         puriCinere.put("description", "Rumah sakit Umum");
 
-        return hospitalData;
+        return Collections.unmodifiableMap(hospitalData);
     }
 
     @EventMapping
