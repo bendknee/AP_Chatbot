@@ -75,13 +75,4 @@ public enum MediaWikiDao {
         }
     }
 
-    /**
-     * A test only method, do not call.
-     * @param testCsvPath CSV test file to load.
-     */
-    public void provideTestEnvironment(String testCsvPath) {
-        dataLocation = testCsvPath;
-        loadCsv(testCsvPath);
-    }
-
 }

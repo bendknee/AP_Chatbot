@@ -17,6 +17,8 @@ import com.linecorp.bot.model.message.ImageMessage;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -25,6 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootTest(properties = "line.bot.handler.enabled=false")
 @ExtendWith(SpringExtension.class)
 public class BotControllerTest {
@@ -32,6 +40,20 @@ public class BotControllerTest {
     static {
         System.setProperty("line.bot.channelSecret", "SECRET");
         System.setProperty("line.bot.channelToken", "TOKEN");
+    }
+
+    private Path testFixtureFile;
+    private static final List<String> LINES = Arrays.asList("api_url", "http://stage48.net/wiki/api.php");
+
+    @Before
+    void setUp() throws Exception {
+        testFixtureFile = Files.createTempFile("mediawiki_data", "csv");
+        Files.write(testFixtureFile, LINES, Charset.defaultCharset());
+    }
+
+    @After
+    void tearDown() throws Exception {
+        Files.delete(testFixtureFile);
     }
 
     @Autowired
@@ -62,7 +84,19 @@ public class BotControllerTest {
         TextMessage replyText = (TextMessage)reply;
 
         String text = replyText.getText();
-        assertTrue(text.contains("Wiki added"));
+        assertTrue(text.contains("Wiki added."));
+    }
+
+    @Test
+    void testHandleRandomWikiArticleCommand() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/random_wiki_article");
+
+        Message reply = botController.handleTextMessageEvent(event);
+        TextMessage replyText = (TextMessage)reply;
+
+        String text = replyText.getText();
+        assertTrue(text.contains("http"));
     }
 
     @Test
