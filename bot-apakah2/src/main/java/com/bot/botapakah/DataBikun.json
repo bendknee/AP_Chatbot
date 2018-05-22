@@ -1,0 +1,71 @@
+[{
+  "name" : "Halte FH",
+  "address" : "Universitas Indonesia",
+  "latitude": -6.36456411,
+  "longitude" : 106.83230214,
+  "imageLink" : "https://image.ibb.co/hYHEO8/DSC_1000.jpg"
+},
+  {
+    "name" : "Halte RIK",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.37174054,
+    "longitude" : 106.82947064,
+    "imageLink" : "https://image.ibb.co/jBJFVo/DSC_1003.jpg"
+  },
+  {
+    "name" : "Halte FIK",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.37112987,
+    "longitude" : 106.82679275,
+    "imageLink" : "https://image.ibb.co/nCn1mT/DSC_1005.jpg"
+  },
+  {
+    "name" : "Halte FMIPA",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.37007718,
+    "longitude" : 106.82594085,
+    "imageLink" : "https://image.ibb.co/gTest8/DSC_1006.jpg"
+  },
+  {
+    "name" : "Halte VOKASI",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.36589743,
+    "longitude" : 106.82190681,
+    "imageLink" : "https://image.ibb.co/iZBSRT/DSC_1009.jpg"
+  },
+  {
+    "name" : "Halte FT",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.36094795,
+    "longitude" : 106.82334065,
+    "imageLink" : "https://image.ibb.co/gt0Afo/DSC_1010.jpg"
+  },
+  {
+    "name" : "Halte FEB",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.35938051,
+    "longitude" : 106.82608724,
+    "imageLink" : "https://image.ibb.co/eEEE6T/DSC_1011.jpg"
+  },
+  {
+    "name" : "Halte FIB",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.36122518,
+    "longitude" : 106.82944536,
+    "imageLink" : "https://image.ibb.co/d5Zst8/DSC_1012.jpg"
+  },
+  {
+    "name" : "Halte FISIP",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.36170697,
+    "longitude" : 106.82997489,
+    "imageLink" : "https://image.ibb.co/b3tkD8/DSC_1013.jpg"
+  },
+  {
+    "name" : "Halte FPsi",
+    "address" : "Universitas Indonesia",
+    "latitude": -6.36260265,
+    "longitude" : 106.83084393,
+    "imageLink" : "https://image.ibb.co/gp9gmT/DSC_1014.jpg"
+  }
+]
