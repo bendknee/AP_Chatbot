@@ -9,22 +9,22 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import com.neovisionaries.i18n.CountryCode;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestTemplate;
+
 
 @LineMessageHandler
 public class WeatherController {
 
     private static final Logger LOGGER = Logger.getLogger(WeatherController.class.getName());
-    private Set<String> slashWeather = new HashSet<>();
+    private Set<String> personalTrigger = new HashSet<>();
     private final String baseUrl = "api.openweathermap.org/data/2.5/weather?";
     private final String apiKey = "appid=187bd7d86855cb7ee05515d77863583d";
 
@@ -38,7 +38,7 @@ public class WeatherController {
         Source source = event.getSource();
         if (!(source instanceof GroupSource)) {
             if (content.equals("/weather")) {
-                slashWeather.add(source.getSenderId());
+                personalTrigger.add(source.getSenderId());
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
             } else if (content.toLowerCase().contains("/configure_weather")) {
@@ -57,8 +57,7 @@ public class WeatherController {
             }
         }
 
-        String replyText = content.replace("/echo", "");
-        return new TextMessage(replyText.substring(1));
+        return null;
     }
 
     @EventMapping
@@ -67,8 +66,9 @@ public class WeatherController {
                 event.getTimestamp(), event.getMessage().getTitle()));
         LocationMessageContent content = event.getMessage();
         Source source = event.getSource();
-        if (!(source instanceof GroupSource) & slashWeather.contains(source.getSenderId())) {
-            slashWeather.remove(source.getSenderId());
+
+        if (!(source instanceof GroupSource) & personalTrigger.contains(source.getSenderId())) {
+            personalTrigger.remove(source.getSenderId());
             String latitude = Double.toString(content.getLatitude());
             String longitude = Double.toString(content.getLongitude());
             String url = baseUrl + apiKey + "&lat=" + latitude + "&lon=" + longitude;
@@ -96,22 +96,28 @@ public class WeatherController {
             return data;
         } catch (JSONException e) {
             e.printStackTrace();
-            return null;
+            data.clear();
+            data.add("City not found. Try another city");
+            return data;
         }
     }
 
     private String textResponseFormatter(ArrayList<String> datas) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Weather at your position (");
-        sb.append(datas.get(0)).append(", ");
-        sb.append(datas.get(1)).append("):\n");
-        sb.append(datas.get(2)).append(" *icon\n");
-        sb.append("Wind speed : ");
-        sb.append(datas.get(3)).append(" meter/sec\n");
-        sb.append("Temperature : ");
-        sb.append(datas.get(4)).append(" Kelvin\n");
-        sb.append("Humidity : ");
-        sb.append(datas.get(5)).append("%");
-        return sb.toString();
+        if (datas.size() > 1) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Weather at your position (");
+            sb.append(datas.get(0)).append(", ");
+            sb.append(datas.get(1)).append("):\n");
+            sb.append(datas.get(2)).append(" *icon\n");
+            sb.append("Wind speed : ");
+            sb.append(datas.get(3)).append(" meter/sec\n");
+            sb.append("Temperature : ");
+            sb.append(datas.get(4)).append(" Kelvin\n");
+            sb.append("Humidity : ");
+            sb.append(datas.get(5)).append("%");
+            return sb.toString();
+        } else {
+            return datas.get(0);
+        }
     }
 }
