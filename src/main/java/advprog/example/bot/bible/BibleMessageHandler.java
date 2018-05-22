@@ -53,7 +53,7 @@ public class BibleMessageHandler {
 
     public String getGroupId() {
         assert isGroupMessageEvent();
-        return ((GroupSource)event.getSource()).getGroupId();
+        return ((GroupSource) event.getSource()).getGroupId();
     }
 
     public String getUserId() {
@@ -70,8 +70,8 @@ public class BibleMessageHandler {
             return chatMessageContent.toLowerCase().contains(GROUP_CHAT_INPUT_SPEC)
                     || lastMessageBookName.containsKey(getGroupId());
         }
-        return chatMessageContent.toLowerCase().contains(PRIVATE_CHAT_INPUT_SPEC)
-                || shouldHandleManualVerseInput();
+        return chatMessageContent.toLowerCase()
+                .contains(PRIVATE_CHAT_INPUT_SPEC) || shouldHandleManualVerseInput();
     }
 
     public Message getPrivateChatReplyMessage() throws Exception {
@@ -91,10 +91,9 @@ public class BibleMessageHandler {
             // Send carousels of all books
             List<String> books = bibleVerseFactory.getBooks();
             List<CarouselColumn> columns = new ArrayList<>();
-            for (String book: books) {
+            for (String book : books) {
                 List<Action> actions = new ArrayList<>();
-                actions.add(new MessageAction("Choose",
-                        String.format("/bible %s", book)));
+                actions.add(new MessageAction("Choose", String.format("/bible %s", book)));
                 columns.add(new CarouselColumn(null, book, book, actions));
             }
             Template carouselTemplate = new CarouselTemplate(columns);
@@ -111,29 +110,27 @@ public class BibleMessageHandler {
                 List<CarouselColumn> columns = new ArrayList<>();
                 for (int i = 0; i < Math.min(chapters.size(), 10); ++i) {
                     List<Action> actions = new ArrayList<>();
-                    actions.add(new MessageAction("Choose",
-                            String.format("/bible %s %s", book, chapters.get(i))));
-                    columns.add(new CarouselColumn(
-                            null,
-                            book + " " + chapters.get(i),
-                            book + " " + chapters.get(i),
-                            actions)
-                    );
+                    actions.add(new MessageAction(
+                        "Choose", String.format("/bible %s %s", book, chapters.get(i))));
+                    columns.add(new CarouselColumn(null, book + " " + chapters
+                            .get(i), book + " " + chapters.get(i), actions));
                 }
                 Template carouselTemplate = new CarouselTemplate(columns);
                 return new TemplateMessage("Chapters", carouselTemplate);
             } else if (!splittedChatMessageContent[2].contains(":")) {
-                choosenBook.put(getUserId(), splittedChatMessageContent[1]);
+                choosenBook.put(getUserId(), 
+                    splittedChatMessageContent[1]);
                 choosenChapter.put(getUserId(), splittedChatMessageContent[2]);
-                List<String> verses = bibleVerseFactory.getVerseNumbers(
-                    splittedChatMessageContent[1], splittedChatMessageContent[2]
-                );
+                List<String> verses = bibleVerseFactory
+                        .getVerseNumbers(splittedChatMessageContent[1], 
+                                splittedChatMessageContent[2]);
                 String output = String.format("Please input verse number manually for %s %s.",
-                        splittedChatMessageContent[1], splittedChatMessageContent[2]);
-                output += String.format("\nValid verse numbers are from %s to %s.",
-                        verses.get(0), verses.get(verses.size() - 1));
-                output += String.format("\nExample input: \"%s\" (without quotes)", verses.get(
-                        verses.size() - 1));
+                        splittedChatMessageContent[1], 
+                        splittedChatMessageContent[2]);
+                output += String.format("\nValid verse numbers are from %s to %s.", verses.get(0),
+                        verses.get(verses.size() - 1));
+                output += String.format("\nExample input: \"%s\" (without quotes)", verses
+                        .get(verses.size() - 1));
                 return new TextMessage(output);
             }
             String chapterAndVerse = splittedChatMessageContent[2];
@@ -146,24 +143,20 @@ public class BibleMessageHandler {
     public Message getGroupChatReplyMessage() throws Exception {
         assert isGroupMessageEvent();
         String replyMessageContent;
-        if (chatMessageContent.toLowerCase().contains(GROUP_CHAT_INPUT_SPEC)) {
+        if (chatMessageContent.toLowerCase()
+            .contains(GROUP_CHAT_INPUT_SPEC)) {
             String randomBook = bibleVerseFactory.getRandomBook();
-            String randomChapter = bibleVerseFactory.getRandomChapter(randomBook);
-            String randomVerseNumber = bibleVerseFactory.getRandomVerseNumber(
-                    randomBook,
-                    randomChapter);
-            replyMessageContent = bibleVerseFactory.getVerse(
-                    randomBook,
-                    randomChapter,
-                    randomVerseNumber
-            );
+            String randomChapter = bibleVerseFactory
+                    .getRandomChapter(randomBook);
+            String randomVerseNumber = bibleVerseFactory
+                    .getRandomVerseNumber(randomBook, 
+                            randomChapter);
+            replyMessageContent = bibleVerseFactory
+                    .getVerse(randomBook, randomChapter, randomVerseNumber);
             lastMessageBookName.put(getGroupId(), randomBook);
         } else {
-            if (chatMessageContent
-                    .toLowerCase()
-                    .contains(
-                        lastMessageBookName.get(getGroupId()).toLowerCase()
-                    )) {
+            if (chatMessageContent.toLowerCase().contains(lastMessageBookName
+                    .get(getGroupId()).toLowerCase())) {
                 replyMessageContent = GUESS_CORRECT_REPLY_MESSAGE_CONTENT;
                 lastMessageBookName.remove(getGroupId());
             } else {
