@@ -39,14 +39,87 @@ public class SacredTextControllerTest extends TestCase {
     }
 
     @Test
-    public void testHandleTextMessageEvent() {
+    public void testHandleTextMessageValidParameterizedEvent() throws Exception {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/sacred Lorem Ipsum");
+                EventTestUtil.createDummyTextMessage("/sacred_text 5:2");
 
-        //TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("sacred~ Lorem Ipsum", "sacred~ Lorem Ipsum");
+        assertEquals("To him the richest of the rich, the Lord of treasures excellent,\n"
+            + "Indra, with Soma juice outpoured.", reply);
     }
+    
+    @Test
+    public void testHandleTextMessageIncorrectParameterizedEventTooManyParameter() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 5:2 extra");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageIncorrectParameterizedFormatEvent1() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 5");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageIncorrectParameterizedFormatEvent2() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 5:2:1");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageIncorrectChapter() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text notInt:2");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Chapter and Verse must both be an integer", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageIncorrectVerse() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 5:notInt");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Chapter and Verse must both be an integer", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageInvalidChapter() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 200:1");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Chapter not available\n Available Chapters: 1-191", reply);
+    }
+    
+    @Test
+    public void testHandleTextMessageInvalidVerse() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/sacred_text 103:0");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", reply);
+    }
+    
+    
 
     @Test
     public void testHandleDefaultMessage() {

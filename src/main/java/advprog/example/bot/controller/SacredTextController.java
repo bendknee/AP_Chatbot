@@ -146,7 +146,8 @@ public class SacredTextController {
                     hasChosed = false;
                     return new TextMessage(sacredResponse(chapter, verse));
                 } else if (contentText.startsWith("/")) {
-                    return new TextMessage("Command doesn't exist, try: kill yourself");
+                    return new TextMessage("Command doesn't exist\n"
+                    		+ "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>");
                 }
             } else {
                 if (contentText.startsWith("/")) {
@@ -180,7 +181,7 @@ public class SacredTextController {
 
         HttpResponse response = client.execute(get);
         if (response.getStatusLine().getStatusCode() != 200) {
-            return "Chapter not available";
+            return "Chapter not available\n Available Chapters: 1-191";
         }
         Document html = Jsoup.connect(url).get();
 
