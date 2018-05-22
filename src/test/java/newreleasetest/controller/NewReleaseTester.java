@@ -80,6 +80,20 @@ public class NewReleaseTester {
     }
 
     @Test
+    void testSuksesArgument() throws IOException, JSONException,
+            CurrencyNotSupportedException,
+            ServiceException, EndpointException, StorageException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/vgmdb ost this month");
+
+        List<TextMessage> reply = newReleaseController.handleTextMessageEvent(event);
+
+        assertNotNull(reply.get(0).getText());
+        assertNotNull(reply.get(1).getText());
+    }
+
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 

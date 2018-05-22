@@ -50,7 +50,7 @@ public class NewReleaseController {
 
     @EventMapping
     public static List<TextMessage>
-    handleTextMessageEvent(MessageEvent<TextMessageContent> event)
+        handleTextMessageEvent(MessageEvent<TextMessageContent> event)
             throws JSONException, IOException, CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         List<TextMessage> mess = new ArrayList<>();
@@ -64,8 +64,8 @@ public class NewReleaseController {
         }
         String parser = contentText.substring(0, 21);
         try {
-            if (!parser.equalsIgnoreCase("/vgmdb OST this month") ||
-                    contentText.length() > 22) {
+            if (!parser.equalsIgnoreCase("/vgmdb OST this month")
+                    || contentText.length() > 22) {
                 throw new IllegalArgumentException();
             }
             String hasil = cekNewRelease();
@@ -74,7 +74,7 @@ public class NewReleaseController {
             return mess;
         } catch (IllegalArgumentException e) {
             mess.add(new TextMessage("Sorry, your input is not valid it should be"
-                            + " /vgmdb OST this month"));
+                    + " /vgmdb OST this month"));
             return mess;
         }
     }
