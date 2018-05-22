@@ -114,10 +114,6 @@ public class BotController {
             CarouselTemplate carouselTemplate = new CarouselTemplate(
                     Arrays.asList(
                             new CarouselColumn("https://u.livechart.me/anime/poster_images/154/0957157a7117cf99523c2042cc46045f:small.jpg", "Genre", "Click One of The Genre", Arrays.asList(
-                                    /*new URIAction("Go to line.me",
-                                            "https://line.me"),
-                                    new URIAction("Go to line.me",
-                                            "https://line.me"),*/
                                     new PostbackAction("Action",
                                             "action", "/film Action"),
                                     new PostbackAction("Comedy",
@@ -133,14 +129,6 @@ public class BotController {
                                             "romance", "/film Romance"),
                                     new PostbackAction("Adventure",
                                             "adventure", "/film Adventure")
-                                    /*new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new MessageAction("Say message",
-                                            "Rice=米")*/
                             )),
                             new CarouselColumn("https://u.livechart.me/anime/poster_images/2666/4bcb03db668aa7c1c1480cd5eebd45ab.png:small.jpg", "Genre", "Click One of The Genre", Arrays.asList(
                                     new PostbackAction("Horror",
@@ -149,14 +137,6 @@ public class BotController {
                                             "drama", "/film Drama"),
                                     new PostbackAction("Supernatural",
                                             "supernatural", "/film Supernatural")
-                                    /*new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new MessageAction("Say message",
-                                            "Rice=米")*/
                             )),
                             new CarouselColumn("https://u.livechart.me/anime/poster_images/236/4164704792825607648280c87d916ea3:small.jpg", "Genre", "Click One of The Genre", Arrays.asList(
                                     new PostbackAction("Slice Of Life",
@@ -165,35 +145,7 @@ public class BotController {
                                             "fantasy", "/film Fantasy"),
                                     new PostbackAction("Historical",
                                             "historical", "/film Historical")
-                                    /*new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new PostbackAction("言 hello2",
-                                            "hello こんにちは",
-                                            "hello こんにちは"),
-                                    new MessageAction("Say message",
-                                            "Rice=米")*/
                             ))
-                            /*new CarouselColumn(imageUrl, "Datetime Picker", "Please select a date, time or datetime", Arrays.asList(
-                                    new DatetimePickerAction("Datetime",
-                                            "action=sel",
-                                            "datetime",
-                                            "2017-06-18T06:15",
-                                            "2100-12-31T23:59",
-                                            "1900-01-01T00:00"),
-                                    new DatetimePickerAction("Date",
-                                            "action=sel&only=date",
-                                            "date",
-                                            "2017-06-18",
-                                            "2100-12-31",
-                                            "1900-01-01"),
-                                    new DatetimePickerAction("Time",
-                                            "action=sel&only=time",
-                                            "time",
-                                            "06:15",
-                                            "23:59",
-                                            "00:00")
-                            ))*/
                     ));
             TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
             this.reply(replyToken, templateMessage);
