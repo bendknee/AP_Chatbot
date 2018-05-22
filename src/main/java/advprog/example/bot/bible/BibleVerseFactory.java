@@ -20,7 +20,7 @@ public class BibleVerseFactory {
 
     public BibleVerseFactory() throws IOException {
         String pathName = new File("").getAbsolutePath();
-        pathName = pathName.concat("/src/main/java/advprog/example/bot/bible/Bible.json");
+        pathName = pathName.concat("/src/main/java/advprog/example/bot/bible/bible.json");
         jsonFile = new File(pathName);
         bibleDatabase = new ObjectMapper().readTree(jsonFile);
     }
