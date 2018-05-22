@@ -156,7 +156,7 @@ public class BibleMessageHandlerTest {
                 )
         );
         handler.handleTextMessageEvent();
-        String content = "halo albertus angga";
+        String content = "halo";
         assertNotEquals(content, BibleMessageHandler.lastMessageBookName.get("groupId"));
         handler = new BibleMessageHandler(
                 EventTestUtil.createDummyGroupTextMessage(content)

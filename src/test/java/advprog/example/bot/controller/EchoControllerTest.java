@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
 
+import advprog.example.bot.bible.BibleMessageHandler;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -43,7 +45,7 @@ public class EchoControllerTest {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
 
-        TextMessage reply = echoController.handleTextMessageEvent(event);
+        TextMessage reply = (TextMessage)echoController.handleTextMessageEvent(event);
 
         assertEquals("Lorem Ipsum", reply.getText());
     }
@@ -51,6 +53,7 @@ public class EchoControllerTest {
     @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
+
         echoController.handleDefaultMessage(event);
 
         verify(event, atLeastOnce()).getSource();
