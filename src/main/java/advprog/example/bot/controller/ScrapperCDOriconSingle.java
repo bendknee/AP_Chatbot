@@ -34,7 +34,9 @@ public class ScrapperCDOriconSingle {
             offset = "https://www.oricon.co.jp/rank/js/y/"+date+"/";
         }
         else {
-            return "Input Mode Salah!!!\n\n\nFormat input\n/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
+            return "Input Mode Salah!!!\n\n\n" +
+                    "Format input\n" +
+                    "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
         }
 
         // scrapping data
@@ -61,7 +63,9 @@ public class ScrapperCDOriconSingle {
             return top10;
         }
         catch (IOException e) {
-            return "Input tanggal salah atau tidak ditemukan!!!\n\n\nFormat input\n/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
+            return "Input tanggal salah atau tidak ditemukan!!!\n\n\n" +
+                    "Format input\n" +
+                    "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
         }
     }
 }
