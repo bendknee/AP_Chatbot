@@ -12,6 +12,7 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
 
 import java.nio.charset.Charset;
@@ -89,10 +90,8 @@ public class BotControllerTest {
                 EventTestUtil.createDummyTextMessage("/random_wiki_article");
 
         Message reply = botController.handleTextMessageEvent(event);
-        TextMessage replyText = (TextMessage)reply;
 
-        String text = replyText.getText();
-        assertTrue(text.contains("http"));
+        assertTrue(reply instanceof TemplateMessage);
     }
 
     @Test
