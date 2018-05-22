@@ -7,10 +7,7 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.ImageMessage;
-import com.linecorp.bot.model.message.Message;
-import com.linecorp.bot.model.message.TemplateMessage;
-import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.*;
 import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
@@ -24,8 +21,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @LineMessageHandler
 public class HospitalController {
+
+    @Autowired
+    private LineMessagingClient lineMessagingClient;
 
     private static final Logger LOGGER = Logger.getLogger(HospitalController.class.getName());
     private static final HashMap<String, HashMap<String, String>> HOSPITAL_DATA = getData();
@@ -130,29 +132,36 @@ public class HospitalController {
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public String handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         String replyToken = event.getReplyToken();
         String contentText = content.getText();
 
-        String processedInput; String replyText = "Mohon ulangi permintaan Anda";
-        if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
-            processedInput = contentText.replace("/hospital ", "");
-        } else if (contentText.length() == 16 && contentText.substring(0,16).equals("/random_hospital")) {
-            TemplateMessage reply =
-                    new TemplateMessage("Hospital List", getCarouselTemplateMessage());
-            reply(replyToken, reply);
-        } else if (contentText.length() == 5 && contentText.substring(0,6).equals("/info")) {
-            int jumlahHospital = HOSPITAL_DATA.size();
-            replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
-        } else if (contentText.length() > 4 && contentText.substring(0,4).equals("/get")) {
-            int indexNum = Integer.parseInt(contentText.substring(4,5));
-
+        String replyText = "Mohon ulangi permintaan Anda";
+        if (state == STATE_GENERAL) {
+            if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
+                state = STATE_ADD_LOCATION;
+                replyText = "Terima kasih, permintaan anda akan kami proses";
+                reply(replyToken, new TextMessage(replyText));
+            } else if (contentText.length() == 16 && contentText.substring(0, 16).equals("/random_hospital")) {
+                TemplateMessage carouselReply =
+                        new TemplateMessage("Hospital List", getCarouselTemplateMessage());
+                reply(replyToken, carouselReply);
+            } else if (contentText.length() == 5 && contentText.substring(0, 5).equals("/info")) {
+                int jumlahHospital = HOSPITAL_DATA.size();
+                replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
+            } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
+                int indexNum = Integer.parseInt(contentText.substring(4, 5));
+                displayData(replyToken, indexNum);
+            }
+        } else if (state == STATE_ADD_LOCATION) {
+            replyText = "Silahkan masukkan lokasi";
+            reply(replyToken, new TextMessage(replyText));
         }
 
-        return new TextMessage(replyText);
+        return replyText;
     }
 
     @EventMapping
@@ -160,9 +169,11 @@ public class HospitalController {
 
         String replyText = "Mohon ulangi permintaan Anda";
         if (state == STATE_ADD_LOCATION) {
-            LocationMessageContent locationMessageContent = event.getMessage();
-            replyText = "Mohon tunggu, permintaan Anda sedang kami proses";
             state = STATE_GENERAL;
+            LocationMessageContent locationMessageContent = event.getMessage();
+            String replyToken = event.getReplyToken();
+            getDistance(replyToken, locationMessageContent.getLatitude(), locationMessageContent.getLongitude());
+            replyText = "Mohon tunggu, permintaan Anda sedang kami proses";
         };
 
         return new TextMessage(replyText);
@@ -194,22 +205,63 @@ public class HospitalController {
         return new CarouselTemplate(columns);
     }
 
-    private void displayData() {
-        
+    private void getDistance(String replyToken, double latitude, double longitude) {
+        int index = 0;
+        double jarak = 0;
 
+        for (int i = 0; i < 10; i++) {
+            HashMap<String, String> hospital = HOSPITAL_DATA.get(i);
+            double jarakTemp = pythagorean(latitude, longitude,
+                    Double.parseDouble(hospital.get("location").substring(0,10)),
+                    Double.parseDouble(hospital.get("location").substring(11))
+            );
+
+            if (i == 0) {
+                index = i; jarak = jarakTemp;
+            } else if (jarak > jarakTemp) {
+                index = i; jarak = jarakTemp;
+            }
+        }
+
+        displayData(replyToken, index, jarak);
+    }
+
+    private void displayData(String replyToken, int numIndex) {
+        HashMap<String, String> hospital = HOSPITAL_DATA.get(numIndex);
+
+        ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
+        TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
+        LocationMessage locationReply = new LocationMessage(
+                "", hospital.get("address"),
+                Double.parseDouble(hospital.get("location").substring(0,10)),
+                Double.parseDouble(hospital.get("location").substring(11))
+        );
+
+        reply(replyToken, Arrays.asList(imageReply, textReply, locationReply));
+    }
+
+    private void displayData(String replyToken, int numIndex, double jarak) {
+        HashMap<String, String> hospital = HOSPITAL_DATA.get(numIndex);
+
+        ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
+        TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description") +
+                "\nJarak ke rumah sakit " + jarak + " meter");
+        LocationMessage locationReply = new LocationMessage(
+                "", hospital.get("address"),
+                Double.parseDouble(hospital.get("location").substring(0,10)),
+                Double.parseDouble(hospital.get("location").substring(11))
+        );
+
+        reply(replyToken, Arrays.asList(imageReply, textReply, locationReply));
     }
 
     private void reply(String replyToken, Message message) {
-        LineMessagingClient lineMessagingClient = null;
         lineMessagingClient.replyMessage(new ReplyMessage(replyToken, Arrays.asList(message)));
     }
 
     private void reply(String replyToken, List<Message> message) {
-        LineMessagingClient lineMessagingClient = null;
         lineMessagingClient.replyMessage(new ReplyMessage(replyToken, message));
     }
-
-
 
     private ArrayList<Integer> generateRandom() {
         ArrayList<Integer> randomNumber = new ArrayList<Integer>();
@@ -241,4 +293,12 @@ public class HospitalController {
         return randomNum;
     }
 
+
+    private double pythagorean(double a, double b, double c, double d) {
+        double aa = (a-c)*Math.pow(10, 6);
+        double bb = (b-d)*Math.pow(10, 6);
+        double result = Math.sqrt(Math.pow(aa, 2)+ Math.pow(bb, 2));
+
+        return result;
+    }
 }
