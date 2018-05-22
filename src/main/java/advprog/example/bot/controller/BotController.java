@@ -34,6 +34,8 @@ public class BotController {
         switch (command) {
             case "/echo":
                 return new TextMessage(args);
+            case "/add_wiki":
+                return MediaWikiCommand.executeAddWiki(args);
         }
 
         return handleDefaultMessageEvent(event);
