@@ -126,7 +126,7 @@ public class HospitalController {
     }
 
     @EventMapping
-    public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public String handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')",
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -143,6 +143,7 @@ public class HospitalController {
                 TemplateMessage carouselReply =
                         new TemplateMessage("Hospital List", getCarouselTemplateMessage());
                 reply(replyToken, carouselReply);
+                replyText = "Method dapat dijalankan tanpa mengeluarkan error";
             } else if (contentText.length() == 5 && contentText.substring(0, 5).equals("/info")) {
                 int jumlahHospital = HOSPITAL_DATA.size();
                 replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
@@ -150,15 +151,18 @@ public class HospitalController {
             } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
                 int indexNum = Integer.parseInt(contentText.substring(5, 6));
                 displayData(replyToken, indexNum);
+                replyText = "Method dapat dijalankan tanpa mengeluarkan error";
             }
         } else if (state == STATE_ADD_LOCATION) {
             replyText = "Silahkan masukkan lokasi";
             reply(replyToken, new TextMessage(replyText));
         }
+
+        return replyText;
     }
 
     @EventMapping
-    public TextMessage handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
+    public String handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
 
         String replyText = "Mohon ulangi permintaan Anda";
         if (state == STATE_ADD_LOCATION) {
@@ -169,7 +173,7 @@ public class HospitalController {
             replyText = "Mohon tunggu, permintaan Anda sedang kami proses";
         };
 
-        return new TextMessage(replyText);
+        return replyText;
     }
 
 
