@@ -66,7 +66,7 @@ public class FakeNewsParser {
     private void writeToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            FileWriter writer = new FileWriter("news-source.json");
+            FileWriter writer = new FileWriter("news.json");
             writer.write(gson.toJson(newsList));
             writer.close();
         } catch (IOException e) {
