@@ -36,24 +36,22 @@ public class WeatherController {
 
         String content = event.getMessage().getText();
         Source source = event.getSource();
-        if (!(source instanceof GroupSource)) {
+        if (source instanceof GroupSource) {
+            if (content.toLowerCase().contains("cuaca di")) {
+                String[] inputSplit = content.toLowerCase().split(" ");
+                //int indexKeyWord = inputSplit.indexOf("cuaca");
+                String city = inputSplit[2];
+                String url = baseUrl + apiKey + "&q=" + city;
+                ArrayList<String> requiredDatas = fetchDataApiRequest(url);
+                return new TextMessage(textResponseFormatter(requiredDatas));
+            }
+        } else {
             if (content.equals("/weather")) {
                 personalTrigger.add(source.getUserId());
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
             } else if (content.toLowerCase().contains("/configure_weather")) {
 
-            }
-
-        } else {
-            if (content.toLowerCase().contains("cuaca di")) {
-                ArrayList<String> inputSplit = new ArrayList<>();
-                inputSplit.addAll(Arrays.asList(content.toLowerCase().split(" ")));
-                int indexKeyWord = inputSplit.indexOf("cuaca");
-                String city = inputSplit.get(2);
-                String url = baseUrl + apiKey + "&q=" + city;
-                ArrayList<String> requiredDatas = fetchDataApiRequest(url);
-                return new TextMessage(textResponseFormatter(requiredDatas));
             }
         }
 
@@ -67,8 +65,8 @@ public class WeatherController {
         LocationMessageContent content = event.getMessage();
         Source source = event.getSource();
 
-        if (!(source instanceof GroupSource) & personalTrigger.contains(source.getUserId())) {
-            personalTrigger.remove(source.getSenderId());
+        if (!(source instanceof GroupSource)) {
+            //personalTrigger.remove(source.getSenderId());
             String latitude = Double.toString(content.getLatitude());
             String longitude = Double.toString(content.getLongitude());
             String url = baseUrl + apiKey + "&lat=" + latitude + "&lon=" + longitude;
