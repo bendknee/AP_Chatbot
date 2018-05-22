@@ -18,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.action.DatetimePickerAction;
+import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
+import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
@@ -50,7 +53,7 @@ public class SacredTextController {
 
 		if (contentText.equals("/sacred_text") && !hasChosed) {
 
-			ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
+			/*ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
 			for (int i = 1; i <= 20; i++) {
 				String img = "";
 				carouselList.add(new CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " + i,
@@ -59,7 +62,16 @@ public class SacredTextController {
 			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
 			TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
 			System.out.println("check template: "+templateMessage+" #dah");
-			return templateMessage;
+			return templateMessage;*/
+			ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
+			for (int i = 1; i <= 20; i++) {
+				String img = "";
+				carouselList.add(new CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " + i,
+						Arrays.asList(new PostbackAction("Choose", "" + i))));
+			}
+			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
+            TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
+            this.reply(event.getReplyToken(), templateMessage);
 
 		} else if (contentText.startsWith("/sacred_text ") && !hasChosed) {
 			String[] replyTextArray = contentText.split(" ");
@@ -146,15 +158,27 @@ public class SacredTextController {
 	}
 
 	private void reply(String replyToken, Message message) {
-		reply(replyToken, Collections.singletonList(message));
-	}
+        reply(replyToken, Collections.singletonList(message));
+    }
 
-	private void reply(String replyToken, List<Message> messages) {
-		try {
-			BotApiResponse apiResponse = lineMessagingClient.replyMessage(new ReplyMessage(replyToken, messages)).get();
-		} catch (InterruptedException | ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private void reply(String replyToken, List<Message> messages) {
+        try {
+            BotApiResponse apiResponse = lineMessagingClient
+                    .replyMessage(new ReplyMessage(replyToken, messages))
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void replyText(String replyToken, String message) {
+        if (replyToken.isEmpty()) {
+            throw new IllegalArgumentException("replyToken must not be empty");
+        }
+        if (message.length() > 1000) {
+            message = message.substring(0, 1000 - 2) + "……";
+        }
+        this.reply(replyToken, new TextMessage(message));
+    }
 
 }
