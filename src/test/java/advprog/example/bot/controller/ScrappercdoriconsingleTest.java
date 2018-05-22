@@ -19,7 +19,7 @@ public class ScrappercdoriconsingleTest {
                 + "(9) 恋はシュミシュミ - 郷ひろみ - 2018-05-16\n"
                 + "(10) divine criminal - fripSide - 2018-05-16\n";
         String dateDaily = "2018-05-17";
-        String dailyTest = ScrapperCDOriconSingle.scrapping("daily", dateDaily);
+        String dailyTest = ScrappercdoriconSingle.scrapping("daily", dateDaily);
         assertEquals(daily, dailyTest);
 
         String weekly = "(1) 進化理論 - BOYS AND MEN - 2018-05-09\n"
@@ -34,7 +34,7 @@ public class ScrappercdoriconsingleTest {
                 + "(9) WE/GO - さとり少年団 - 2018-05-09\n"
                 + "(10) 誓い - 雨宮天 - 2018-05-09\n";
         String dateWeekly = "2018-05-21";
-        String weeklyTest = ScrapperCDOriconSingle.scrapping("weekly", dateWeekly);
+        String weeklyTest = ScrappercdoriconSingle.scrapping("weekly", dateWeekly);
         assertEquals(weekly, weeklyTest);
 
         String monthly = "(1) シンクロニシティ - 乃木坂46 - 2018-04-25\n"
@@ -48,7 +48,7 @@ public class ScrappercdoriconsingleTest {
                 + "(9) ODD FUTURE - UVERworld - 2018-05-02\n"
                 + "(10) Shanana ここにおいで - B2takes! - 2018-04-11\n";
         String dateMonthly = "2018-04";
-        String monthlyTest = ScrapperCDOriconSingle.scrapping("monthly", dateMonthly);
+        String monthlyTest = ScrappercdoriconSingle.scrapping("monthly", dateMonthly);
         assertEquals(monthly, monthlyTest);
 
         String yearly = "(1) 願いごとの持ち腐れ - AKB48 - 2017-05-31\n"
@@ -62,13 +62,13 @@ public class ScrappercdoriconsingleTest {
                 + "(9) 風に吹かれても - 欅坂46 - 2017-10-25\n"
                 + "(10) Doors 〜勇気の軌跡〜 - 嵐 - 2017-11-08\n";
         String dateYearly = "2017";
-        String yearlyTest = ScrapperCDOriconSingle.scrapping("yearly", dateYearly);
+        String yearlyTest = ScrappercdoriconSingle.scrapping("yearly", dateYearly);
         assertEquals(yearly, yearlyTest);
 
         String error = "Input tanggal salah atau tidak ditemukan!!!\n\n\n"
                 + "Format input\n"
                 + "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
-        String errorTest = ScrapperCDOriconSingle.scrapping("daily", "2017");
+        String errorTest = ScrappercdoriconSingle.scrapping("daily", "2017");
         assertEquals(error, errorTest);
     }
 

@@ -29,12 +29,12 @@ public class EchoController {
                         if (! input[2].equals("daily") && ! input[2].equals("weekly")) {
                             String[] tmp = input[2].split("-");
                             if (tmp.length == 2) {
-                                contentText = ScrapperCDOriconSingle.scrapping("monthly", input[2]);
+                                contentText = ScrappercdoriconSingle.scrapping("monthly", input[2]);
                             } else if (tmp.length == 1) {
-                                contentText = ScrapperCDOriconSingle.scrapping("yearly", input[2]);
+                                contentText = ScrappercdoriconSingle.scrapping("yearly", input[2]);
                             }
                         } else {
-                            contentText = ScrapperCDOriconSingle.scrapping(input[2], input[3]);
+                            contentText = ScrappercdoriconSingle.scrapping(input[2], input[3]);
                         }
                         break;
                     default:
