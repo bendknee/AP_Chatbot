@@ -85,7 +85,8 @@ public class WeatherController {
             JSONObject parsedJson = new JSONObject(stringifiedJson);
             data.add(parsedJson.getString("name"));         // City name
             String countryCode = parsedJson.getJSONObject("sys").getString("country");
-            data.add(CountryCode.getByCode(countryCode).getName()); // Country name
+            data.add(countryCode);
+            //data.add(CountryCode.getByCode(countryCode).getName()); // Country name
             JSONObject weatherObject = parsedJson.getJSONArray("weather").getJSONObject(0);
             data.add(weatherObject.getString("main"));      // Main weather condition
             data.add(parsedJson.getJSONObject("wind").getString("speed"));   // Wind Speed (m/s)
