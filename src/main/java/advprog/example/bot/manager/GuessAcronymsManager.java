@@ -28,11 +28,11 @@ public class GuessAcronymsManager {
         this.lineMessagingClient = lineMessagingClient;
     }
 
-    public void handlePrivateChat(String userId, String message) {
+    public void handlePrivateChat(String userId, String message, String replyToken) {
 
     }
 
-    public void handleGroupChat(String groupId, String userId, String message) {
+    public void handleGroupChat(String groupId, String userId, String message, String replyToken) {
 
     }
 }

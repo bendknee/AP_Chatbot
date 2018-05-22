@@ -51,8 +51,8 @@ public class GuessAcronymsControllerTest {
         guessAcronymsController.handleTextMessageEvent(event);
 
         verify(guessAcronymsManager, atLeastOnce())
-            .handlePrivateChat("U1", "Hello from private chat");
-        verify(guessAcronymsManager, never()).handleGroupChat(any(), any(), any());
+            .handlePrivateChat("U1", "Hello from private chat", "replyToken");
+        verify(guessAcronymsManager, never()).handleGroupChat(any(), any(), any(), any());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class GuessAcronymsControllerTest {
         guessAcronymsController.handleTextMessageEvent(event);
 
         verify(guessAcronymsManager, atLeastOnce())
-            .handleGroupChat("C1", "U1", "Hello from group chat");
-        verify(guessAcronymsManager, never()).handlePrivateChat(any(), any());
+            .handleGroupChat("C1", "U1", "Hello from group chat", "replyToken");
+        verify(guessAcronymsManager, never()).handlePrivateChat(any(), any(), any());
     }
 }
