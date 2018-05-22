@@ -189,7 +189,8 @@ public class HospitalController {
         ArrayList<Integer> randomNum = generateRandom();
 
         for (int i = 0; i < 3; i++) {
-            HashMap<String, String> hospital =  HOSPITAL_DATA.get(randomNum.get(i));
+            String stringified = Integer.toString(randomNum.get(i));
+            HashMap<String, String> hospital =  HOSPITAL_DATA.get(stringified);
 
             MessageAction action = new MessageAction("/get " + randomNum.get(i), hospital.get("name"));
             CarouselColumn column = new CarouselColumn(
@@ -207,9 +208,8 @@ public class HospitalController {
         double jarak = 0;
 
         for (int i = 0; i < 10; i++) {
-            System.out.println(i);
-            HashMap<String, String> hospital = HOSPITAL_DATA.get(i);
-            System.out.println(hospital);
+            String stringified = Integer.toString(i);
+            HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
             double jarakTemp = pythagorean(latitude, longitude,
                     Double.parseDouble(hospital.get("location").substring(0,9)),
                     Double.parseDouble(hospital.get("location").substring(11))
@@ -226,7 +226,8 @@ public class HospitalController {
     }
 
     private void displayData(String replyToken, int numIndex) {
-        HashMap<String, String> hospital = HOSPITAL_DATA.get(numIndex);
+        String stringified = Integer.toString(numIndex);
+        HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
         ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
@@ -240,7 +241,8 @@ public class HospitalController {
     }
 
     private void displayData(String replyToken, int numIndex, double jarak) {
-        HashMap<String, String> hospital = HOSPITAL_DATA.get(numIndex);
+        String stringified = Integer.toString(numIndex);
+        HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
         ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description") +
