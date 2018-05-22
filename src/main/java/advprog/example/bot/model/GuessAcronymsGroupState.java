@@ -17,6 +17,11 @@ public class GuessAcronymsGroupState {
     protected GuessAcronymsGroupState() {
     }
 
+    public GuessAcronymsGroupState(String groupId) {
+        this.groupId = groupId;
+        state = "";
+    }
+
     public GuessAcronymsGroupState(String groupId, String state) {
         this.groupId = groupId;
         this.state = state;

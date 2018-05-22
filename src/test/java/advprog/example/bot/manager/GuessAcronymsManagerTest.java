@@ -398,8 +398,6 @@ public class GuessAcronymsManagerTest {
             .when(guessAcronymsRepository)
             .findByAcronym("EAW");
         guessAcronymsManager.handleGroupChat("C1", "U1", "Salah", "replyToken");
-        verify(lineMessagingClient, atLeastOnce())
-            .replyMessage(new ReplyMessage("replyToken", new TextMessage("EAW")));
         assertEquals("guess EAW", guessAcronymsGroupState.getState());
         assertEquals(0, guessAcronymsUserState.getScore());
     }

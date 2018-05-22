@@ -5,8 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity
-public class GuessAcronymsUserState {
+public class GuessAcronymsUserState implements Comparable<GuessAcronymsUserState> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,15 +21,18 @@ public class GuessAcronymsUserState {
     protected GuessAcronymsUserState() {
     }
 
+    public GuessAcronymsUserState(String groupId, String userId) {
+        this.groupId = groupId;
+        this.userId = userId;
+        state = "";
+        score = 0;
+    }
+
     public GuessAcronymsUserState(String groupId, String userId, String state, long score) {
         this.groupId = groupId;
         this.userId = userId;
         this.state = state;
         this.score = score;
-    }
-
-    public String getGroupId() {
-        return groupId;
     }
 
     public String getUserId() {
@@ -48,5 +53,10 @@ public class GuessAcronymsUserState {
 
     public void setScore(long score) {
         this.score = score;
+    }
+
+    @Override
+    public int compareTo(@NotNull GuessAcronymsUserState guessAcronymsUserState) {
+        return Long.compare(score, guessAcronymsUserState.score);
     }
 }
