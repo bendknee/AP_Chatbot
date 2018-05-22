@@ -58,6 +58,7 @@ public class SacredTextController {
 			}
 			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
 			TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
+			System.out.println("check template: "+templateMessage+" #dah");
 			return templateMessage;
 
 		} else if (contentText.startsWith("/sacred_text ") && !hasChosed) {
@@ -76,6 +77,7 @@ public class SacredTextController {
 			} catch (Exception e) {
 				return new TextMessage("Chapter and Verse must both be an integer");
 			}
+			hasChosed = false;
 			return new TextMessage(sacredResponse(chapter, verse));
 		} else if (contentText.startsWith("/") && !hasChosed) {
 			return new TextMessage("Command doesn't exist, try: kill yourself");
