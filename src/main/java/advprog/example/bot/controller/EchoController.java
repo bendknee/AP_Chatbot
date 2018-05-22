@@ -21,22 +21,26 @@ public class EchoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
-        String[] input = contentText.split(" ");
-        switch (input[0].toLowerCase()) {
+        String[] input = contentText.toLowerCase().split(" ");
+        switch (input[0]) {
             case "/oricon":
-                switch (input[1].toLowerCase()) {
+                switch (input[1]) {
                     case "jpsingles":
-                        if (!input[2].toLowerCase().equals("daily") && !input[2].toLowerCase().equals("weekly")) {
+                        if (!input[2].equals("daily") && !input[2].equals("weekly")) {
                             String[] tmp = input[2].split("-");
-                            if (tmp.length == 2)
+                            if (tmp.length == 2) {
                                 contentText = ScrapperCDOriconSingle.scrapping("monthly", input[2]);
-                            else if (tmp.length == 1)
+                            } else if (tmp.length == 1) {
                                 contentText = ScrapperCDOriconSingle.scrapping("yearly", input[2]);
-                        }
-                        else
+                            }
+                        } else
                             contentText = ScrapperCDOriconSingle.scrapping(input[2], input[3]);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
 

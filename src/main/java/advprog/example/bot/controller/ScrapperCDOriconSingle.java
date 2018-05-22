@@ -23,17 +23,13 @@ public class ScrapperCDOriconSingle {
         ArrayList<String> val = new ArrayList<>();
         if (mode.toLowerCase().equals("daily")) {
             offset = "https://www.oricon.co.jp/rank/js/d/"+date+"/";
-        }
-        else if (mode.toLowerCase().equals("weekly")) {
+        } else if (mode.toLowerCase().equals("weekly")) {
             offset = "https://www.oricon.co.jp/rank/js/w/"+date+"/";
-        }
-        else if (mode.toLowerCase().equals("monthly")) {
+        } else if (mode.toLowerCase().equals("monthly")) {
             offset = "https://www.oricon.co.jp/rank/js/m/"+date+"/";
-        }
-        else if (mode.toLowerCase().equals("yearly")) {
+        } else if (mode.toLowerCase().equals("yearly")) {
             offset = "https://www.oricon.co.jp/rank/js/y/"+date+"/";
-        }
-        else {
+        } else {
             return "Input Mode Salah!!!\n\n\n" +
                     "Format input\n" +
                     "/oricon jpsingles <YYYY | YYYY-MM | weekly YYYY-MM-DD | daily YYYY-MM-DD>";
