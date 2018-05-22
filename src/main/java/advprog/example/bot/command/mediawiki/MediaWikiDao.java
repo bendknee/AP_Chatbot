@@ -39,6 +39,12 @@ public enum MediaWikiDao {
             throw new IllegalArgumentException("mediawiki must not be null");
         }
 
+        for (MediaWiki m : getMediaWikis()) {
+            if (m.equals(mediaWiki)) {
+                return m;
+            }
+        }
+
         mediawikis.add(mediaWiki);
         this.writeCsv(dataLocation);
         return mediaWiki;

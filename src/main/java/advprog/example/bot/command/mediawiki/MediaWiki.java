@@ -66,4 +66,11 @@ public class MediaWiki {
         }
 
     }
+
+    public boolean equals(MediaWiki other) {
+        if (other == null) {
+            return false;
+        }
+        return this.getApiUrl().equals(other.getApiUrl());
+    }
 }
