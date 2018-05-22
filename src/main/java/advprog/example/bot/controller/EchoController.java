@@ -23,7 +23,7 @@ public class EchoController {
         String contentText = content.getText();
 
         String[] tempInput = contentText.split(" ");
-        if(tempInput[0].equalsIgnoreCase("/enterkomputer") && tempInput.length == 3) {
+        if (tempInput[0].equalsIgnoreCase("/enterkomputer") && tempInput.length == 3) {
             Enterkomputer.findPrice(tempInput[1].toLowerCase(),tempInput[2].toLowerCase());
         }
 
