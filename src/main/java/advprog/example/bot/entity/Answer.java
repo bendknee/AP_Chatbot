@@ -1,7 +1,5 @@
 package advprog.example.bot.entity;
 
-import lombok.Data;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,11 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "answer")
-public class AnswerEntity {
+public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +21,14 @@ public class AnswerEntity {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private QuestionEntity question;
+    private Question question;
 
     @NotNull
     private String answer;
 
-    public AnswerEntity() {}
+    public Answer() {}
 
-    public AnswerEntity(String answer, QuestionEntity question) {
+    public Answer(String answer, Question question) {
         this.answer = answer;
         this.question = question;
     }

@@ -1,13 +1,12 @@
 package advprog.example.bot.controller;
 
 import advprog.example.bot.context.QuestionContext;
-import advprog.example.bot.entity.QuestionEntity;
+import advprog.example.bot.context.QuizContext;
+import advprog.example.bot.entity.Question;
 import advprog.example.bot.handler.EchoHandler;
 import advprog.example.bot.handler.QuizHandler;
-import advprog.example.bot.repository.AnswerRepository;
-import advprog.example.bot.repository.QuestionRepository;
+
 import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
@@ -20,6 +19,7 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.logging.Logger;
@@ -32,8 +32,7 @@ public class BotController {
     private EchoHandler echoHandler;
     private QuizHandler quizHandler;
     private QuestionContext questionContext;
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
+    private QuizContext quizContext;
 
     @Autowired
     public BotController(
@@ -41,15 +40,13 @@ public class BotController {
             EchoHandler echoHandler,
             QuizHandler quizHandler,
             QuestionContext questionContext,
-            QuestionRepository questionRepository,
-            AnswerRepository answerRepository
+            QuizContext quizContext
     ) {
         this.lineMessagingClient = lineMessagingClient;
         this.echoHandler = echoHandler;
         this.quizHandler = quizHandler;
         this.questionContext = questionContext;
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+        this.quizContext = quizContext;
     }
 
     @EventMapping
@@ -59,42 +56,49 @@ public class BotController {
 
         Source source = event.getSource();
         String senderId = source.getSenderId();
-        TextMessageContent content = event.getMessage();
-        String contentText = content.getText();
+        String content = event.getMessage().getText();
 
         Message reply = null;
 
-        if (contentText.matches("^/echo .*")) {
-            contentText = contentText.replace("/echo ", "");
-            reply = echoHandler.composeReply(contentText);
+        if (content.matches("^stop zonk$")) {
+            return quizHandler.handleStopZonk(senderId);
+        } else if (content.matches("^next question$")) {
+            return quizHandler.handleNextQuestion(senderId);
+        } else if (content.matches("^start zonk$")) {
+            if (source instanceof RoomSource || source instanceof GroupSource) {
+                return quizHandler.handleStartZonk(senderId);
+            } else {
+                return new TextMessage("Room / Group chat only.");
+            }
+        }
 
-        } else if (questionContext.containsAddContextKey(senderId)) {
-            QuestionEntity question = questionContext.getAddContext(senderId);
+        if (questionContext.containsAddContextKey(senderId)) {
+            Question question = questionContext.getAddContext(senderId);
 
             if (!question.isQuestionSet()) {
-                reply = quizHandler.handleSetQuestion(senderId, contentText);
+                return quizHandler.handleSetQuestion(senderId, content);
             } else if (!question.isAnswersFilled()) {
-                reply = quizHandler.handleAddAnswer(senderId, contentText);
+                return quizHandler.handleAddAnswer(senderId, content);
             }
-        } else if (questionContext.containsChangeContextKey(senderId)) {
-            if (questionContext.getChangeContext(senderId) == null) {
-                reply = quizHandler.handleMessageWithNullChangeContext(senderId, contentText);
-            } else {
-                reply = quizHandler.handleMessageWithChangeContext(senderId, contentText);
-            }
-        } else if (contentText.matches("^/add_question$")) {
+        }
+
+        if (content.matches("^/echo .*")) {
+            content = content.replace("/echo ", "");
+            reply = echoHandler.composeReply(content);
+
+        } else if (content.matches("^/add_question$")) {
             if (source instanceof UserSource) {
                 reply = quizHandler.handleAddQuestion(senderId);
             } else {
                 reply = new TextMessage("Private chat only.");
             }
-        } else if (contentText.matches("^/change_answer$")) {
+        } else if (content.matches("^/change_answer$")) {
             if (source instanceof UserSource) {
                 reply = quizHandler.handleChangeAnswer(senderId);
             } else {
                 reply = new TextMessage("Private chat only.");
             }
-        } else if (contentText.matches("^/bye$")) {
+        } else if (content.matches("^/bye$")) {
             if (source instanceof GroupSource) {
                 lineMessagingClient.leaveGroup(((GroupSource) source).getGroupId()).get();
             } else if (source instanceof RoomSource) {
@@ -112,13 +116,17 @@ public class BotController {
         Message reply = null;
 
         if (questionContext.containsAddContextKey(senderId)) {
-            QuestionEntity question = questionContext.getAddContext(senderId);
+            Question question = questionContext.getAddContext(senderId);
 
             if (!question.hasCorrectAnswer()) {
                 reply = quizHandler.handleSetCorrectAnswer(senderId, data);
             }
         } else if (questionContext.containsChangeContextKey(senderId)) {
-            reply = quizHandler.handleMessageWithChangeContext(senderId, data);
+            if (questionContext.getChangeContext(senderId) == null) {
+                reply = quizHandler.handleMessageWithNullChangeContext(senderId, data);
+            } else {
+                reply = quizHandler.handleMessageWithChangeContext(senderId, data);
+            }
         }
 
         return reply;

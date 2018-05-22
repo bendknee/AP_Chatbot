@@ -7,18 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AnswerEntityTest {
+public class AnswerTest {
 
-    private AnswerEntity answerEntity;
+    private Answer answer;
 
     @BeforeEach
     public void setUp() {
-        answerEntity = new AnswerEntity("a!");
+        answer = new Answer("a!");
     }
 
     @Test
     public void testGetAnswer() {
-        String answer = answerEntity.getAnswer();
+        String answer = this.answer.getAnswer();
 
         assertThat(answer).isEqualTo("a!");
     }
@@ -26,25 +26,25 @@ public class AnswerEntityTest {
     @Test
     public void testSetAnswer() {
         String newAnswer = "aa!";
-        answerEntity.setAnswer(newAnswer);
+        answer.setAnswer(newAnswer);
 
-        assertThat(answerEntity.getAnswer()).isEqualTo(newAnswer);
+        assertThat(answer.getAnswer()).isEqualTo(newAnswer);
     }
 
     @Test
     public void testGetIsTrue() {
-        answerEntity.setCorrectAnswer(true);
+        answer.setCorrectAnswer(true);
 
-        boolean isCorrect = answerEntity.isCorrectAnswer();
+        boolean isCorrect = answer.isCorrectAnswer();
         assertTrue(isCorrect);
     }
 
     @Test
     public void testSetIsTrue() {
-        answerEntity.setCorrectAnswer(false);
-        assertFalse(answerEntity.isCorrectAnswer());
+        answer.setCorrectAnswer(false);
+        assertFalse(answer.isCorrectAnswer());
 
-        answerEntity.setCorrectAnswer(true);
-        assertTrue(answerEntity.isCorrectAnswer());
+        answer.setCorrectAnswer(true);
+        assertTrue(answer.isCorrectAnswer());
     }
 }

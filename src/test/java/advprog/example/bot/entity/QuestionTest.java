@@ -5,20 +5,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class QuestionEntityTest {
+public class QuestionTest {
 
-    private QuestionEntity questionEntity;
-    private AnswerEntity answerEntity1;
-    private AnswerEntity answerEntity2;
+    private Question question;
+    private Answer answer1;
+    private Answer answer2;
 
     @BeforeEach
     void setUp() {
-        questionEntity = new QuestionEntity("?");
+        question = new Question("?");
     }
 
     @Test
     void testGetQuestion() {
-        String question = questionEntity.getQuestion();
+        String question = this.question.getQuestion();
 
         assertThat(question).isEqualTo("?");
     }
@@ -26,16 +26,16 @@ public class QuestionEntityTest {
     @Test
     void testSetQuestion() {
         String newQuestion = "??";
-        questionEntity.setQuestion(newQuestion);
+        question.setQuestion(newQuestion);
 
         assertThat(newQuestion).isEqualTo(newQuestion);
     }
 
     @Test
     void testAddAnswers() {
-        questionEntity.addAnswer(answerEntity1);
-        questionEntity.addAnswer(answerEntity2);
+        question.addAnswer(answer1);
+        question.addAnswer(answer2);
 
-        assertThat(questionEntity.getAnswers().size()).isEqualTo(2);
+        assertThat(question.getAnswers().size()).isEqualTo(2);
     }
 }

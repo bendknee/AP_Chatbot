@@ -1,47 +1,59 @@
 package advprog.example.bot.handler;
 
 import advprog.example.bot.context.QuestionContext;
-import advprog.example.bot.entity.AnswerEntity;
-import advprog.example.bot.entity.QuestionEntity;
+import advprog.example.bot.context.QuizContext;
+import advprog.example.bot.entity.Answer;
+import advprog.example.bot.entity.Question;
+import advprog.example.bot.entity.Quiz;
 import advprog.example.bot.repository.AnswerRepository;
 import advprog.example.bot.repository.QuestionRepository;
+
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class QuizHandler {
     private QuestionContext questionContext;
+    private QuizContext quizContext;
     private QuestionRepository questionRepository;
     private AnswerRepository answerRepository;
 
     @Autowired
     public QuizHandler(
             QuestionContext questionContext,
+            QuizContext quizContext,
             QuestionRepository questionRepository,
             AnswerRepository answerRepository
     ) {
         this.questionContext = questionContext;
+        this.quizContext = quizContext;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
     }
 
     public TextMessage handleAddQuestion(String userId) {
-        List<QuestionEntity> questions = questionRepository.findByCreatorId(userId);
+        List<Question> questions = questionRepository.findByCreatorId(userId);
         String reply;
 
         if (questions.size() <= 10) {
-            questionContext.putAddContext(userId, new QuestionEntity(userId));
+            questionContext.putAddContext(userId, new Question(userId));
             reply = "Enter your question.";
         } else {
             reply = "You can only make 10 questions.";
@@ -51,7 +63,7 @@ public class QuizHandler {
     }
 
     public TextMessage handleSetQuestion(String key, String message) {
-        QuestionEntity question = questionContext.getAddContext(key);
+        Question question = questionContext.getAddContext(key);
         TextMessage reply;
 
         if (message.length() <= 120) {
@@ -65,11 +77,11 @@ public class QuizHandler {
     }
 
     public Message handleAddAnswer(String key, String message) {
-        QuestionEntity question = questionContext.getAddContext(key);
+        Question question = questionContext.getAddContext(key);
         Message reply = null;
 
         if (message.length() <= 120) {
-            question.addAnswer(new AnswerEntity(message, question));
+            question.addAnswer(new Answer(message, question));
         } else {
             reply = new TextMessage("Answer can't be more than 120 characters.");
         }
@@ -82,7 +94,7 @@ public class QuizHandler {
     }
 
     public Message handleSetCorrectAnswer(String key, String message) {
-        QuestionEntity question = questionContext.getAddContext(key);
+        Question question = questionContext.getAddContext(key);
         Message reply;
 
         try {
@@ -104,11 +116,11 @@ public class QuizHandler {
         return reply;
     }
 
-    private TemplateMessage createAnswersCarousel(QuestionEntity question) {
+    private TemplateMessage createAnswersCarousel(Question question) {
         ArrayList<CarouselColumn> columns = new ArrayList<>();
 
         int index = 0;
-        for (AnswerEntity answer: question.getAnswers()) {
+        for (Answer answer: question.getAnswers()) {
             String id = Integer.toString(index++);
             columns.add(createCarouselColumn(answer.toString(), id));
         }
@@ -117,10 +129,10 @@ public class QuizHandler {
     }
 
     private TemplateMessage createQuestionsCarousel(String creatorId) {
-        List<QuestionEntity> questions = questionRepository.findByCreatorId(creatorId);
+        List<Question> questions = questionRepository.findByCreatorId(creatorId);
         ArrayList<CarouselColumn> columns = new ArrayList<>();
 
-        for (QuestionEntity question: questions) {
+        for (Question question: questions) {
             String id = Integer.toString(question.getId());
             columns.add(createCarouselColumn(question.getQuestion(), id));
         }
@@ -147,17 +159,18 @@ public class QuizHandler {
     }
 
     public Message handleMessageWithChangeContext(String key, String message) {
-        QuestionEntity questionEntity = questionContext.getChangeContext(key);
-        questionEntity.setCorrectAnswerIndex(Integer.parseInt(message));
+        Question question = questionContext.getChangeContext(key);
+
+        question.setCorrectAnswerIndex(Integer.parseInt(message));
         questionContext.removeChangeContext(key);
 
-        return new TextMessage(questionEntity.toString());
+        return new TextMessage(question.toString());
     }
 
     public Message handleMessageWithNullChangeContext(String key, String message) {
         Message reply = null;
         int id = Integer.parseInt(message);
-        Optional<QuestionEntity> question = questionRepository.findById(id);
+        Optional<Question> question = questionRepository.findById(id);
 
         if (question.isPresent()) {
             questionContext.putChangeContext(key, question.get());
@@ -167,16 +180,58 @@ public class QuizHandler {
         return reply;
     }
 
-    public Message handleStartZonk() {
-        return null;
+    public TextMessage handleStartZonk(String senderId) {
+        List<Question> questions = questionRepository.findAll();
+        quizContext.putContext(senderId, new Quiz(questions));
+
+        return handleNextQuestion(senderId);
     }
 
-    public Message handleNextQuestion() {
-        return null;
+    public TextMessage handleNextQuestion(String senderId) {
+        TextMessage reply = null;
+
+        if (quizContext.containsContext(senderId)) {
+            Quiz quiz = quizContext.getContext(senderId);
+            Question question = quiz.getRandomQuestion();
+
+            if (question != null) {
+                reply = new TextMessage(question.getQuestion());
+                quiz.setCurrentQuestion(question);
+            }
+        }
+
+        return reply;
     }
 
-    public Message handleStopZonk() {
-        return null;
+    public TextMessage handleStopZonk(String senderId) {
+        TextMessage reply = null;
+
+        if (quizContext.containsContext(senderId)) {
+            String replyMessage = "";
+            HashMap<String, Integer> scoreBoard = quizContext.getContext(senderId).getScore();
+
+            Map<String, Integer> sortedScoreBoard =  scoreBoard
+                    .entrySet()
+                    .stream()
+                    .sorted(Entry.comparingByValue())
+                    .collect(Collectors.toMap(
+                            Entry::getKey,
+                            Entry::getValue,
+                            (e1, e2) -> e1,
+                            LinkedHashMap::new
+                    ));
+
+            int juara = 1;
+            for (Entry<String, Integer> entry: sortedScoreBoard.entrySet()) {
+                replyMessage += (juara++) + ". " + entry.getKey() + " " + entry.getValue() + "\n";
+            }
+
+            replyMessage += "Goodbye.";
+            reply = new TextMessage(replyMessage);
+            quizContext.removeContext(senderId);
+        }
+
+        return reply;
     }
 
     public Message handleMessageOnActiveSession() {

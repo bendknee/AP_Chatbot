@@ -1,55 +1,43 @@
 package advprog.example.bot.context;
 
-import advprog.example.bot.entity.QuestionEntity;
+import advprog.example.bot.entity.Question;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 @Component
-public class QuestionContext extends Context<QuestionEntity> {
-    public void putAddContext(String key, QuestionEntity question) {
-        key = "adding-" + key;
+public class QuestionContext {
+    private HashMap<String, Question> store = new HashMap<>();
 
-        super.putContext(key, question);
+    public void putAddContext(String key, Question question) {
+        store.put("adding-" + key, question);
     }
 
-    public QuestionEntity getAddContext(String key) {
-        key = "adding-" + key;
-
-        return super.getContext(key);
+    public Question getAddContext(String key) {
+        return store.get("adding-" + key);
     }
 
-    public QuestionEntity removeAddContext(String key) {
-        key = "adding-" + key;
-
-        return super.removeContext(key);
+    public void removeAddContext(String key) {
+        store.remove("adding-" + key);
     }
 
     public boolean containsAddContextKey(String key) {
-        key = "adding-" + key;
-
-        return super.containsKey(key);
+        return store.containsKey("adding-" + key);
     }
 
-    public void putChangeContext(String key, QuestionEntity question) {
-        key = "change-" + key;
-
-        super.putContext(key, question);
+    public void putChangeContext(String key, Question question) {
+        store.put("change-" + key, question);
     }
 
-    public QuestionEntity getChangeContext(String key) {
-        key = "change-" + key;
-
-        return super.getContext(key);
+    public Question getChangeContext(String key) {
+        return store.get("change-" + key);
     }
 
-    public QuestionEntity removeChangeContext(String key) {
-        key = "change-" + key;
-
-        return super.removeContext(key);
+    public void removeChangeContext(String key) {
+        store.get("change-" + key);
     }
 
     public boolean containsChangeContextKey(String key) {
-        key = "change-" + key;
-
-        return super.containsKey(key);
+        return store.containsKey("change-" + key);
     }
 }
