@@ -232,7 +232,7 @@ public class HospitalController {
         ImageMessage imageReply = new ImageMessage(hospital.get("picture"), hospital.get("picture"));
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
         LocationMessage locationReply = new LocationMessage(
-                "", hospital.get("address"),
+                hospital.get("name"), hospital.get("address"),
                 Double.parseDouble(hospital.get("location").substring(0,9)),
                 Double.parseDouble(hospital.get("location").substring(11))
         );
@@ -248,7 +248,7 @@ public class HospitalController {
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description") +
                 "\nJarak ke rumah sakit " + jarak + " meter");
         LocationMessage locationReply = new LocationMessage(
-                "", hospital.get("address"),
+                hospital.get("name"), hospital.get("address"),
                 Double.parseDouble(hospital.get("location").substring(0,9)),
                 Double.parseDouble(hospital.get("location").substring(11))
         );
