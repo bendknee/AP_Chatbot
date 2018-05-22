@@ -17,7 +17,7 @@ public class Anime {
         return synopsis;
     }
 
-    public Anime(String title, List<String> genre, String synopsis){
+    public Anime(String title, List<String> genre, String synopsis) {
         this.title = title;
         this.genre = genre;
         this.synopsis = synopsis;

@@ -17,7 +17,7 @@ public class SetUpAnime {
     }
 
     public void setUrl() {
-        this.url = "https://www.livechart.me/"+season+"-"+year+"/tv";;
+        this.url = "https://www.livechart.me/" + season + "-" + year + "/tv";
     }
 
     public String getYear() {

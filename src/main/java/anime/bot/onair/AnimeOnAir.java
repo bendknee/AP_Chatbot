@@ -1,22 +1,20 @@
 package anime.bot.onair;
 
+import static java.lang.String.format;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.Jsoup;
-import static java.lang.String.format;
-import java.io.IOException;
-import ch.qos.logback.core.pattern.util.IEscapeUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 
 public class AnimeOnAir {
     private List<Anime> animeList;
 
-    public AnimeOnAir(){
+    public AnimeOnAir() {
         animeList = new ArrayList<Anime>();
     }
 
@@ -45,13 +43,12 @@ public class AnimeOnAir {
     }
 
 
-    public String returnAnimeBasedOnGenreYearAndSeason(String genre){
+    public String returnAnimeBasedOnGenreYearAndSeason(String genre) {
         StringBuilder stringBuilder = new StringBuilder();
         String string = "Sorry but the specification you have entered was no longer in our Chart!";
-        //String string = animeList.size()+"hehe";
-        if (!animeList.isEmpty()){
+        if (!animeList.isEmpty()) {
             for (Anime anime : animeList) {
-                if (anime.getGenre().toString().contains(genre)){
+                if (anime.getGenre().toString().contains(genre)) {
                     string = stringBuilder.append(format("%s\n", anime.toString())).toString();
                 }
             }
@@ -67,7 +64,7 @@ public class AnimeOnAir {
         this.animeList = animeList;
     }
 
-    public String returnAnime () {
+    public String returnAnime() {
         return "";
     }
 
