@@ -47,7 +47,7 @@ public class SacredTextController {
     private LineMessagingClient lineMessagingClient;
 
     @EventMapping
-    public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", 
             event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
