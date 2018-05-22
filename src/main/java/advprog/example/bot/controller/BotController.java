@@ -33,17 +33,18 @@ public class BotController {
 
         switch (command) {
             case "/echo": {
-                if (!args.isEmpty())
+                if (!args.isEmpty()) {
                     return new TextMessage(args);
+                }
                 return handleDefaultMessageEvent(event);
             }
             case "/add_wiki":
                 return MediaWikiCommand.executeAddWiki(args);
             case "/random_wiki_article":
                 return MediaWikiCommand.executeRandomWikiArticle(args);
+            default:
+                return handleDefaultMessageEvent(event);
         }
-
-        return handleDefaultMessageEvent(event);
     }
 
     @EventMapping

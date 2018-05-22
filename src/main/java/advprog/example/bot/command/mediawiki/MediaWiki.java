@@ -1,17 +1,13 @@
 package advprog.example.bot.command.mediawiki;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
 
 public class MediaWiki {
 
@@ -53,12 +49,14 @@ public class MediaWiki {
         String mainPageUrl = apiUrl.substring(0, apiUrl.lastIndexOf("/")) + "/index.php";
         int baseIndex;
         try {
-            Connection.Response response = Jsoup.connect(mainPageUrl).followRedirects(true).execute();
+            Connection.Response response = Jsoup.connect(mainPageUrl)
+                    .followRedirects(true)
+                    .execute();
             baseIndex = response.url().toString().lastIndexOf("/");
         } catch (IOException e) {
             throw new IllegalStateException("Connection error");
         }
-        String title = url.substring(baseIndex+1);
+        String title = url.substring(baseIndex + 1);
         System.out.println(title);
         try {
             return URLDecoder.decode(title.replace('_', ' '), "UTF-8");

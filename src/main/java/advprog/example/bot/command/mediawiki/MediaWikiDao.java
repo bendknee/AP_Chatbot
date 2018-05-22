@@ -1,9 +1,5 @@
 package advprog.example.bot.command.mediawiki;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,6 +10,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
 public enum MediaWikiDao {
 
     INSTANCE();
@@ -21,7 +21,7 @@ public enum MediaWikiDao {
     private String dataLocation = "mediawiki_data.csv";
 
     private static final String[] HEADERS = {
-            "api_url",
+        "api_url",
     };
 
     private List<MediaWiki> mediawikis;
