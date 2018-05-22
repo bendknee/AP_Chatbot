@@ -106,7 +106,7 @@ public class WeatherController {
             sb.append("Weather at your position (");
             sb.append(datas.get(0)).append(", ");
             sb.append(datas.get(1)).append("):\n");
-            sb.append(datas.get(2)).append(emojiSelector(datas.get(2)));
+            sb.append(datas.get(2)).appendCodePoint(emojiSelector(datas.get(2)));
             sb.append("\nWind speed : ");
             sb.append(datas.get(3)).append(" meter/sec\n");
             sb.append("Temperature : ");
@@ -125,20 +125,20 @@ public class WeatherController {
         return Double.toString(temperature);
     }
 
-    private String emojiSelector(String weather) {
+    private int emojiSelector(String weather) {
         if (weather.contains("clouds")) {
-            return "0x1000AC";
+            return 0x1000AC;
         } else if (weather.contains("clear")) {
-            return "0x1000A9";
+            return 0x1000A9;
         } else if (weather.contains("rain")) {
-            return "0x1000AA";
+            return 0x1000AA;
         } else if (weather.contains("thunderstorm")) {
-            return "0x10003A";
+            return 0x10003A;
         } else if (weather.contains("snow")) {
-            return "0x1000AB";
+            return 0x1000AB;
         } else if (weather.contains("mist")) {
-            return "0x10002A";
+            return 0x10002A;
         }
-        return "0x1000A8";
+        return 0x1000A8;
     }
 }
