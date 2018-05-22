@@ -3,15 +3,12 @@ package topalbumtest.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import advprog.example.bot.EventTestUtil;
-import org.json.JSONException;
-
-import topalbumpac.controller.TopAlbumsControl;
-import topalbumpac.TopAlbumPac;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -25,11 +22,14 @@ import com.ritaja.xchangerate.storage.StorageException;
 
 import java.io.IOException;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import topalbumpac.TopAlbumPac;
+import topalbumpac.controller.TopAlbumsControl;
 
 @SpringBootTest(properties = "line.bot.handler.enabled=false", classes = TopAlbumPac.class)
 @ExtendWith(SpringExtension.class)
@@ -53,7 +53,8 @@ public class TopAlbumTest {
     }
 
     @Test
-    void testHandleTextMessageEvent() throws IOException, JSONException, CurrencyNotSupportedException,
+    void testHandleTextMessageEvent() throws IOException, JSONException,
+            CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/VJBEVEVVFN");
@@ -65,7 +66,8 @@ public class TopAlbumTest {
     }
 
     @Test
-    void testillegalArgument() throws IOException, JSONException, CurrencyNotSupportedException,
+    void testillegalArgument() throws IOException, JSONException,
+            CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/wvevuyebverbver"
@@ -75,6 +77,19 @@ public class TopAlbumTest {
 
         assertEquals("Sorry your input is not valid "
                 + "the format should be /vgmdb most_popular", reply.getText());
+    }
+
+    @Test
+    void testSuksesArgument() throws IOException, JSONException,
+            CurrencyNotSupportedException, ServiceException,
+            EndpointException, StorageException {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/vgmdb most_popular");
+
+        TextMessage reply = control.handleTextMessageEvent(event);
+
+        assertTrue(reply.getText().contains("1 - CHRONO CROSS "
+                + "ORIGINAL SOUNDTRACK - 4.72 (429700 IDR)"));
     }
 
     @Test
