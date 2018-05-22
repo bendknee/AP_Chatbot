@@ -182,7 +182,7 @@ public class GuessAcronymsManagerTest {
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/update_acronym", "replyToken");
         List<CarouselColumn> carouselColumns = new ArrayList<>();
-        carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
+        carouselColumns.add(new CarouselColumn("https://obs.line-scdn.net/0hhs_4wZ4hN1xiTRo6tHVIC0MQPD5RLylXQCt8M0ROamhPenlkXnx4OU4eb2RNf3MKXykoaSlNYT4adXMKWW55M0UZaG9LKg/f256x256",
                                                "EAW",
                                                "Endrawan Andika Wicaksana",
                                                Collections.singletonList(
@@ -244,7 +244,7 @@ public class GuessAcronymsManagerTest {
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/delete_acronym", "replyToken");
         List<CarouselColumn> carouselColumns = new ArrayList<>();
-        carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
+        carouselColumns.add(new CarouselColumn("https://obs.line-scdn.net/0hhs_4wZ4hN1xiTRo6tHVIC0MQPD5RLylXQCt8M0ROamhPenlkXnx4OU4eb2RNf3MKXykoaSlNYT4adXMKWW55M0UZaG9LKg/f256x256",
                                                "EAW",
                                                "Endrawan Andika Wicaksana",
                                                Collections.singletonList(
