@@ -208,7 +208,7 @@ public class HospitalController {
         for (int i = 0; i < 10; i++) {
             HashMap<String, String> hospital = HOSPITAL_DATA.get(i);
             double jarakTemp = pythagorean(latitude, longitude,
-                    Double.parseDouble(hospital.get("location").substring(0,10)),
+                    Double.parseDouble(hospital.get("location").substring(0,9)),
                     Double.parseDouble(hospital.get("location").substring(11))
             );
 
@@ -229,7 +229,7 @@ public class HospitalController {
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
         LocationMessage locationReply = new LocationMessage(
                 "", hospital.get("address"),
-                Double.parseDouble(hospital.get("location").substring(0,10)),
+                Double.parseDouble(hospital.get("location").substring(0,9)),
                 Double.parseDouble(hospital.get("location").substring(11))
         );
 
