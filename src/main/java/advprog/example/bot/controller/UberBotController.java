@@ -14,13 +14,22 @@ import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import com.uber.sdk.rides.client.ServerTokenSession;
+import com.uber.sdk.rides.client.SessionConfiguration;
+import com.uber.sdk.rides.client.UberRidesApi;
+import com.uber.sdk.rides.client.model.PriceEstimate;
+import com.uber.sdk.rides.client.services.RidesService;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import java.text.NumberFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
@@ -42,10 +51,13 @@ public class UberBotController {
     private static final int STATE_CONFIRMATION = 3;
     private static final int STATE_NAME_LOCATION = 4;
     private static final int STATE_DELETE_LOCATION = 5;
+    private static final int STATE_POSITION_LOCATION = 6;
 
     private static int state = STATE_GENERAL;
 
     private static final Logger LOGGER = Logger.getLogger(UberBotController.class.getName());
+
+    private static RidesService ridesService;
 
     @EventMapping
     public String handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
@@ -59,7 +71,15 @@ public class UberBotController {
 
         if (state == STATE_GENERAL) {
             if (contentText.equals("/uber")) {
-                replyMessage = uberCommand();
+                if (!dataIsEmpty()) {
+                    state = STATE_POSITION_LOCATION;
+                    replyMessage = "Perintah /uber diterima, silahkan kirim lokasi anda";
+                    reply(replyToken, new TextMessage(replyMessage));
+                } else {
+                    replyMessage = "Data destination kosong! Silahkan jalankan "
+                            + "command /add_destination";
+                    reply(replyToken, new TextMessage(replyMessage));
+                }
             } else if (contentText.equals("/add_destination")) {
                 if (databaseSize() < 10) {
                     state = STATE_ADD_LOCATION;
@@ -132,7 +152,19 @@ public class UberBotController {
                 replyMessage = "Apakah anda yakin ingin menghapus lokasi? (yes/no)";
                 reply(replyToken, new TextMessage(replyMessage));
             }
-        } else if (state == STATE_ADD_LOCATION) {
+        } else if (state == STATE_DESTINATION) {
+            if (!nameIsUnique(contentText)) {
+                state = STATE_GENERAL;
+                replyMessage = estimateTrip(contentText);
+                reply(replyToken, new TextMessage(replyMessage));
+            } else {
+                replyMessage = "Nama lokasi tidak ada di database, silahkan pilih lokasi kembali";
+                TextMessage textMessage = new TextMessage(replyMessage);
+                TemplateMessage templateMessage =
+                        new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
+                reply(replyToken, Arrays.asList(textMessage, templateMessage));
+            }
+        } else if (state == STATE_ADD_LOCATION || state == STATE_POSITION_LOCATION) {
             replyMessage = "Silahkan kirim lokasi anda";
             reply(replyToken, new TextMessage(replyMessage));
         }
@@ -141,7 +173,8 @@ public class UberBotController {
     }
 
     @EventMapping
-    public String handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
+    public String handleLocationMessageEvent(MessageEvent<LocationMessageContent>
+                                                         event) throws Exception {
         String replyToken = event.getReplyToken();
         String replyMessage = "";
 
@@ -151,6 +184,14 @@ public class UberBotController {
             replyMessage = "Lokasi diterima, silahkan beri nama lokasi tersebut "
                     + "(Contoh: Wisma Rossela)";
             reply(replyToken, new TextMessage(replyMessage));
+        } else if (state == STATE_POSITION_LOCATION) {
+            locationMessageContent = event.getMessage();
+            state = STATE_DESTINATION;
+            replyMessage = "Lokasi diterima, silahkan pilih lokasi tujuan anda";
+            TextMessage textMessage = new TextMessage(replyMessage);
+            TemplateMessage templateMessage =
+                    new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
+            reply(replyToken, Arrays.asList(textMessage, templateMessage));
         }
 
         return replyMessage;
@@ -254,6 +295,92 @@ public class UberBotController {
         file.close();
     }
 
+    private String estimateTrip(String tujuan) throws Exception {
+        JSONArray arr = (JSONArray) getData().get("data");
+        JSONObject destination = null;
+
+        for (int i = 0; i < arr.size(); i++) {
+            JSONObject obj = (JSONObject) arr.get(i);
+            if (tujuan.equalsIgnoreCase((String) obj.get("nama"))) {
+                destination = (JSONObject) obj.get("lokasi");
+                break;
+            }
+        }
+
+        float startLatitude = (float) locationMessageContent.getLatitude();
+        float startLongitude = (float) locationMessageContent.getLongitude();
+        float endLatitude = ((Double) destination.get("latitude")).floatValue();
+        float endLongitude = ((Double) destination.get("longitude")).floatValue();
+
+        List<PriceEstimate> list = getRidesService().getPriceEstimates(
+                startLatitude, startLongitude, endLatitude, endLongitude)
+                .execute().body().getPrices();
+
+        if (!list.isEmpty()) {
+            String distance = String.format("%.2f",
+                    list.get(0).getDistance() * 1.60934); // From Miles to Kilometers
+            String result = String.format("Destination: %s (%s kilometers from current "
+                    + "position)\n\nEstimated travel time and fares for each Uber "
+                    + "services:\n\n", tujuan, distance);
+
+            String uberX = "";
+            String uberPool = "";
+            String uberBlack = "";
+            for (PriceEstimate price : list) {
+                if (price.getDisplayName().equals("TAXI")) {
+                    break;
+                }
+                String time = String.format("%.2f", ((double)price.getDuration()) / 60);
+
+                String lowPrice = String.format("%.2f",
+                        ((double)price.getLowEstimate()) * 14122.8);
+                //1 dollar = 14.122.8 rupiah in 23rd May 2018
+
+                lowPrice = toRupiah(Double.parseDouble(lowPrice));
+                String highPrice = String.format("%.2f",
+                        ((double)price.getHighEstimate()) * 14122.8);
+                //1 dollar = 14.122.8 rupiah in 23rd May 2018
+                highPrice = toRupiah(Double.parseDouble(highPrice));
+                String estimate = lowPrice + " - " + highPrice;
+                
+                if (price.getDisplayName().equals("uberX")) {
+                    uberX = String.format("- UberX (%s minutes, %s rupiah)\n",
+                            time, estimate);
+                } else if (price.getDisplayName().equals("POOL")) {
+                    uberPool = String.format("- UberPool (%s minutes, %s rupiah)\n",
+                            time, estimate);
+                } else if (price.getDisplayName().equals("BLACK")) {
+                    uberBlack = String.format("- UberBlack (%s minutes, %s rupiah)\n",
+                            time, estimate);
+                }
+            }
+
+            result += uberX + uberPool + uberBlack
+                    + "- UberMotor: Not available\n\n"
+                    + "Data provided by [Uber](https://www.uber.com)";
+
+            return result;
+        } else {
+            return "Yahh.. lokasi dan tujuan anda tidak bisa hitung oleh uber\n\nSilahkan"
+                    + " cari lokasi dan tujuan di luar South Asia";
+        }
+
+    }
+
+    private RidesService getRidesService() {
+        if (ridesService != null) {
+            return ridesService;
+        } else {
+            SessionConfiguration config = new SessionConfiguration.Builder()
+                    .setClientId("sf5RewxSOClX84ls021bnipyyECMs-4M")
+                    .setServerToken("mXlsRelclS83NWhGV92Yw_daWnIN7e50suTxNAuK")
+                    .build();
+            ServerTokenSession session = new ServerTokenSession(config);
+            ridesService = UberRidesApi.with(session).build().createService();
+            return ridesService;
+        }
+    }
+
     private boolean dataIsEmpty() throws Exception {
         return ((JSONArray) getData().get("data")).isEmpty();
     }
@@ -275,8 +402,12 @@ public class UberBotController {
         return ((JSONArray) getData().get("data")).size();
     }
 
-    private String uberCommand() {
-        return "";
+    private String toRupiah(double number) {
+        Locale indonesia = new Locale("in", "ID");
+        NumberFormat rupiah = NumberFormat.getCurrencyInstance(indonesia);
+        String hasil =  rupiah.format(number);
+        hasil = hasil.substring(2);
+        return hasil;
     }
 
     @EventMapping

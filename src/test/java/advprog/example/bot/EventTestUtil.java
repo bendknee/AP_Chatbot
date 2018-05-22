@@ -25,4 +25,18 @@ public class EventTestUtil {
                         -6.362413, 106.818845),
                 Instant.parse("2018-01-01T00:00:00.000Z"));
     }
+
+    public static MessageEvent<LocationMessageContent> createDummyLocationMessage1() {
+        return new MessageEvent<>("replyToken", new UserSource("userId"),
+                new LocationMessageContent("id", "title","address",
+                        37.775960, -122.418287),
+                Instant.parse("2018-01-01T00:00:00.000Z"));
+    }
+
+    public static MessageEvent<LocationMessageContent> createDummyLocationMessage2() {
+        return new MessageEvent<>("replyToken", new UserSource("userId"),
+                new LocationMessageContent("id", "title","address",
+                        37.770285, -122.424682),
+                Instant.parse("2018-01-01T00:00:00.000Z"));
+    }
 }

@@ -41,24 +41,50 @@ public class UberBotControllerTest {
         assertNotNull(uberBotController);
     }
 
-    /*
+
     @Test
     void testHandleCommandUber() throws Exception {
         MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/add_destination");
+        uberBotController.handleTextMessageEvent(event);
+
+        MessageEvent<LocationMessageContent> event2 =
+                EventTestUtil.createDummyLocationMessage1();
+        uberBotController.handleLocationMessageEvent(event2);
+
+
+        MessageEvent<TextMessageContent> event3 =
+                EventTestUtil.createDummyTextMessage("Uber HQ");
+        uberBotController.handleTextMessageEvent(event3);
+
+
+        MessageEvent<TextMessageContent> event4 =
                 EventTestUtil.createDummyTextMessage("/uber");
+        String reply = uberBotController.handleTextMessageEvent(event4);
+        assertEquals("Perintah /uber diterima, silahkan kirim lokasi anda", reply);
 
-        String reply = uberBotController.handleTextMessageEvent(event);
-        String correctAnswer = "Destination: Plumpang (5 kilomerters from current position)\n"
-                              + "Estimated travel time and fares for each Uber services:\n\n"
-                              + "UberX (10 minutes, 10 rupiah)\n"
-                              + "UberPool (10 minutes, 15 rupiah)\n"
-                              + "UberBlack (10 minutes, 20 rupiah)\n"
-                              + "UberMotor (10 minutes, 15 rupiah)\n\n"
-                              + "Data provided by [Uber](https://www.uber.com)";
+        MessageEvent<LocationMessageContent> event5 =
+                EventTestUtil.createDummyLocationMessage2();
+        reply = uberBotController.handleLocationMessageEvent(event5);
+        assertEquals("Lokasi diterima, silahkan pilih lokasi tujuan anda", reply);
 
-        assertEquals(correctAnswer, reply);
+        MessageEvent<TextMessageContent> event6 =
+                EventTestUtil.createDummyTextMessage("Uber HQ");
+        uberBotController.handleTextMessageEvent(event6);
+
+        MessageEvent<TextMessageContent> event7 =
+                EventTestUtil.createDummyTextMessage("/remove_destination");
+        uberBotController.handleTextMessageEvent(event7);
+
+
+        event7 = EventTestUtil.createDummyTextMessage("Uber HQ");
+        uberBotController.handleTextMessageEvent(event7);
+
+
+        event7 = EventTestUtil.createDummyTextMessage("yes");
+        uberBotController.handleTextMessageEvent(event7);
     }
-    */
+
 
     @Test
     void testHandleCommandAddDestination() throws Exception {

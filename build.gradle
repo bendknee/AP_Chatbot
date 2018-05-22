@@ -47,6 +47,11 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5_version"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit5_version"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.2.0"
+    implementation 'com.uber.sdk:rides:0.5.2'
+}
+
+configurations.all {
+    exclude module: 'slf4j-log4j12'
 }
 
 // Configure Checkstyle plugin
