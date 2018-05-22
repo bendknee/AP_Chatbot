@@ -177,7 +177,7 @@ public class GuessAcronymsManagerTest {
             .findByGroupIdAndUserId("U1", "U1");
         List<GuessAcronyms> guessAcronyms = new ArrayList<>();
         guessAcronyms.add(new GuessAcronyms("EAW", "Endrawan Andika Wicaksana"));
-        doReturn(guessAcronyms.iterator())
+        doReturn(guessAcronyms)
             .when(guessAcronymsRepository)
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/update_acronym", "replyToken");
@@ -239,7 +239,7 @@ public class GuessAcronymsManagerTest {
             .findByGroupIdAndUserId("U1", "U1");
         List<GuessAcronyms> guessAcronyms = new ArrayList<>();
         guessAcronyms.add(new GuessAcronyms("EAW", "Endrawan Andika Wicaksana"));
-        doReturn(guessAcronyms.iterator())
+        doReturn(guessAcronyms)
             .when(guessAcronymsRepository)
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/delete_acronym", "replyToken");
@@ -343,10 +343,9 @@ public class GuessAcronymsManagerTest {
         List<GuessAcronyms> guessAcronyms = new ArrayList<>();
         GuessAcronyms guessAcronym = new GuessAcronyms("EAW", "Endrawan Andika Wicaksana");
         guessAcronyms.add(guessAcronym);
-        doReturn(guessAcronyms.iterator())
+        doReturn(guessAcronyms)
             .when(guessAcronymsRepository)
             .findAll();
-        doReturn(guessAcronym).when(guessAcronyms).get(any());
         guessAcronymsManager.handleGroupChat("C1", "U1", "start acronym", "replyToken");
         verify(lineMessagingClient, atLeastOnce())
             .replyMessage(new ReplyMessage("replyToken", new TextMessage("EAW")));
@@ -366,16 +365,15 @@ public class GuessAcronymsManagerTest {
             .when(guessAcronymsGroupStateRepository)
             .findByGroupId("C1");
         GuessAcronyms guessAcronym = new GuessAcronyms("EAW", "Endrawan Andika Wicaksana");
-        doReturn(guessAcronym)
+        doReturn(Optional.of(guessAcronym))
             .when(guessAcronymsRepository)
             .findByAcronym("EAW");
         List<GuessAcronyms> guessAcronyms = new ArrayList<>();
         GuessAcronyms guessAcronym2 = new GuessAcronyms("EA", "Endrawan Andika");
         guessAcronyms.add(guessAcronym2);
-        doReturn(guessAcronyms.iterator())
+        doReturn(guessAcronyms)
             .when(guessAcronymsRepository)
             .findAll();
-        doReturn(guessAcronym2).when(guessAcronyms).get(any());
         guessAcronymsManager.handleGroupChat("C1", "U1", "Endrawan Andika Wicaksana", "replyToken");
         verify(lineMessagingClient, atLeastOnce())
             .replyMessage(new ReplyMessage("replyToken", new TextMessage("EA")));
@@ -396,7 +394,7 @@ public class GuessAcronymsManagerTest {
             .when(guessAcronymsGroupStateRepository)
             .findByGroupId("C1");
         GuessAcronyms guessAcronym = new GuessAcronyms("EAW", "Endrawan Andika Wicaksana");
-        doReturn(guessAcronym)
+        doReturn(Optional.of(guessAcronym))
             .when(guessAcronymsRepository)
             .findByAcronym("EAW");
         guessAcronymsManager.handleGroupChat("C1", "U1", "Salah", "replyToken");
@@ -419,16 +417,15 @@ public class GuessAcronymsManagerTest {
             .when(guessAcronymsGroupStateRepository)
             .findByGroupId("C1");
         GuessAcronyms guessAcronym = new GuessAcronyms("EAW", "Endrawan Andika Wicaksana");
-        doReturn(guessAcronym)
+        doReturn(Optional.of(guessAcronym))
             .when(guessAcronymsRepository)
             .findByAcronym("EAW");
         List<GuessAcronyms> guessAcronyms = new ArrayList<>();
         GuessAcronyms guessAcronym2 = new GuessAcronyms("EA", "Endrawan Andika");
         guessAcronyms.add(guessAcronym2);
-        doReturn(guessAcronyms.iterator())
+        doReturn(guessAcronyms)
             .when(guessAcronymsRepository)
             .findAll();
-        doReturn(guessAcronym2).when(guessAcronyms).get(any());
         guessAcronymsManager.handleGroupChat("C1", "U1", "next acronym", "replyToken");
         verify(lineMessagingClient, atLeastOnce())
             .replyMessage(new ReplyMessage("replyToken", new TextMessage("EA")));
