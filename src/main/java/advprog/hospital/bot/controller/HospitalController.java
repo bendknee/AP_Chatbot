@@ -207,7 +207,9 @@ public class HospitalController {
         double jarak = 0;
 
         for (int i = 0; i < 10; i++) {
+            System.out.println(i);
             HashMap<String, String> hospital = HOSPITAL_DATA.get(i);
+            System.out.println(hospital);
             double jarakTemp = pythagorean(latitude, longitude,
                     Double.parseDouble(hospital.get("location").substring(0,9)),
                     Double.parseDouble(hospital.get("location").substring(11))
