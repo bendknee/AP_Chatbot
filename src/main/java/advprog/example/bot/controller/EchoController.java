@@ -27,7 +27,7 @@ public class EchoController {
                 switch (input[1].toLowerCase()) {
                     case "bluray":
                         Scrapper sc = new Scrapper();
-                        contentText = sc.scrapping(input[2], input[3]);
+                        contentText = Scrapper.scrapping(input[2], input[3]);
                         break;
                 }
                 break;
