@@ -41,7 +41,7 @@ public class FakeNewsControllerTest {
     @Test
     void testHandleTextMessageEventSatire() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo is_satire");
+                EventTestUtil.createDummyTextMessage("gue dapet di bignuggetnews.com loh");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 

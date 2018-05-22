@@ -6,17 +6,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class FakeNewsParser {
-    private List<News> newsList;
+    public List<News> newsList;
     private List<String> criteria;
 
     public FakeNewsParser() {
@@ -27,15 +24,12 @@ public class FakeNewsParser {
 
     public void readData() {
         try {
-            Type listType = new TypeToken<List<News>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<News>>(){}.getType();
             Gson gson = new Gson();
-            File file = new File("news-source.json");
+            File file = new File("news.json");
             BufferedReader br = new BufferedReader(new FileReader(file));
             JsonElement element = new JsonParser().parse(br);
-            //Type newsType = (Type) new TypeToken<List<News>>(){}.getType();
-            //Type collectionType = new TypeToken<List<News>>(){}.getType();
-            //newsList = gson.fromJson(element, new TypeToken<List<News>>(){}.getType());
-            newsList = gson.fromJson(br, listType);
+            newsList = gson.fromJson(element, new TypeToken<List<News>>(){}.getType());
         } catch (FileNotFoundException e) {
             System.out.println("File Tidak Ditemukan");
         }
@@ -53,12 +47,12 @@ public class FakeNewsParser {
         } else if (targetNews.containsFilter(criteria)) {
             return criteria + " is already present";
         } else if (this.criteria.contains(criteria)) {
-            if (targetNews.getNewsType2().equals("")) {
-                targetNews.setNewsType2(criteria);
+            if (targetNews.getType2().equals("")) {
+                targetNews.setType2(criteria);
                 writeToJson();
                 return criteria + " added as a criteria of " + news;
-            } else if (targetNews.getNewsType3().equals("")) {
-                targetNews.setNewsType3(criteria);
+            } else if (targetNews.getType3().equals("")) {
+                targetNews.setType3(criteria);
                 writeToJson();
                 return criteria + " added as a criteria of " + news;
             } else {
@@ -88,12 +82,13 @@ public class FakeNewsParser {
 
     public String checkNews(String news, String criteria) {
         News targetNews = checkListContainsNews(news);
+        System.out.println(targetNews);
         if (targetNews == null) {
-            return news + " is safe";
+            return news + " is a safe news website";
         } else if (!targetNews.containsFilter(criteria)) {
-            return news + " is not considered as " + criteria;
+            return news + " isn't a " + criteria + " news website";
         } else if (targetNews.containsFilter(criteria)) {
-            return news + " is considered as " + criteria;
+            return news + " is a " + criteria + " news website";
         } else {
             return "input not valid";
         }
@@ -102,6 +97,8 @@ public class FakeNewsParser {
     public static void main(String[] args) {
         FakeNewsParser y = new FakeNewsParser();
         String x = "2";
-        y.checkListContainsNews("365usanews.com");
+        y.checkListContainsNews("100percentfedup.com");
+        System.out.println(y.checkNews("conservativespirit.com", "political"));
+        System.out.println(y.addNewCriteria("consert.com", "asek"));
     }
 }

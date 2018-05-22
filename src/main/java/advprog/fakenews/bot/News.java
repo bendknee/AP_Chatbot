@@ -1,17 +1,13 @@
 package advprog.fakenews.bot;
 
 public class News {
-    String newsUrl, newsType1, newsType2, newsType3, newsNotes;
+    String newsUrl, type, type2, type3, newsNotes;
 
-    public News(){
-
-    }
-
-    public News(String newsUrl, String newsType1, String newsType2, String newsType3, String newsNotes) {
+    public News(String newsUrl, String type, String type2, String type3, String newsNotes) {
         this.newsUrl = newsUrl;
-        this.newsType1 = newsType1;
-        this.newsType2 = newsType2;
-        this.newsType3 = newsType3;
+        this.type = type;
+        this.type2 = type2;
+        this.type3 = type3;
         this.newsNotes = newsNotes;
     }
 
@@ -23,28 +19,28 @@ public class News {
         this.newsUrl = newsUrl;
     }
 
-    public String getNewsType1() {
-        return newsType1;
+    public String getType() {
+        return type;
     }
 
-    public void setNewsType1(String newsType1) {
-        this.newsType1 = newsType1;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getNewsType2() {
-        return newsType2;
+    public String getType2() {
+        return type2;
     }
 
-    public void setNewsType2(String newsType2) {
-        this.newsType2 = newsType2;
+    public void setType2(String type2) {
+        this.type2 = type2;
     }
 
-    public String getNewsType3() {
-        return newsType3;
+    public String getType3() {
+        return type3;
     }
 
-    public void setNewsType3(String newsType3) {
-        this.newsType3 = newsType3;
+    public void setType3(String type3) {
+        this.type3 = type3;
     }
 
     public String getNewsNotes() {
@@ -56,11 +52,11 @@ public class News {
     }
 
     public boolean containsFilter(String criteria){
-        return true;
-        //return false;
-    }
-
-    public String getType(){
-        return "x";
+        if (this.getType().equalsIgnoreCase(criteria) || this.getType2()
+                .equalsIgnoreCase(criteria) || this.getType3().equalsIgnoreCase(criteria)){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
