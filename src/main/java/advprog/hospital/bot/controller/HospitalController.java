@@ -150,7 +150,7 @@ public class HospitalController {
                 replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
                 reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
-                int indexNum = Integer.parseInt(contentText.substring(4, 5));
+                int indexNum = Integer.parseInt(contentText.substring(5, 6));
                 displayData(replyToken, indexNum);
             }
         } else if (state == STATE_ADD_LOCATION) {
@@ -229,7 +229,7 @@ public class HospitalController {
         String stringified = Integer.toString(numIndex);
         HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
-        ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
+        ImageMessage imageReply = new ImageMessage(hospital.get("picture"), hospital.get("picture"));
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
         LocationMessage locationReply = new LocationMessage(
                 "", hospital.get("address"),
@@ -244,7 +244,7 @@ public class HospitalController {
         String stringified = Integer.toString(numIndex);
         HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
-        ImageMessage imageReply = new ImageMessage(hospital.get("image"), hospital.get("image"));
+        ImageMessage imageReply = new ImageMessage(hospital.get("picture"), hospital.get("picture"));
         TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description") +
                 "\nJarak ke rumah sakit " + jarak + " meter");
         LocationMessage locationReply = new LocationMessage(
