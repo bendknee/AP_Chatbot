@@ -41,7 +41,7 @@ public class UberBotController {
     private static final int STATE_DESTINATION = 2;
     private static final int STATE_CONFIRMATION = 3;
     private static final int STATE_NAME_LOCATION = 4;
-    private static final int STATE_DELETE_LOCATION = 1;
+    private static final int STATE_DELETE_LOCATION = 5;
 
     private static int state = STATE_GENERAL;
 
@@ -61,34 +61,63 @@ public class UberBotController {
             if (contentText.equals("/uber")) {
                 replyMessage = uberCommand();
             } else if (contentText.equals("/add_destination")) {
-                state = STATE_ADD_LOCATION;
-                replyMessage = "Perintah /add_destination diterima, "
-                        + "silahkan kirim lokasi anda";
-                reply(replyToken, new TextMessage(replyMessage));
+                if (databaseSize() < 10) {
+                    state = STATE_ADD_LOCATION;
+                    replyMessage = "Perintah /add_destination diterima, "
+                            + "silahkan kirim lokasi anda";
+                    reply(replyToken, new TextMessage(replyMessage));
+                } else {
+                    replyMessage = "Banyak lokasi maksimal 10, silahkan hapus lokasi "
+                            + "dari database\n\n jalankan perintah /remove_destination";
+                    reply(replyToken, new TextMessage(replyMessage));
+                }
             } else if (contentText.equals("/remove_destination")) {
                 if (!dataIsEmpty()) {
                     state = STATE_DELETE_LOCATION;
                     replyMessage = "Perintah /remove_destination diterima, silahkan pilih "
                             + "lokasi yang ingin dihapus";
                     TextMessage textMessage = new TextMessage(replyMessage);
-                    TemplateMessage templateMessage = new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
+                    TemplateMessage templateMessage =
+                            new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
                     reply(replyToken, Arrays.asList(textMessage, templateMessage));
                 } else {
-                    replyMessage = "Data destination kosong! Silahkan jalankan command /add_destination";
+                    replyMessage = "Data destination kosong! Silahkan jalankan "
+                            + "command /add_destination";
                     reply(replyToken, new TextMessage(replyMessage));
                 }
 
+            } else {
+                replyMessage = "Command uber-bot-ps:\n/uber\nBot calculates the distance"
+                        + " between current user location and destination\n\n"
+                        + "/add_destination\nBot saves pair of name and its associated "
+                        + "location\n\n"
+                        + "/remove_destination\nUser chooses a destination to remove "
+                        + "from the bot";
+                reply(replyToken, new TextMessage(replyMessage));
             }
         } else if (state == STATE_NAME_LOCATION) {
-            addDestination(contentText);
-            state = STATE_GENERAL;
-            replyMessage = "Lokasi telah berhasil disimpan";
-            reply(replyToken, new TextMessage(replyMessage));
+            if (nameIsUnique(contentText)) {
+                addDestination(contentText);
+                state = STATE_GENERAL;
+                replyMessage = "Lokasi telah berhasil disimpan";
+                reply(replyToken, new TextMessage(replyMessage));
+            } else {
+                replyMessage = "Nama sudah ada di data, silahkan masukan nama lain";
+                reply(replyToken, new TextMessage(replyMessage));
+            }
         } else if (state == STATE_DELETE_LOCATION) {
-            location = contentText;
-            state = STATE_CONFIRMATION;
-            replyMessage = "Apakah anda yakin ingin menhapus lokasi? (yes/no)";
-            reply(replyToken, new TextMessage(replyMessage));
+            if (!nameIsUnique(contentText)) {
+                location = contentText;
+                state = STATE_CONFIRMATION;
+                replyMessage = "Apakah anda yakin ingin menghapus lokasi? (yes/no)";
+                reply(replyToken, new TextMessage(replyMessage));
+            } else {
+                replyMessage = "Nama lokasi tidak ada di database, silahkan pilih lokasi kembali";
+                TextMessage textMessage = new TextMessage(replyMessage);
+                TemplateMessage templateMessage =
+                        new TemplateMessage("Choose Destination", getCarouselTemplateMessage());
+                reply(replyToken, Arrays.asList(textMessage, templateMessage));
+            }
         } else if (state == STATE_CONFIRMATION) {
             if (contentText.equalsIgnoreCase("yes")) {
                 state = STATE_GENERAL;
@@ -100,9 +129,12 @@ public class UberBotController {
                 replyMessage = "Lokasi tidak dihapus";
                 reply(replyToken, new TextMessage(replyMessage));
             } else {
-                replyMessage = "Apakah anda yakin ingin menhapus lokasi? (yes/no)";
+                replyMessage = "Apakah anda yakin ingin menghapus lokasi? (yes/no)";
                 reply(replyToken, new TextMessage(replyMessage));
             }
+        } else if (state == STATE_ADD_LOCATION) {
+            replyMessage = "Silahkan kirim lokasi anda";
+            reply(replyToken, new TextMessage(replyMessage));
         }
 
         return replyMessage;
@@ -226,12 +258,25 @@ public class UberBotController {
         return ((JSONArray) getData().get("data")).isEmpty();
     }
 
-    private String uberCommand() {
-      return "";
+    private boolean nameIsUnique(String name) throws Exception {
+        JSONArray arr = (JSONArray) getData().get("data");
+
+        for (int i = 0; i < arr.size(); i++) {
+            JSONObject obj = (JSONObject) arr.get(i);
+            if (name.equalsIgnoreCase((String) obj.get("nama"))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    private String removeDestinationCommand() {
-      return "";
+    private int databaseSize() throws  Exception {
+        return ((JSONArray) getData().get("data")).size();
+    }
+
+    private String uberCommand() {
+        return "";
     }
 
     @EventMapping
