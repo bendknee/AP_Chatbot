@@ -32,7 +32,8 @@ public class MediaWiki {
 
         return response != null
                 && response.getStatusCode() == HttpStatus.OK
-                && response.getBody().contains("MediaWiki API");
+                && response.getBody().contains("MediaWiki")
+                && response.getBody().contains("API");
     }
 
     public String getRandomPageUrl() {
