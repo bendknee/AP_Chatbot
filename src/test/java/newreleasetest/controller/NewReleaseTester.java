@@ -1,5 +1,6 @@
 package newreleasetest.controller;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,7 +16,6 @@ import botnewrelease.controller.NewReleaseController;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 
 import com.ritaja.xchangerate.api.CurrencyNotSupportedException;
@@ -88,8 +88,9 @@ public class NewReleaseTester {
 
         List<TextMessage> reply = newReleaseController.handleTextMessageEvent(event);
 
-        assertNotNull(reply.get(0).getText());
-        assertNotNull(reply.get(1).getText());
+        assertTrue(reply.get(0).getText().contains("Beat Saber Original "
+                + "Game Soundtrack : 127000 IDR"));
+        assertFalse(reply.get(1).getText().contains("ehvfuvsvdfv : 619900 IDR"));
     }
 
 
