@@ -105,7 +105,7 @@ public class GuessAcronymsManager {
             String acronym = guessAcronyms.getAcronym();
             String expansion = guessAcronyms.getExpansion();
 
-            carouselColumns.add(new CarouselColumn("",
+            carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
                                                    acronym,
                                                    expansion,
                                                    Collections.singletonList(
@@ -169,7 +169,7 @@ public class GuessAcronymsManager {
             String acronym = guessAcronyms.getAcronym();
             String expansion = guessAcronyms.getExpansion();
 
-            carouselColumns.add(new CarouselColumn("",
+            carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
                                                    acronym,
                                                    expansion,
                                                    Collections.singletonList(

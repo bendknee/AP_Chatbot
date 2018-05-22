@@ -182,7 +182,7 @@ public class GuessAcronymsManagerTest {
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/update_acronym", "replyToken");
         List<CarouselColumn> carouselColumns = new ArrayList<>();
-        carouselColumns.add(new CarouselColumn("",
+        carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
                                                "EAW",
                                                "Endrawan Andika Wicaksana",
                                                Collections.singletonList(
@@ -244,7 +244,7 @@ public class GuessAcronymsManagerTest {
             .findAll();
         guessAcronymsManager.handlePrivateChat("U1", "/delete_acronym", "replyToken");
         List<CarouselColumn> carouselColumns = new ArrayList<>();
-        carouselColumns.add(new CarouselColumn("",
+        carouselColumns.add(new CarouselColumn("/static/buttons/1040.jpg",
                                                "EAW",
                                                "Endrawan Andika Wicaksana",
                                                Collections.singletonList(
