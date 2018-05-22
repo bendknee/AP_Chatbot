@@ -80,43 +80,31 @@ public class TopAlbumsControl {
             CurrencyNotSupportedException,
             ServiceException, EndpointException, StorageException {
         String hasil = "";
-        try {
-            int i = 0;
-            int ptrcount = 0;
-            Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
-            Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
-            int id = 14;
-            int hrefl = 22;
-            int[] pointer = new
-                    int[]{22, 24, 20, 23, 22, 26,
-                21, 16, 23, 19, 20, 21, 21, 21,
-                19, 23, 20, 19, 22, 18};
-            for (Element element : containers) {
-                String judul = element.text();
-                String rating = doc.select("td").get(id).text().substring(0, 4);
-                String url = doc.select("a[href]").get(hrefl).attr("href");
-                Document link = Jsoup.connect(url).get();
-                Element elem = link.select("td").get(pointer[ptrcount]);
-                String temp = elem.text();
-                if (temp.equalsIgnoreCase("Not for sale")) {
-                    hasil += ((i + 1) + " - " + judul + " - " + rating
-                            + " (Not for Sale)" + "\n");
-                } else {
-                    String[] harga = temp.split(" ");
-                    int value = convertHarga(harga[0], harga[1]);
-                    hasil += ((i + 1) + " - " + judul + " - " + rating
-                            + " (" + value + " IDR)" + "\n");
-                }
-                i++;
-                ptrcount++;
-                id += 4;
-                hrefl++;
+        int i = 0;
+        Document doc = Jsoup.connect("https://vgmdb.net/db/statistics.php?do=top_rated").get();
+        Elements containers = doc.select("span.albumtitle[lang=\"en\"]");
+        int id = 14;
+        int hrefl = 22;
+        for (Element element : containers) {
+            String judul = element.text();
+            String rating = doc.select("td").get(id).text().substring(0, 4);
+            String url = doc.select("a[href]").get(hrefl).attr("href");
+            Document link = Jsoup.connect(url).get();
+            String selectCss = "#album_infobit_large tr:nth-of-type(4) td:nth-of-type(2)";
+            String[] harga = link.select(selectCss).first().text().split(" ");
+            if (harga[0].equalsIgnoreCase("Not")) {
+                hasil += ((i + 1) + " - " + judul + " - " + rating
+                        + " (Not for Sale)" + "\n");
+            } else {
+                int value = convertHarga(harga[0], harga[1]);
+                hasil += ((i + 1) + " - " + judul + " - " + rating
+                        + " (" + value + " IDR)" + "\n");
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return hasil += "Sorry, the rest are not available because "
-                    + "there are some mistakes from the webservice"
-                    + " please contact the admin (Winston Chandra).";
+            i++;
+            id += 4;
+            hrefl++;
         }
+
         return hasil;
     }
 

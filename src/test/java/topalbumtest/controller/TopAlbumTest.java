@@ -88,8 +88,8 @@ public class TopAlbumTest {
 
         TextMessage reply = control.handleTextMessageEvent(event);
 
-        assertTrue(reply.getText().contains("1 - CHRONO CROSS "
-                + "ORIGINAL SOUNDTRACK - 4.72 (429700 IDR)"));
+        assertTrue(reply.getText().contains("1 - CHRONO CROSS ORIGINAL "
+                + "SOUNDTRACK - 4.72 (429700 IDR)"));
     }
 
     @Test
