@@ -20,6 +20,7 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.event.Event;
+import com.linecorp.bot.model.event.JoinEvent;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -51,12 +52,15 @@ public class SacredTextController {
 		TextMessageContent content = event.getMessage();
 		String contentText = content.getText();
 		if (event.getSource() instanceof GroupSource) {
-			if (contentText.equals("randomVerse")){
+			if (contentText.equals("randomVerse")) {
 				return new TextMessage("hehe");
 			}
+			else if (contentText.equals("/bye")){
+				this.replyText(event.getReplyToken(), "Leaving group");
+                lineMessagingClient.leaveGroup(((GroupSource) event.getSource()).getGroupId()).get();
+			}
 
-		} 
-		else {
+		} else {
 			if (!hasChosed) {
 				if (contentText.equals("/sacred_text")) {
 
@@ -194,6 +198,12 @@ public class SacredTextController {
 			message = message.substring(0, 1000 - 2) + "……";
 		}
 		this.reply(replyToken, new TextMessage(message));
+	}
+
+	@EventMapping
+	public void handleJoinEvent(JoinEvent event) {
+		String replyToken = event.getReplyToken();
+		this.replyText(replyToken, "Joined " + event.getSource());
 	}
 
 }
