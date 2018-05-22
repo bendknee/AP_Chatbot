@@ -18,14 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
-import com.linecorp.bot.model.action.DatetimePickerAction;
-import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
-import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.event.source.GroupSource;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
@@ -40,6 +38,8 @@ public class SacredTextController {
 	private static final Logger LOGGER = Logger.getLogger(SacredTextController.class.getName());
 	private boolean hasChosed = false;
 	private int chosenChapter = 0;
+	private int randomChapter = 0;
+	private int triesRemaining = 0;
 
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
@@ -50,60 +50,77 @@ public class SacredTextController {
 				event.getMessage()));
 		TextMessageContent content = event.getMessage();
 		String contentText = content.getText();
-
-		if (contentText.equals("/sacred_text") && !hasChosed) {
-
-			/*ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
-			for (int i = 1; i <= 20; i++) {
-				String img = "";
-				carouselList.add(new CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " + i,
-						Arrays.asList(new PostbackAction("Choose", "" + i))));
+		if (event.getSource() instanceof GroupSource) {
+			if (contentText.equals("randomVerse")){
+				return new TextMessage("hehe");
 			}
-			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
-			TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-			System.out.println("check template: "+templateMessage+" #dah");
-			return templateMessage;*/
-			ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
-			for (int i = 1; i <= 20; i++) {
-				String img = "";
-				carouselList.add(new CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " + i,
-						Arrays.asList(new PostbackAction("Choose", "" + i))));
-			}
-			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
-            TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-            this.reply(event.getReplyToken(), templateMessage);
 
-		} else if (contentText.startsWith("/sacred_text ") && !hasChosed) {
-			String[] replyTextArray = contentText.split(" ");
+		} 
+		else {
+			if (!hasChosed) {
+				if (contentText.equals("/sacred_text")) {
 
-			// kalo input huruf? size gk sesuai?
-			String[] value = replyTextArray[1].split(":");
-			if (replyTextArray.length != 2 || value.length != 2) {
-				return new TextMessage("Parameter should just be <Chapter>:<Verse>");
-			}
-			int chapter = 0;
-			int verse = 0;
-			try {
-				chapter = Integer.parseInt(value[0]);
-				verse = Integer.parseInt(value[1]);
-			} catch (Exception e) {
-				return new TextMessage("Chapter and Verse must both be an integer");
-			}
-			hasChosed = false;
-			return new TextMessage(sacredResponse(chapter, verse));
-		} else if (contentText.startsWith("/") && !hasChosed) {
-			return new TextMessage("Command doesn't exist, try: kill yourself");
-		} else if (hasChosed) {
-			int verse = 0;
-			try {
-				verse = Integer.parseInt(contentText);
-			} catch (Exception e) {
-				return new TextMessage("Verse must be an integer, example : 1");
-			}
-			return new TextMessage(sacredResponse(chosenChapter, verse));
+					/*
+					 * ArrayList<CarouselColumn> carouselList = new
+					 * ArrayList<CarouselColumn>(); for (int i = 1; i <= 20;
+					 * i++) { String img = ""; carouselList.add(new
+					 * CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " +
+					 * i, Arrays.asList(new PostbackAction("Choose", "" + i))));
+					 * } CarouselTemplate carouselTemplate = new
+					 * CarouselTemplate(carouselList); TemplateMessage
+					 * templateMessage = new
+					 * TemplateMessage("Carousel alt text", carouselTemplate);
+					 * System.out.println("check template: "
+					 * +templateMessage+" #dah" ); return templateMessage;
+					 */
+					ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
+					for (int i = 1; i <= 20; i++) {
+						String img = "";
+						carouselList.add(new CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " + i,
+								Arrays.asList(new PostbackAction("Choose", "" + i))));
+					}
+					CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
+					TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
+					this.reply(event.getReplyToken(), templateMessage);
 
+				} else if (contentText.startsWith("/sacred_text ")) {
+					String[] replyTextArray = contentText.split(" ");
+
+					String[] value = replyTextArray[1].split(":");
+					if (replyTextArray.length != 2 || value.length != 2) {
+						return new TextMessage("Parameter should just be <Chapter>:<Verse>");
+					}
+					int chapter = 0;
+					int verse = 0;
+					try {
+						chapter = Integer.parseInt(value[0]);
+						verse = Integer.parseInt(value[1]);
+					} catch (Exception e) {
+						return new TextMessage("Chapter and Verse must both be an integer");
+					}
+					hasChosed = false;
+					return new TextMessage(sacredResponse(chapter, verse));
+				} else if (contentText.startsWith("/")) {
+					return new TextMessage("Command doesn't exist, try: kill yourself");
+				}
+			}
+
+			else {
+				if (contentText.startsWith("/")) {
+					return new TextMessage("Previous process hasn't finished");
+				}
+				int verse = 0;
+				try {
+					verse = Integer.parseInt(contentText);
+				} catch (Exception e) {
+					return new TextMessage("Verse must be an integer, example : 1");
+				}
+				return new TextMessage(sacredResponse(chosenChapter, verse));
+
+			}
 		}
-		return new TextMessage("Previous process hasn't finished");
+
+		return null;
 	}
 
 	@EventMapping
@@ -158,27 +175,25 @@ public class SacredTextController {
 	}
 
 	private void reply(String replyToken, Message message) {
-        reply(replyToken, Collections.singletonList(message));
-    }
+		reply(replyToken, Collections.singletonList(message));
+	}
 
-    private void reply(String replyToken, List<Message> messages) {
-        try {
-            BotApiResponse apiResponse = lineMessagingClient
-                    .replyMessage(new ReplyMessage(replyToken, messages))
-                    .get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	private void reply(String replyToken, List<Message> messages) {
+		try {
+			BotApiResponse apiResponse = lineMessagingClient.replyMessage(new ReplyMessage(replyToken, messages)).get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    private void replyText(String replyToken, String message) {
-        if (replyToken.isEmpty()) {
-            throw new IllegalArgumentException("replyToken must not be empty");
-        }
-        if (message.length() > 1000) {
-            message = message.substring(0, 1000 - 2) + "……";
-        }
-        this.reply(replyToken, new TextMessage(message));
-    }
+	private void replyText(String replyToken, String message) {
+		if (replyToken.isEmpty()) {
+			throw new IllegalArgumentException("replyToken must not be empty");
+		}
+		if (message.length() > 1000) {
+			message = message.substring(0, 1000 - 2) + "……";
+		}
+		this.reply(replyToken, new TextMessage(message));
+	}
 
 }
