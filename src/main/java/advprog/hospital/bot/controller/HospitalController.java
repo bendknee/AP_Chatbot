@@ -148,6 +148,7 @@ public class HospitalController {
             } else if (contentText.length() == 5 && contentText.substring(0, 5).equals("/info")) {
                 int jumlahHospital = HOSPITAL_DATA.size();
                 replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
+                reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
                 int indexNum = Integer.parseInt(contentText.substring(4, 5));
                 displayData(replyToken, indexNum);
