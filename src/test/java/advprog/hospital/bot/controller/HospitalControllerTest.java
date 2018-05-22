@@ -99,6 +99,19 @@ public class HospitalControllerTest {
     }
 
     @Test
+    void testDaruratMessage() {
+        MessageEvent<TextMessageContent> event0 =
+                EventTestUtil.createDummyTextMessage("Waduh, darurat bosku");
+        MessageEvent<LocationMessageContent> event1 =
+                EventTestUtil.createDummyLocationMessage(-6.362413, 106.818845);
+
+        hospitalController.handleTextMessageEvent(event0);
+        String reply = hospitalController.handleLocationMessageEvent(event1);
+
+        assertEquals("Mohon tunggu, permintaan Anda sedang kami proses", reply);
+    }
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 

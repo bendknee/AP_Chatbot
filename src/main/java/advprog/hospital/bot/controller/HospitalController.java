@@ -30,6 +30,7 @@ public class HospitalController {
 
     private static final int STATE_GENERAL = 0;
     private static final int STATE_ADD_LOCATION = 1;
+    private static final int STATE_DARURAT = 2;
 
     private static int state = STATE_GENERAL;
 
@@ -132,26 +133,34 @@ public class HospitalController {
         TextMessageContent content = event.getMessage();
         String replyToken = event.getReplyToken();
         String contentText = content.getText();
+        String daruratText;
+        daruratText = contentText.replace("darurat", "");
+        daruratText = daruratText.replace("Darurat", "");
 
         String replyText = "Mohon ulangi permintaan Anda";
-        if (state == STATE_GENERAL) {
+        if (state == STATE_GENERAL || state == STATE_DARURAT) {
             if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
                 state = STATE_ADD_LOCATION;
                 replyText = "Terima kasih, permintaan anda akan kami proses";
                 reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() == 16 && contentText.substring(0, 16).equals("/random_hospital")) {
+                state = STATE_GENERAL;
                 TemplateMessage carouselReply =
                         new TemplateMessage("Hospital List", getCarouselTemplateMessage());
                 reply(replyToken, carouselReply);
                 replyText = "Method dapat dijalankan tanpa mengeluarkan error";
             } else if (contentText.length() == 5 && contentText.substring(0, 5).equals("/info")) {
+                state = STATE_GENERAL;
                 int jumlahHospital = HOSPITAL_DATA.size();
                 replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
                 reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
+                state = STATE_GENERAL;
                 int indexNum = Integer.parseInt(contentText.substring(5, 6));
                 displayData(replyToken, indexNum);
                 replyText = "Method dapat dijalankan tanpa mengeluarkan error";
+            } else if (contentText.length() != daruratText.length()) {
+                state = STATE_DARURAT;
             }
         } else if (state == STATE_ADD_LOCATION) {
             replyText = "Silahkan masukkan lokasi";
@@ -165,7 +174,7 @@ public class HospitalController {
     public String handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
 
         String replyText = "Mohon ulangi permintaan Anda";
-        if (state == STATE_ADD_LOCATION) {
+        if (state == STATE_ADD_LOCATION || state == STATE_DARURAT) {
             state = STATE_GENERAL;
             LocationMessageContent locationMessageContent = event.getMessage();
             String replyToken = event.getReplyToken();
