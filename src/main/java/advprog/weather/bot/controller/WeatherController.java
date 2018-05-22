@@ -25,7 +25,7 @@ public class WeatherController {
 
     private static final Logger LOGGER = Logger.getLogger(WeatherController.class.getName());
     private Set<String> personalTrigger = new HashSet<>();
-    private final String baseUrl = "api.openweathermap.org/data/2.5/weather?";
+    private final String baseUrl = "https://api.openweathermap.org/data/2.5/weather?";
     private final String apiKey = "appid=187bd7d86855cb7ee05515d77863583d";
 
 
@@ -38,16 +38,17 @@ public class WeatherController {
         Source source = event.getSource();
         if (source instanceof GroupSource) {
             if (content.toLowerCase().contains("cuaca di")) {
-                String[] inputSplit = content.toLowerCase().split(" ");
-                //int indexKeyWord = inputSplit.indexOf("cuaca");
-                String city = inputSplit[2];
+                ArrayList<String> inputSplit = new ArrayList<>();
+                inputSplit.addAll(Arrays.asList(content.toLowerCase().split(" ")));
+                int indexKeyWord = inputSplit.indexOf("cuaca");
+                String city = inputSplit.get(indexKeyWord + 2);
                 String url = baseUrl + apiKey + "&q=" + city;
                 ArrayList<String> requiredDatas = fetchDataApiRequest(url);
                 return new TextMessage(textResponseFormatter(requiredDatas));
             }
         } else {
             if (content.equals("/weather")) {
-                personalTrigger.add(source.getUserId());
+                personalTrigger.add(source.getSenderId());
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
             } else if (content.toLowerCase().contains("/configure_weather")) {
@@ -65,8 +66,8 @@ public class WeatherController {
         LocationMessageContent content = event.getMessage();
         Source source = event.getSource();
 
-        if (!(source instanceof GroupSource)) {
-            //personalTrigger.remove(source.getSenderId());
+        if (!(source instanceof GroupSource) & personalTrigger.contains(source.getSenderId())) {
+            personalTrigger.remove(source.getSenderId());
             String latitude = Double.toString(content.getLatitude());
             String longitude = Double.toString(content.getLongitude());
             String url = baseUrl + apiKey + "&lat=" + latitude + "&lon=" + longitude;
@@ -76,7 +77,7 @@ public class WeatherController {
         return null;
     }
 
-    private ArrayList<String> fetchDataApiRequest(String url) {
+    private static ArrayList<String> fetchDataApiRequest(String url) {
         ArrayList<String> data = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
@@ -85,8 +86,7 @@ public class WeatherController {
             JSONObject parsedJson = new JSONObject(stringifiedJson);
             data.add(parsedJson.getString("name"));         // City name
             String countryCode = parsedJson.getJSONObject("sys").getString("country");
-            data.add(countryCode);
-            //data.add(CountryCode.getByCode(countryCode).getName()); // Country name
+            data.add(CountryCode.getByCode(countryCode).getName()); // Country name
             JSONObject weatherObject = parsedJson.getJSONArray("weather").getJSONObject(0);
             data.add(weatherObject.getString("main"));      // Main weather condition
             data.add(parsedJson.getJSONObject("wind").getString("speed"));   // Wind Speed (m/s)
@@ -101,7 +101,7 @@ public class WeatherController {
         }
     }
 
-    private String textResponseFormatter(ArrayList<String> datas) {
+    private static String textResponseFormatter(ArrayList<String> datas) {
         if (datas.size() > 1) {
             StringBuilder sb = new StringBuilder();
             sb.append("Weather at your position (");
