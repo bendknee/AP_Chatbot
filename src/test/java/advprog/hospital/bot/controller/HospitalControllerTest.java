@@ -49,6 +49,16 @@ public class HospitalControllerTest {
     }
 
     @Test
+    void testHospitalDatabase() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/info");
+
+        TextMessage reply = hospitalController.handleTextMessageEvent(event);
+
+        assertEquals("Terdapat 10 rumah sakit sekitar Depok dalam database", reply.getText());
+    }
+
+    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
