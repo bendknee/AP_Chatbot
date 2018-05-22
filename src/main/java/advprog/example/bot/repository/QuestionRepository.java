@@ -1,5 +1,12 @@
 package advprog.example.bot.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import advprog.example.bot.entity.QuestionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface QuestionRepository extends CrudRepository<QuestionRepository, Long> {}
+import java.util.List;
+
+@Repository
+public interface QuestionRepository extends JpaRepository<QuestionEntity, Integer> {
+    List<QuestionEntity> findByCreatorId(String creatorId);
+}

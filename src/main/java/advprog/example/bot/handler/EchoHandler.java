@@ -1,14 +1,13 @@
-package advprog.example.bot.composer;
+package advprog.example.bot.handler;
 
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EchoComposer implements Composer {
+public class EchoHandler {
 
-    @Override
-    public Message composeMessage(String arg) {
+    public Message composeReply(String arg) {
         return new TextMessage(arg);
     }
 }

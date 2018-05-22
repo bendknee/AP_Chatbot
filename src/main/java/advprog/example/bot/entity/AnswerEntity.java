@@ -1,42 +1,41 @@
 package advprog.example.bot.entity;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "answer")
 public class AnswerEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private QuestionEntity questionEntity;
+    private QuestionEntity question;
 
+    @NotNull
     private String answer;
-    private boolean isCorrectAnswer;
 
-    public AnswerEntity(String answer) {
+    public AnswerEntity() {}
+
+    public AnswerEntity(String answer, QuestionEntity question) {
         this.answer = answer;
+        this.question = question;
     }
 
-    public String getAnswer() {
+    @Override
+    public String toString() {
         return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public boolean isCorrectAnswer() {
-        return isCorrectAnswer;
-    }
-
-    public void setCorrectAnswer(boolean correctAnswer) {
-        isCorrectAnswer = correctAnswer;
     }
 }
