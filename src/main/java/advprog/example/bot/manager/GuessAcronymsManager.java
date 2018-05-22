@@ -403,11 +403,11 @@ public class GuessAcronymsManager {
 
         String state = groupState.getState();
         Message replyMessage = null;
-        if (state.equals("") && message.contains("start acronym")) {
+        if (state.equals("") && message.toLowerCase().contains("start acronym")) {
             replyMessage = playAcronymGameStart(groupId);
-        } else if (state.startsWith("guess") && message.equals("next acronym")) {
+        } else if (state.startsWith("guess") && message.toLowerCase().equals("next acronym")) {
             replyMessage = playAcronymGameSkipAcronym(groupId);
-        } else if (state.startsWith("guess") && message.equals("stop acronym")) {
+        } else if (state.startsWith("guess") && message.toLowerCase().equals("stop acronym")) {
             replyMessage = playAcronymGameStopGame(groupId);
         } else if (state.startsWith("guess")) {
             replyMessage = playAcronymGuessAttempt(groupId, userId, message);
