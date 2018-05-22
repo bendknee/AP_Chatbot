@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Logger;
 
 import org.apache.http.HttpResponse;
@@ -40,7 +41,7 @@ public class SacredTextController {
 	private boolean hasChosed = false;
 	private int chosenChapter = 0;
 	private int randomChapter = 0;
-	private int triesRemaining = 0;
+	private int chancesRemaining = 0;
 
 	@Autowired
 	private LineMessagingClient lineMessagingClient;
@@ -53,11 +54,46 @@ public class SacredTextController {
 		String contentText = content.getText();
 		if (event.getSource() instanceof GroupSource) {
 			if (contentText.equals("randomVerse")) {
-				return new TextMessage("hehe");
+				randomChapter = ThreadLocalRandom.current().nextInt(1, 192);
+				String randomVerse = randomVerse(randomChapter);
+				chancesRemaining = 5;
+				return new TextMessage("Guess the chapter!\n " +
+						"Which chapter number that has the following verse:\n" +
+						randomVerse + "You have 5 chances, good luck! " +
+						"\nKunci Jawaban: "+randomChapter);
 			}
-			else if (contentText.equals("/bye")){
+			else if (chancesRemaining > 0){
+				boolean isInteger = false;
+				int userGuess = 0;
+				try {
+					userGuess = Integer.parseInt(contentText.toString());
+					isInteger = true;
+				}
+				catch (Exception e){
+					
+				}
+				if(isInteger){
+					String output = "";
+					if (userGuess == randomChapter){
+						chancesRemaining = 0;
+						output = "You are correct";
+					}
+					else {
+						output = "Incorrect\n";
+						if(--chancesRemaining > 0){
+							output += "Try again, chances remaining: "+chancesRemaining;
+						}
+						else{
+							output += "Correct answer is "+randomChapter;
+						}
+						
+					}
+					return new TextMessage(output);
+				}
+			}
+			else if (contentText.equals("/bye")) {
 				this.replyText(event.getReplyToken(), "Leaving group");
-                lineMessagingClient.leaveGroup(((GroupSource) event.getSource()).getGroupId()).get();
+				lineMessagingClient.leaveGroup(((GroupSource) event.getSource()).getGroupId()).get();
 			}
 
 		} else {
@@ -154,9 +190,9 @@ public class SacredTextController {
 		String regex = "<br>\\s\\d+(.)?\\s";
 		String[] verses = contentToStr.split(regex);
 		verses[0] = verses[0].replaceFirst("1(.)? ", "");
-		for (String vers : verses) {
+		/*for (String vers : verses) {
 			result += vers.replace("<br>", "");
-		}
+		}*/
 		if (verse > verses.length || verse < 1) {
 			result = "Invalid Verse Number\nVerse Range(inclusive): 1-" + verses.length;
 		} else {
@@ -166,6 +202,32 @@ public class SacredTextController {
 		}
 
 		return result;
+	}
+
+	public static String randomVerse(int chapter) throws Exception {
+		String url = String.format("http://www.sacred-texts.com/hin/rigveda/rv01%03d.htm", chapter);
+
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet get = new HttpGet(url);
+
+		HttpResponse response = client.execute(get);
+
+		Document html = Jsoup.connect(url).get();
+
+		String result = "";
+		Element content = html.select("p:has(br)").first();
+		String contentToStr = content.toString().replace("<p>", "").replaceAll("</p>", "");
+		String regex = "<br>\\s\\d+(.)?\\s";
+		String[] verses = contentToStr.split(regex);
+		int verse = ThreadLocalRandom.current().nextInt(0, verses.length);
+		verses[0] = verses[0].replaceFirst("1(.)? ", "");
+
+		result = verses[verse].replace("<br> ", "\n");
+		result = result.replaceAll("</(.*)>", "");
+		result = result.replaceAll("<(.*)>", "");
+
+		return result;
+
 	}
 
 	@EventMapping
