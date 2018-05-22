@@ -38,7 +38,7 @@ public class WeatherController {
         Source source = event.getSource();
         if (!(source instanceof GroupSource)) {
             if (content.equals("/weather")) {
-                personalTrigger.add(source.getSenderId());
+                personalTrigger.add(source.getUserId());
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
             } else if (content.toLowerCase().contains("/configure_weather")) {
@@ -50,7 +50,7 @@ public class WeatherController {
                 ArrayList<String> inputSplit = new ArrayList<>();
                 inputSplit.addAll(Arrays.asList(content.toLowerCase().split(" ")));
                 int indexKeyWord = inputSplit.indexOf("cuaca");
-                String city = inputSplit.get(indexKeyWord + 2);
+                String city = inputSplit.get(2);
                 String url = baseUrl + apiKey + "&q=" + city;
                 ArrayList<String> requiredDatas = fetchDataApiRequest(url);
                 return new TextMessage(textResponseFormatter(requiredDatas));
@@ -67,7 +67,7 @@ public class WeatherController {
         LocationMessageContent content = event.getMessage();
         Source source = event.getSource();
 
-        if (!(source instanceof GroupSource) & personalTrigger.contains(source.getSenderId())) {
+        if (!(source instanceof GroupSource) & personalTrigger.contains(source.getUserId())) {
             personalTrigger.remove(source.getSenderId());
             String latitude = Double.toString(content.getLatitude());
             String longitude = Double.toString(content.getLongitude());
