@@ -1,0 +1,38 @@
+{
+  "Genesis": {
+    "42": {
+      "1": "When Jacob learned that there was grain in Egypt, he said to his sons, \"Why do you just keep looking at each other?\"",
+      "3": "Then ten of Joseph's brothers went down to buy grain from Egypt.",
+      "2": "He continued, \"I have heard that there is grain in Egypt. Go down there and buy some for us, so that we may live and not die.\""
+    },
+    "1": {
+      "1": "In the beginning God created the heavens and the earth.",
+      "3": "And God said, \"Let there be light,\" and there was light.",
+      "2": "Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.",
+    }
+  },
+  "Ruth": {
+    "1": {
+      "1": "In the days when the judges ruled, there was a famine in the land, and a man from Bethlehem in Judah, together with his wife and two sons, went to live for a while in the country of Moab.",
+      "3": "Now Elimelech, Naomi's husband, died, and she was left with her two sons.",
+      "2": "The man's name was Elimelech, his wife's name Naomi, and the names of his two sons were Mahlon and Kilion. They were Ephrathites from Bethlehem, Judah. And they went to Moab and lived there.",
+    },
+    "3": {
+      "1": "One day Naomi her mother-in-law said to her, \"My daughter, should I not try to find a home for you, where you will be well provided for?",
+      "3": "Wash and perfume yourself, and put on your best clothes. Then go down to the threshing floor, but don't let him know you are there until he has finished eating and drinking.",
+      "2": "Is not Boaz, with whose servant girls you have been, a kinsman of ours? Tonight he will be winnowing barley on the threshing floor.",
+    }
+  },
+  "Matthew": {
+    "1": {
+      "1": "A record of the genealogy of Jesus Christ the son of David, the son of Abraham:",
+      "3": "Judah the father of Perez and Zerah, whose mother was Tamar, Perez the father of Hezron, Hezron the father of Ram,",
+      "2": "Abraham was the father of Isaac, Isaac the father of Jacob, Jacob the father of Judah and his brothers,",
+    },
+    "3": {
+      "1": "In those days John the Baptist came, preaching in the Desert of Judea",
+      "3": "This is he who was spoken of through the prophet Isaiah: \"A voice of one calling in the desert, 'Prepare the way for the Lord, make straight paths for him.'\"",
+      "2": "and saying, \"Repent, for the kingdom of heaven is near.\"",
+    }
+  }
+}
