@@ -58,8 +58,8 @@ public class BibleVerseFactoryTest {
 
     @Test
     void testIsBookExistFalse() {
-        assertFalse(factory.isBookExist("Albertus"));
-        assertFalse(factory.isBookExist("Kautsar Fadlillah"));
+        assertFalse(factory.isBookExist("Quran"));
+        assertFalse(factory.isBookExist("Al Quran"));
     }
 
     @Test
