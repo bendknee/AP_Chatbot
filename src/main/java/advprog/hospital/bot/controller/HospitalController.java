@@ -192,7 +192,7 @@ public class HospitalController {
             String stringified = Integer.toString(randomNum.get(i));
             HashMap<String, String> hospital =  HOSPITAL_DATA.get(stringified);
 
-            MessageAction action = new MessageAction("/get " + randomNum.get(i), hospital.get("name"));
+            MessageAction action = new MessageAction(hospital.get("name"), "/get " + randomNum.get(i));
             CarouselColumn column = new CarouselColumn(
                     hospital.get("picture"), hospital.get("name"), hospital.get("address"),
                     Arrays.asList(action)
@@ -249,7 +249,7 @@ public class HospitalController {
                 "\nJarak ke rumah sakit " + jarak + " meter");
         LocationMessage locationReply = new LocationMessage(
                 "", hospital.get("address"),
-                Double.parseDouble(hospital.get("location").substring(0,10)),
+                Double.parseDouble(hospital.get("location").substring(0,9)),
                 Double.parseDouble(hospital.get("location").substring(11))
         );
 
