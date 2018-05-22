@@ -42,7 +42,7 @@ public class SacredTextController {
 	private LineMessagingClient lineMessagingClient;
 
 	@EventMapping
-	public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
+	public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
 		LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", event.getTimestamp(),
 				event.getMessage()));
 		TextMessageContent content = event.getMessage();
@@ -58,7 +58,7 @@ public class SacredTextController {
 			}
 			CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
 			TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
-			reply(event.getReplyToken(), templateMessage);
+			return templateMessage;
 
 		} else if (contentText.startsWith("/sacred_text ") && !hasChosed) {
 			String[] replyTextArray = contentText.split(" ");
