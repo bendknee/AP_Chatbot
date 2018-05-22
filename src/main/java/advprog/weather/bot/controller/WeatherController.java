@@ -81,8 +81,8 @@ public class WeatherController {
         ArrayList<String> data = new ArrayList<>();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders header = new HttpHeaders();
-        String stringifiedJson = restTemplate.getForObject(url, String.class, header);
         try {
+            String stringifiedJson = restTemplate.getForObject(url, String.class, header);
             JSONObject parsedJson = new JSONObject(stringifiedJson);
             data.add(parsedJson.getString("name"));         // City name
             String countryCode = parsedJson.getJSONObject("sys").getString("country");
@@ -125,20 +125,20 @@ public class WeatherController {
         return Double.toString(temperature);
     }
 
-    private char emojiSelector(String weather) {
+    private String emojiSelector(String weather) {
         if (weather.contains("clouds")) {
-            return (char) 0x1000AC;
+            return "0x1000AC";
         } else if (weather.contains("clear")) {
-            return (char) 0x1000A9;
+            return "0x1000A9";
         } else if (weather.contains("rain")) {
-            return (char) 0x1000AA;
+            return "0x1000AA";
         } else if (weather.contains("thunderstorm")) {
-            return (char) 0x10003A;
+            return "0x10003A";
         } else if (weather.contains("snow")) {
-            return (char) 0x1000AB;
+            return "0x1000AB";
         } else if (weather.contains("mist")) {
-            return (char) 0x10002A;
+            return "0x10002A";
         }
-        return (char) 0x1000A8;
+        return "0x1000A8";
     }
 }
