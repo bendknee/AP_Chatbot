@@ -52,7 +52,7 @@ public class HospitalController {
         hospitalData.put("3", meilia); hospitalData.put("4", grhaPermata);
         hospitalData.put("5", bhaktiYudha); hospitalData.put("6", hasanahAfiah);
         hospitalData.put("7", sentraMedika); hospitalData.put("8", mitraKeluarga);
-        hospitalData.put("9", harapanDepok); hospitalData.put("10", puriCinere);
+        hospitalData.put("9", harapanDepok); hospitalData.put("0", puriCinere);
 
         herminaDepok.put("picture", "https://lh4.googleusercontent.com/JMRDkWUi5e_PqhExsxDibKXVt8UCubeL8axp9z" +
                 "fZo_rxq0mGmxiHptqK1CI4hpjg-r152TegxH8jHd-edjiW=w1366-h639");
