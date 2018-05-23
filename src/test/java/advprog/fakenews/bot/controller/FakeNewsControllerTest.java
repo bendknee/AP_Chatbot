@@ -39,33 +39,63 @@ public class FakeNewsControllerTest {
     }
 
     @Test
-    void testHandleTextMessageEventSatire() {
+    void testHandleTextMessageEventSafe() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("gue dapet di bignuggetnews.com loh");
+                EventTestUtil.createDummyTextMessage("/is_satire pornhub.com");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 
-        assertEquals("is_satire", reply.getText());
+        assertEquals("pornhub.com is a safe news website", reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventSatire() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/is_satire conservativespirit.com");
+
+        TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
+
+        assertEquals("conservativespirit.com isn't a satire news website", reply.getText());
     }
 
     @Test
     void testHandleTextMessageEventFake() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo is_fake");
+                EventTestUtil.createDummyTextMessage("/is_fake conservativespirit.com");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 
-        assertEquals("is_fake", reply.getText());
+        assertEquals("conservativespirit.com is a fake news website", reply.getText());
     }
 
     @Test
     void testHandleTextMessageEventConspiracy() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo is_conspiracy");
+                EventTestUtil.createDummyTextMessage("/is_conspiracy conservativetribune.com");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 
-        assertEquals("is_conspiracy", reply.getText());
+        assertEquals("conservativetribune.com is a conspiracy news website", reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventFalseInput() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("Wawiyu");
+
+        TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
+        assertNotNull(reply.getText());
+    }
+
+    @Test
+    void testHandleTextMessageEventAddFilter() {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/add_filter ExperimentalVaccines.org conspiracy");
+
+        TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
+
+        assertEquals("conspiracy is already present", reply.getText());
+
     }
 
     @Test

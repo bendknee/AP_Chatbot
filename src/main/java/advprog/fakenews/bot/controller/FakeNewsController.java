@@ -1,7 +1,7 @@
 package advprog.fakenews.bot.controller;
 
-import advprog.fakenews.bot.BotFakeNewsApplication;
 import advprog.fakenews.bot.FakeNewsParser;
+import advprog.fakenews.bot.News;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -47,13 +47,13 @@ public class FakeNewsController {
             }
             String depan = content.getText().split(" ")[0];
             if (depan.equalsIgnoreCase("/is_fake")) {
-                String news = content.getText().replace(depan, "");
+                String news = content.getText().split(" ")[1];
                 return new TextMessage(parser.checkNews(news, "fake"));
             } else if (depan.equalsIgnoreCase("/is_satire")) {
-                String news = content.getText().replace(depan, "");
+                String news = content.getText().split(" ")[1];
                 return new TextMessage(parser.checkNews(news, "satire"));
             } else if (depan.equalsIgnoreCase("/is_conspiracy")) {
-                String news = content.getText().replace(depan, "");
+                String news = content.getText().split(" ")[1];
                 return new TextMessage(parser.checkNews(news, "conspiracy"));
             } else if (depan.equalsIgnoreCase("/add_filter")) {
                 String filterUrl = content.getText().split(" ")[1];

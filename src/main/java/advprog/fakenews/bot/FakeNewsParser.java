@@ -80,14 +80,13 @@ public class FakeNewsParser {
     }
 
     public String printWarning(String news) {
-        return checkListContainsNews(news) != null ? "warning "
+        return checkListContainsNews(news) != null ? "Dangerous!!!! "
                 + news + " considered as "
                 + checkListContainsNews(news).getType() : "";
     }
 
     public String checkNews(String news, String criteria) {
         News targetNews = checkListContainsNews(news);
-        System.out.println(targetNews);
         if (targetNews == null) {
             return news + " is a safe news website";
         } else if (!targetNews.containsFilter(criteria)) {
@@ -97,5 +96,9 @@ public class FakeNewsParser {
         } else {
             return "input not valid";
         }
+    }
+
+    public static void main(String[] args) {
+        FakeNewsParser y = new FakeNewsParser();
     }
 }
