@@ -116,9 +116,10 @@ public class SacredTextController {
                      * System.out.println("check template: "
                      * +templateMessage+" #dah" ); return templateMessage;
                      */
+                	String img = "";
                     ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
                     for (int i = 1; i <= 20; i++) {
-                        String img = "";
+                        img = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Om_symbol.svg/100px-Om_symbol.svg.png";
                         carouselList.add(new CarouselColumn(img, "" + i,
                             "The Rig Veda Book 1 HYMN " + i,
                             Arrays.asList(new PostbackAction("Choose", "" + i))));

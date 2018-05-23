@@ -46,17 +46,18 @@ public class SacredTextControllerTest extends TestCase {
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
         assertEquals("To him the richest of the rich, the Lord of treasures excellent,\n"
-            + "Indra, with Soma juice outpoured.", reply);
+            + "Indra, with Soma juice outpoured.", reply.getText());
     }
     
     @Test
-    public void testHandleTextMessageIncorrectParameterizedEventTooManyParameter() throws Exception {
+    public void testHandleTextMessageIncorrectParameterizedEventTooManyParameter()
+        throws Exception {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/sacred_text 5:2 extra");
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
     }
     
     @Test
@@ -66,7 +67,7 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
     }
     
     @Test
@@ -76,7 +77,7 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply);
+        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
     }
     
     @Test
@@ -86,7 +87,7 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter and Verse must both be an integer", reply);
+        assertEquals("Chapter and Verse must both be an integer", reply.getText());
     }
     
     @Test
@@ -96,7 +97,7 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter and Verse must both be an integer", reply);
+        assertEquals("Chapter and Verse must both be an integer", reply.getText());
     }
     
     @Test
@@ -106,7 +107,7 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter not available\n Available Chapters: 1-191", reply);
+        assertEquals("Chapter not available\n Available Chapters: 1-191", reply.getText());
     }
     
     @Test
@@ -116,7 +117,18 @@ public class SacredTextControllerTest extends TestCase {
 
         TextMessage reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", reply);
+        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", reply.getText());
+    }
+    
+    @Test
+    public void testHandleTextMessageUnknownFunctionEvent() throws Exception {
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createDummyTextMessage("/random");
+
+        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+
+        assertEquals("Command doesn't exist\n"
+                + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>", reply.getText());
     }
     
     
