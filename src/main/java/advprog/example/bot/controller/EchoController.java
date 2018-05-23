@@ -25,6 +25,14 @@ public class EchoController {
         TextMessageContent content = event.getMessage();
         String contentText = content.getText();
 
+        if (contentText.toLowerCase().contains("hari ini nonton apa?")
+                && event.getSource().getClass() != UserSource.class) {
+            ListAnimeBot lab = new ListAnimeBot();
+            return new TextMessage(lab.getListAnime());
+        } else if (contentText.toLowerCase().contains("hari ini nonton apa?")) {
+            return new TextMessage("This command should be on group chats");
+        }
+
         String[] splitContent = contentText.split(" ", 2);
         String command = splitContent[0];
 
@@ -39,10 +47,6 @@ public class EchoController {
         } else if (command.equals("/is_airing")) {
             AnimeBot ab = new AnimeBot(input);
             return new TextMessage(ab.getStatusMessage());
-        } else if (contentText.toLowerCase().contains("hari ini nonton apa?")
-                && event.getSource().getClass() != UserSource.class) {
-            ListAnimeBot lab = new ListAnimeBot();
-            return new TextMessage(lab.getListAnime());
         }
 
         return handleDefaultMessage(event);
