@@ -24,7 +24,8 @@ public class EchoController {
 
         String[] tempInput = contentText.split(" ");
         if (tempInput[0].equalsIgnoreCase("/enterkomputer") && tempInput.length == 3) {
-            Enterkomputer.findPrice(tempInput[1].toLowerCase(),tempInput[2].toLowerCase());
+            return new TextMessage(Enterkomputer.findPrice(tempInput[1].toLowerCase(),
+                    tempInput[2].toLowerCase()));
         }
 
         String replyText = contentText.replace("/echo", "");

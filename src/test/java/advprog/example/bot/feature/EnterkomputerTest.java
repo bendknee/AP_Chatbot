@@ -28,14 +28,14 @@ public class EnterkomputerTest {
     @Test
     void testFindPriceFail() {
         assertEquals("Not found", Enterkomputer
-                .findPrice("Instrumen musik","Yamaha Guitar S25.21 XB"));
+                .findPrice("instrumen musik",("Yamaha Guitar S25.21 XB").toLowerCase()));
     }
 
     @Test
     void testFindPriceSuccess() {
         assertEquals("iGame nVidia Geforce GTX 1080 8GB DDR5X - "
                 + "X-TOP-8G - Triple Fan ( Garansi 3 Bln ) - 9900000", Enterkomputer
-                .findPrice("VgA","iGame Nvidia Geforce GTX 1080"));
+                .findPrice(("VgA").toLowerCase(),("iGame Nvidia Geforce GTX 1080").toLowerCase()));
         assertEquals("No related items", Enterkomputer
                 .findPrice("vga","bukan item"));
     }
