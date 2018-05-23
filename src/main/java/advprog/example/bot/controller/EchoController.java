@@ -60,6 +60,6 @@ public class EchoController {
 
         System.out.println("default handle event: " + event);
 
-        return new TextMessage("Wrong command!\nTry :\n\\echo STRING\n\\is_airing ANIME");
+        return new TextMessage("Wrong command!\nTry :\n/echo STRING\n/is_airing ANIME");
     }
 }
