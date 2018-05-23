@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class Enterkomputer {
 
     public static String findPrice(String category, String name) {
-        String apiUrl = "https://www.enterkomputer.com//api/product/" + category + ".json";
+        String apiUrl = "https://enterkomputer.com/api/product/" + category + ".json";
         try {
             HttpResponse<JsonNode> response = Unirest.get(apiUrl).asJson();
             StringBuilder out = new StringBuilder();
@@ -20,7 +20,8 @@ public class Enterkomputer {
                 if (itemJson.getString("name").toLowerCase().contains(name)) {
                     String itemName = itemJson.getString("name");
                     String itemPrice = itemJson.getString("price");
-                    out.append(itemName + " - " + itemPrice + "\n");
+                    out.append(String.format("%s - %s", itemName, itemPrice));
+                    out.append("\n");
                 }
             });
             if (out.toString().equals("")) {
