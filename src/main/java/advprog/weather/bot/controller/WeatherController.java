@@ -9,10 +9,8 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import com.neovisionaries.i18n.CountryCode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
 import java.util.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +22,7 @@ public class WeatherController {
 
     private static final Logger LOGGER = Logger.getLogger(WeatherController.class.getName());
     private Set<String> personalTrigger = new HashSet<>();
+    private HashMap<String, String> tempConfig = new HashMap<>();
     private final String baseUrl = "https://api.openweathermap.org/data/2.5/weather?";
     private final String apiKey = "appid=187bd7d86855cb7ee05515d77863583d";
 
@@ -43,16 +42,31 @@ public class WeatherController {
                 String city = inputSplit.get(indexKeyWord + 2);
                 String url = baseUrl + apiKey + "&q=" + city;
                 ArrayList<String> requiredDatas = fetchDataApiRequest(url);
-                return new TextMessage(textResponseFormatter(requiredDatas));
+                return new TextMessage(textResponseFormatter(requiredDatas, null));
             }
         } else {
             if (content.equals("/weather")) {
                 personalTrigger.add(source.getSenderId());
+                tempConfig.put(source.getSenderId(), "celcius");
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
+            } else if (content.equals("/configure_weather")) {
+                if (content.split(" ").length == 1) {
+                    return new TextMessage("Please set your temperature configuration "
+                            + "by typing in this format :\n"
+                            + "/configure_weather [celsius/kelvin/fahrenheit]");
+                } else {
+                    String unit = content.split(" ")[1].toLowerCase();
+                    if (unit.equals("celsius") | unit.equals("kelvin")
+                            | unit.equals("fahrenheit")) {
+                        tempConfig.put(source.getSenderId(), unit);
+                        return new TextMessage("Configuration changed to " + unit);
+                    } else {
+                        return new TextMessage(unit + " is not a valid degree unit.");
+                    }
+                }
             }
         }
-
         return null;
     }
 
@@ -69,7 +83,7 @@ public class WeatherController {
             String longitude = Double.toString(content.getLongitude());
             String url = baseUrl + apiKey + "&lat=" + latitude + "&lon=" + longitude;
             ArrayList<String> requiredDatas = fetchDataApiRequest(url);
-            return new TextMessage(textResponseFormatter(requiredDatas));
+            return new TextMessage(textResponseFormatter(requiredDatas, source.getSenderId()));
         }
         return null;
     }
@@ -97,7 +111,7 @@ public class WeatherController {
         }
     }
 
-    private String textResponseFormatter(ArrayList<String> datas) {
+    private String textResponseFormatter(ArrayList<String> datas, String userId) {
         if (datas.size() > 1) {
             StringBuilder sb = new StringBuilder();
             sb.append("Weather at your position (");
@@ -107,7 +121,11 @@ public class WeatherController {
             sb.append("\nWind speed : ");
             sb.append(datas.get(3)).append(" meter/sec\n");
             sb.append("Temperature : ");
-            sb.append(kelvinToCelcius(datas.get(4))).append("° Celcius\n");
+            if (userId == null) {
+                sb.append(defaultConversion(datas.get(4))).append("° Celsius\n");
+            } else {
+                sb.append(degreeConfigurated(datas.get(4), userId));
+            }
             sb.append("Humidity : ");
             sb.append(datas.get(5)).append("%");
             return sb.toString();
@@ -116,7 +134,23 @@ public class WeatherController {
         }
     }
 
-    private String kelvinToCelcius(String kelvin) {
+    private String degreeConfigurated(String kelvin, String userId) {
+        String unit = tempConfig.get(userId);
+        if (unit.equals("celsius")) {
+            double temperature = Double.parseDouble(kelvin);
+            temperature -= 273.15;
+            return String.format("%,.2f", temperature) + "° Celsius\n";
+        } else if (unit.equals("kelvin")) {
+            return kelvin + "° Kelvin\n";
+        } else if (unit.equals("fahrenheit")) {
+            double temperature = Double.parseDouble(kelvin);
+            temperature = 9/5 * (temperature - 273.15) + 32;
+            return String.format("%,.2f", temperature) + "° Fahrenheit\n";
+        }
+        return null;
+    }
+
+    private String defaultConversion(String kelvin) {
         double temperature = Double.parseDouble(kelvin);
         temperature -= 273.15;
         return String.format("%,.2f", temperature);
