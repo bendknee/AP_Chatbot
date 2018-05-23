@@ -29,7 +29,11 @@ public class EchoController {
                         Scrapper sc = new Scrapper();
                         contentText = Scrapper.scrapping(input[2], input[3]);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
 
