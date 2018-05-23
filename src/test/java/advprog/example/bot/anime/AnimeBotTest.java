@@ -16,12 +16,12 @@ public class AnimeBotTest {
 
     @Test
     public void getMessageTest() {
-        assertEquals("ANIME is airing from April,6 2018 until unknown",ab.getStatusMessage());
+        assertEquals("ANIME is airing from 06-04-2018 until unknown time",ab.getStatusMessage());
     }
 
     @Test
     public void checkUrl() {
-        assertEquals("https://myanimelist.net/anime/36864/Akkun_to_Kanojo", ab.getUrl());
+        assertEquals("https://myanimelist.net/api/anime/search.xml?q=akkun+to+kanojo", ab.getUrl());
     }
 
 

@@ -2,7 +2,9 @@ package advprog.example.bot.anime;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,11 +45,11 @@ public class ListAnimeBot {
                 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
                 sf.setTimeZone(TimeZone.getTimeZone("Japan"));
 
-                Date date = new Date(Long.parseLong(timestamp)*1000);
+                Date date = new Date(Long.parseLong(timestamp) * 1000);
 
                 String airingDate = sf.format(date);
 
-                if(airingDate.equals(sf.format(new Date()))) {
+                if (airingDate.equals(sf.format(new Date()))) {
                     list.put(newTitle,Integer.parseInt(epNum));
                 }
             }
@@ -72,10 +74,6 @@ public class ListAnimeBot {
             return sb.toString();
         }
         return "Ooops! No anime is airing today.";
-    }
-
-    public Map<String, Integer> getMapAnime() {
-        return list;
     }
 
     public String getUrl() {

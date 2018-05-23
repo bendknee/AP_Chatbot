@@ -5,6 +5,7 @@ import advprog.example.bot.anime.ListAnimeBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
+import com.linecorp.bot.model.event.source.GroupSource;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -33,12 +34,13 @@ public class EchoController {
 
         String input = splitContent[1];
 
-        if(command.equals("/echo")) {
+        if (command.equals("/echo")) {
             return new TextMessage(input);
         } else if (command.equals("/is_airing")) {
             AnimeBot ab = new AnimeBot(input);
             return new TextMessage(ab.getStatusMessage());
-        } else if (command.equals("hari ini nonton apa?")) {
+        } else if ((command.equals("hari ini nonton apa?"))
+                && (event.getSource() instanceof GroupSource)) {
             ListAnimeBot lab = new ListAnimeBot();
             return new TextMessage(lab.getListAnime());
         }

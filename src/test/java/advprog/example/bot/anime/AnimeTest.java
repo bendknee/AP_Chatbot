@@ -13,21 +13,14 @@ public class AnimeTest {
 
     @Before
     public void setUp() {
-        anime = new Anime("My anime", "Mar 31, 2018", "Aug 22, 2018");
+        anime = new Anime("My anime", "2018-03-01", "2018-08-22");
     }
 
     @Test
-    public void nameTest(){
-        anime.setTitle("My new Anime");
+    public void nameTest() {
+        anime.setTitle("My anime 2");
         assertEquals("My anime 2", anime.getTitle());
     }
-
-    @Test
-    public void isAiring(){
-        anime.setAiringStatus();
-        assertTrue(anime.isAiring());
-    }
-
 
 
 }
