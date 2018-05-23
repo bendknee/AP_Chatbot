@@ -7,6 +7,9 @@ stages:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  POSTGRES_DB: database
+  POSTGRES_USER: username
+  POSTGRES_PASSWORD: "password"
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
