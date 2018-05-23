@@ -90,7 +90,8 @@ public class FakeNewsControllerTest {
     @Test
     void testHandleTextMessageEventAddFilter() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/add_filter ExperimentalVaccines.org conspiracy");
+                EventTestUtil.createDummyTextMessage(
+                    "/add_filter ExperimentalVaccines.org conspiracy");
 
         TextMessage reply = fakeNewsController.handleTextMessageEvent(event);
 
