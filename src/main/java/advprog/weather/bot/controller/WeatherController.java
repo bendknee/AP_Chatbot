@@ -50,7 +50,7 @@ public class WeatherController {
                 tempConfig.put(source.getSenderId(), "celcius");
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
-            } else if (content.equals("/configure_weather")) {
+            } else if (content.contains("/configure_weather")) {
                 if (content.split(" ").length == 1) {
                     return new TextMessage("Please set your temperature configuration "
                             + "by typing in this format :\n"
