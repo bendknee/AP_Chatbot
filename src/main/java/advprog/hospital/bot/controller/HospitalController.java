@@ -7,16 +7,26 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.*;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.ImageMessage;
+import com.linecorp.bot.model.message.LocationMessage;
+import com.linecorp.bot.model.message.TemplateMessage;
+import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @LineMessageHandler
@@ -36,18 +46,18 @@ public class HospitalController {
 
 
     private static Map<String, HashMap<String, String>> getData() {
-        HashMap<String, HashMap<String, String>> hospitalData = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> hospitalData = new HashMap<>();
 
-        HashMap<String, String> herminaDepok = new HashMap<String, String>();
-        HashMap<String, String> tuguIbu = new HashMap<String, String>();
-        HashMap<String, String> meilia = new HashMap<String, String>();
-        HashMap<String, String> grhaPermata = new HashMap<String, String>();
-        HashMap<String, String> bhaktiYudha = new  HashMap<String, String>();
-        HashMap<String, String> hasanahAfiah = new HashMap<String, String>();
-        HashMap<String, String> sentraMedika = new HashMap<String, String>();
-        HashMap<String, String> mitraKeluarga = new HashMap<String, String>();
-        HashMap<String, String> harapanDepok = new HashMap<String, String>();
-        HashMap<String, String> puriCinere = new HashMap<String, String>();
+        HashMap<String, String> herminaDepok = new HashMap<>();
+        HashMap<String, String> tuguIbu = new HashMap<>();
+        HashMap<String, String> meilia = new HashMap<>();
+        HashMap<String, String> grhaPermata = new HashMap<>();
+        HashMap<String, String> bhaktiYudha = new  HashMap<>();
+        HashMap<String, String> hasanahAfiah = new HashMap<>();
+        HashMap<String, String> sentraMedika = new HashMap<>();
+        HashMap<String, String> mitraKeluarga = new HashMap<>();
+        HashMap<String, String> harapanDepok = new HashMap<>();
+        HashMap<String, String> puriCinere = new HashMap<>();
 
         hospitalData.put("1", herminaDepok); hospitalData.put("2", tuguIbu);
         hospitalData.put("3", meilia); hospitalData.put("4", grhaPermata);
@@ -55,69 +65,71 @@ public class HospitalController {
         hospitalData.put("7", sentraMedika); hospitalData.put("8", mitraKeluarga);
         hospitalData.put("9", harapanDepok); hospitalData.put("0", puriCinere);
 
-        herminaDepok.put("picture", "https://static.konsula.com/images/practice/0001001000/0001000266/rumah-" +
-                "sakit-hermina-depok.800x600.jpeg");
+        herminaDepok.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         herminaDepok.put("location", "-6.399851, 106.825205");
         herminaDepok.put("address", "Jl. Raya Siliwangi No. 50 Pancoran Mas Depok");
         herminaDepok.put("name", "Rumah Sakit Hermina Depok");
         herminaDepok.put("description", "Rumah sakit Umum");
 
-        tuguIbu.put("picture", "https://res.cloudinary.com/vanjunior/image/upload/c_fill,f_auto,h_220,q_auto," +
-                "w_250/v1/hospital/RS-Tugu-Ibu.jpg");
+        tuguIbu.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         tuguIbu.put("location", "-6.356472, 106.859890");
         tuguIbu.put("address", "Jl. Raya Bogor Km 29 Cimanggis - Depok");
         tuguIbu.put("name", "Rumah Sakit Tugu Ibu");
         tuguIbu.put("description", "Rumah sakit Umum");
 
-        meilia.put("picture", "https://static.konsula.com/images/practice/0001002000/0001001119/rumah-sakit" +
-                "-meilia.800x600.jpg");
+        meilia.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         meilia.put("location", "-6.376019, 106.902071");
         meilia.put("address", "Jl. Alternatif Cibubur KM. 1, Cimanggis, Kota Depok");
         meilia.put("name", "Rumah Sakit Meilia");
         meilia.put("description", "Rumah sakit Umum");
 
-        grhaPermata.put("picture", "https://static.konsula.com/images/practice/0001001000/0001000679/rumah-" +
-                "sakit-grha-permata-ibu.800x600.jpg");
+        grhaPermata.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         grhaPermata.put("location", "-6.370648, 106.813218");
         grhaPermata.put("address", "Jl. KH. M. Usman No 168 Kukusan Depok");
         grhaPermata.put("name", "Rumah Sakit Grha Permata Ibu");
         grhaPermata.put("description", "Rumah sakit Umum");
 
-        bhaktiYudha.put("picture", "http://www.rsbhaktiyudha.co.id/foto_statis/70selayangpandang.jpg");
+        bhaktiYudha.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         bhaktiYudha.put("location", "-6.397400, 106.806116");
         bhaktiYudha.put("address", "Jl. Raya Sawangan No. 2A Depok");
         bhaktiYudha.put("name", "Rumah Sakit Bhakti Yudha");
         bhaktiYudha.put("description", "Rumah sakit Umum");
 
-        hasanahAfiah.put("picture", "https://static.konsula.com/images/practice/0001001000/0001000889/rumah-" +
-                "sakit-hasanah-graha-afiah.800x600.jpg");
+        hasanahAfiah.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         hasanahAfiah.put("location", "-6.408340, 106.840459");
         hasanahAfiah.put("address", "Jl. Raden Saleh No.42 (Studio Alam TVRI) Depok");
         hasanahAfiah.put("name", "Rumah Sakit Hasanah Graha Afiah");
         hasanahAfiah.put("description", "Rumah sakit Umum");
 
-        sentraMedika.put("picture", "https://static.konsula.com/images/practice/0001001000/0001000678/rumah-" +
-                "sakit-sentra-medika-cisalak.800x600.jpg");
+        sentraMedika.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         sentraMedika.put("location", "-6.391011, 106.865672");
         sentraMedika.put("address", "Jl. Raya Bogor KM. 33 Cisalak, Sukmajaya, Depok");
         sentraMedika.put("name", "Rumah Sakit Sentra Medika");
         sentraMedika.put("description", "Rumah sakit Umum");
 
-        mitraKeluarga.put("picture", "https://static.konsula.com/images/practice/0001001000/0001000873/rumah-" +
-                "sakit-mitra-keluarga-depok.800x600.jpg");
+        mitraKeluarga.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         mitraKeluarga.put("location", "-6.394259, 106.823679");
         mitraKeluarga.put("address", "Jl. Margonda Raya, Pancoran Mas, Depok, Jawa Barat");
         mitraKeluarga.put("name", "Rumah Sakit Mitra Keluarga Depok");
         mitraKeluarga.put("description", "Rumah sakit Umum");
 
-        harapanDepok.put("picture", "http://1.bp.blogspot.com/-oZFaq9REP34/ViZXDoT0EOI/AAAAAAAAAug/g2PVWXX1H" +
-                "OY/s1600/Alamat%2BRumah%2BSakit%2BHarapan%2BDepok.jpg");
+        harapanDepok.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         harapanDepok.put("location", "-6.402518, 106.819878");
         harapanDepok.put("address", "Jl. Pemuda No.10 Depok");
         harapanDepok.put("name", "Rumah Sakit Harapan Depok");
         harapanDepok.put("description", "Rumah sakit Umum");
 
-        puriCinere.put("picture", "https://www.garnesia.com/images/vendor/v4550.jpg");
+        puriCinere.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
+                + "ine-kit/512/help-512.png");
         puriCinere.put("location", "-6.321839, 106.782051");
         puriCinere.put("address", "Jl. Maribaya No.1 Puri Cinere,Depok");
         puriCinere.put("name", "Rumah Sakit Puri Cinere");
@@ -142,8 +154,8 @@ public class HospitalController {
             if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
                 state = STATE_ADD_LOCATION;
                 replyText = "Terima kasih, permintaan anda akan kami proses";
-                reply(replyToken, new TextMessage(replyText));
-            } else if (contentText.length() == 16 && contentText.substring(0, 16).equals("/random_hospital")) {
+            } else if (contentText.length() == 16 &&
+                    contentText.substring(0, 16).equals("/random_hospital")) {
                 state = STATE_GENERAL;
                 TemplateMessage carouselReply =
                         new TemplateMessage("Hospital List", getCarouselTemplateMessage());
@@ -152,7 +164,8 @@ public class HospitalController {
             } else if (contentText.length() == 5 && contentText.substring(0, 5).equals("/info")) {
                 state = STATE_GENERAL;
                 int jumlahHospital = HOSPITAL_DATA.size();
-                replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok dalam database";
+                replyText = "Terdapat " + jumlahHospital + " rumah sakit sekitar Depok"
+                        + " dalam database";
                 reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() > 4 && contentText.substring(0, 4).equals("/get")) {
                 state = STATE_GENERAL;
@@ -178,9 +191,10 @@ public class HospitalController {
             state = STATE_GENERAL;
             LocationMessageContent locationMessageContent = event.getMessage();
             String replyToken = event.getReplyToken();
-            getDistance(replyToken, locationMessageContent.getLatitude(), locationMessageContent.getLongitude());
+            getDistance(replyToken, locationMessageContent.getLatitude(),
+                    locationMessageContent.getLongitude());
             replyText = "Mohon tunggu, permintaan Anda sedang kami proses";
-        };
+        }
 
         return replyText;
     }
@@ -194,14 +208,15 @@ public class HospitalController {
 
     @NotNull
     private CarouselTemplate getCarouselTemplateMessage() {
-        ArrayList<CarouselColumn> columns = new ArrayList<CarouselColumn>();
+        ArrayList<CarouselColumn> columns = new ArrayList<>();
         ArrayList<Integer> randomNum = generateRandom();
 
         for (int i = 0; i < 3; i++) {
             String stringified = Integer.toString(randomNum.get(i));
             HashMap<String, String> hospital =  HOSPITAL_DATA.get(stringified);
 
-            MessageAction action = new MessageAction(hospital.get("name").substring(12), "/get " + randomNum.get(i));
+            MessageAction action = new MessageAction(hospital.get("name").substring(12),
+                    "/get " + randomNum.get(i));
             CarouselColumn column = new CarouselColumn(
                     hospital.get("picture"), hospital.get("name"), hospital.get("address"),
                     Arrays.asList(action)
@@ -238,8 +253,10 @@ public class HospitalController {
         String stringified = Integer.toString(numIndex);
         HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
-        ImageMessage imageReply = new ImageMessage(hospital.get("picture"), hospital.get("picture"));
-        TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description"));
+        ImageMessage imageReply = new ImageMessage(hospital.get("picture"),
+                hospital.get("picture"));
+        TextMessage textReply = new TextMessage(hospital.get("name") + "\n"
+                + hospital.get("description"));
         LocationMessage locationReply = new LocationMessage(
                 hospital.get("name"), hospital.get("address"),
                 Double.parseDouble(hospital.get("location").substring(0,9)),
@@ -253,9 +270,10 @@ public class HospitalController {
         String stringified = Integer.toString(numIndex);
         HashMap<String, String> hospital = HOSPITAL_DATA.get(stringified);
 
-        ImageMessage imageReply = new ImageMessage(hospital.get("picture"), hospital.get("picture"));
-        TextMessage textReply = new TextMessage(hospital.get("name") + "\n" + hospital.get("description") +
-                "\nJarak ke rumah sakit " + jarak + " meter");
+        ImageMessage imageReply = new ImageMessage(hospital.get("picture"),
+                hospital.get("picture"));
+        TextMessage textReply = new TextMessage(hospital.get("name") + "\n"
+                + hospital.get("description") + "\nJarak ke rumah sakit " + jarak + " meter");
         LocationMessage locationReply = new LocationMessage(
                 hospital.get("name"), hospital.get("address"),
                 Double.parseDouble(hospital.get("location").substring(0,9)),
@@ -274,10 +292,8 @@ public class HospitalController {
     }
 
     private ArrayList<Integer> generateRandom() {
-        ArrayList<Integer> randomNumber = new ArrayList<Integer>();
-        ArrayList<Integer> randomNum = generateRandomHelper(randomNumber);
-
-        return randomNum;
+        ArrayList<Integer> randomNumber = new ArrayList<>();
+        return generateRandomHelper(randomNumber);
     }
 
     private ArrayList<Integer> generateRandomHelper(ArrayList<Integer> randomNum) {
@@ -305,10 +321,8 @@ public class HospitalController {
 
 
     private double pythagorean(double a, double b, double c, double d) {
-        double aa = (a-c)*Math.pow(10, 6);
-        double bb = (b-d)*Math.pow(10, 6);
-        double result = Math.sqrt(Math.pow(aa, 2)+ Math.pow(bb, 2));
-
-        return result;
+        double aa = (a - c) * Math.pow(10, 6);
+        double bb = (b - d) * Math.pow(10, 6);
+        return Math.sqrt(Math.pow(aa, 2) + Math.pow(bb, 2));
     }
 }
