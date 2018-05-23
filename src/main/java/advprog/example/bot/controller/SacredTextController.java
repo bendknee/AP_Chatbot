@@ -94,10 +94,6 @@ public class SacredTextController {
                     }
                     return new TextMessage(output);
                 }
-            } else if (contentText.equals("/bye")) {
-                this.replyText(event.getReplyToken(), "Leaving group");
-                lineMessagingClient.leaveGroup(
-                    ((GroupSource) event.getSource()).getGroupId()).get();
             }
 
         } else {
@@ -239,24 +235,9 @@ public class SacredTextController {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-    }
+    }   
 
-    private void replyText(String replyToken, String message) {
-        if (replyToken.isEmpty()) {
-            throw new IllegalArgumentException("replyToken must not be empty");
-        }
-        if (message.length() > 1000) {
-            message = message.substring(0, 1000 - 2) + "……";
-        }
-        this.reply(replyToken, new TextMessage(message));
-    }
-
-    @EventMapping
-    public void handleJoinEvent(JoinEvent event) {
-        String replyToken = event.getReplyToken();
-        this.replyText(replyToken, "Joined " + event.getSource());
-    }
-
+    
     public int getRandomChapter() {
         return randomChapter;
     }

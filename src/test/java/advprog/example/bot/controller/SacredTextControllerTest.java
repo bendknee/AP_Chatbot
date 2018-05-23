@@ -112,7 +112,8 @@ public class SacredTextControllerTest extends TestCase {
 
         Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter not available\n Available Chapters: 1-191", ((TextMessage) reply).getText());
+        assertEquals("Chapter not available\n Available Chapters: 1-191",
+            ((TextMessage) reply).getText());
     }
     
     @Test
@@ -122,7 +123,8 @@ public class SacredTextControllerTest extends TestCase {
 
         Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", ((TextMessage) reply).getText());
+        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8",
+            ((TextMessage) reply).getText());
     }
     
     @Test
@@ -133,7 +135,8 @@ public class SacredTextControllerTest extends TestCase {
         Message reply = sacredTextController.handleTextMessageEvent(event);
 
         assertEquals("Command doesn't exist\n"
-            + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>", ((TextMessage) reply).getText());
+            + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>",
+            ((TextMessage) reply).getText());
     }
     
     @Test
@@ -143,7 +146,8 @@ public class SacredTextControllerTest extends TestCase {
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
         Message reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        assertTrue(((TextMessage) reply).getText().contains(
+            "Guess the chapter from Book 1 of The Rig Veda!"));
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
@@ -160,7 +164,8 @@ public class SacredTextControllerTest extends TestCase {
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
         Message reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        assertTrue(((TextMessage) reply).getText().contains(
+            "Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
@@ -183,7 +188,8 @@ public class SacredTextControllerTest extends TestCase {
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
         Message reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        assertTrue(((TextMessage) reply).getText().contains(
+            "Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
@@ -224,7 +230,8 @@ public class SacredTextControllerTest extends TestCase {
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
         Message reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        assertTrue(((TextMessage) reply).getText().contains(
+            "Guess the chapter from Book 1 of The Rig Veda!"));
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
@@ -243,7 +250,8 @@ public class SacredTextControllerTest extends TestCase {
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
         Message reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        assertTrue(((TextMessage) reply).getText().contains(
+            "Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "answer"),
