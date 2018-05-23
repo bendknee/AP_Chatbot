@@ -9,8 +9,11 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import com.neovisionaries.i18n.CountryCode;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -144,7 +147,7 @@ public class WeatherController {
             return kelvin + "° Kelvin\n";
         } else if (unit.equals("fahrenheit")) {
             double temperature = Double.parseDouble(kelvin);
-            temperature = 9/5 * (temperature - 273.15) + 32;
+            temperature = 9 / 5 * (temperature - 273.15) + 32;
             return String.format("%,.2f", temperature) + "° Fahrenheit\n";
         }
         return null;

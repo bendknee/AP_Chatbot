@@ -77,4 +77,20 @@ public class WeatherControllerTest {
         TextMessage reply = weatherController.handleTextMessageEvent(event);
         assertEquals("City not found. Try another city", reply.getText());
     }
+
+    @Test void testConfigureDegree() {
+        WeatherController controller = new WeatherController();
+        MessageEvent<TextMessageContent> event =
+                EventTestUtil.createPrivateTextMessage("/configure_weather");
+        TextMessage reply = controller.handleTextMessageEvent(event);
+        assertTrue(reply.getText().contains("Please set your temperature"));
+
+        event = EventTestUtil.createPrivateTextMessage("/configure_weather kelvin");
+        reply = controller.handleTextMessageEvent(event);
+        assertEquals("Configuration changed to kelvin", reply.getText());
+
+        event = EventTestUtil.createPrivateTextMessage("/configure_weather wakanda");
+        reply = controller.handleTextMessageEvent(event);
+        assertEquals("wakanda is not a valid degree unit.", reply.getText());
+    }
 }
