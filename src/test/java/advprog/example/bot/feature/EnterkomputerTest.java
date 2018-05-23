@@ -1,14 +1,42 @@
 package advprog.example.bot.feature;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+@SpringBootTest(properties = "line.bot.handler.enabled=false")
+@ExtendWith(SpringExtension.class)
 
 public class EnterkomputerTest {
+
+    Enterkomputer enterkomputer = new Enterkomputer();
+
+    static {
+        System.setProperty("line.bot.channelSecret", "SECRET");
+        System.setProperty("line.bot.channelToken", "TOKEN");
+    }
+
     @Test
-    public void findPriceTest(){
-        String category = "VGA";
-        String name = "Geforce GTX 1080";
-        assertEquals("name desc price",Enterkomputer.findPrice(category, name));
+    void testContextLoads() {
+        assertNotNull(enterkomputer);
+    }
+
+    @Test
+    void testFindPriceFail() {
+        assertEquals("Not found", Enterkomputer
+                .findPrice("Instrumen musik","Yamaha Guitar S25.21 XB"));
+    }
+
+    @Test
+    void testFindPriceSuccess() {
+        assertEquals("iGame nVidia Geforce GTX 1080 8GB DDR5X - "
+                + "X-TOP-8G - Triple Fan ( Garansi 3 Bln ) - 9900000", Enterkomputer
+                .findPrice("VgA","iGame Nvidia Geforce GTX 1080"));
+        assertEquals("No related items", Enterkomputer
+                .findPrice("vga","bukan item"));
     }
 }
