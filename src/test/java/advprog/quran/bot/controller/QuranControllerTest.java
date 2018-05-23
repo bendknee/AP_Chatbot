@@ -119,7 +119,7 @@ public class QuranControllerTest {
         TextMessage reply = (TextMessage) quranClass.reply(event);
         assertNotNull(reply.getText());
 
-        event = EventTestUtil.createDummyTextMessage("Dummy test fail");
+        event = EventTestUtil.createDummyTextMessage("Dummy fail test");
         reply = (TextMessage) quranClass.reply(event);
         assertEquals("Jawaban salah!", reply.getText());
     }
