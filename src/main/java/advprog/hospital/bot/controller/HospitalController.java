@@ -7,9 +7,9 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.LocationMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.ImageMessage;
 import com.linecorp.bot.model.message.LocationMessage;
+import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.message.template.CarouselColumn;
@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import org.jetbrains.annotations.NotNull;
@@ -59,11 +59,16 @@ public class HospitalController {
         HashMap<String, String> harapanDepok = new HashMap<>();
         HashMap<String, String> puriCinere = new HashMap<>();
 
-        hospitalData.put("1", herminaDepok); hospitalData.put("2", tuguIbu);
-        hospitalData.put("3", meilia); hospitalData.put("4", grhaPermata);
-        hospitalData.put("5", bhaktiYudha); hospitalData.put("6", hasanahAfiah);
-        hospitalData.put("7", sentraMedika); hospitalData.put("8", mitraKeluarga);
-        hospitalData.put("9", harapanDepok); hospitalData.put("0", puriCinere);
+        hospitalData.put("1", herminaDepok);
+        hospitalData.put("2", tuguIbu);
+        hospitalData.put("3", meilia);
+        hospitalData.put("4", grhaPermata);
+        hospitalData.put("5", bhaktiYudha);
+        hospitalData.put("6", hasanahAfiah);
+        hospitalData.put("7", sentraMedika);
+        hospitalData.put("8", mitraKeluarga);
+        hospitalData.put("9", harapanDepok);
+        hospitalData.put("0", puriCinere);
 
         herminaDepok.put("picture", "https://cdn0.iconfinder.com/data/icons/healthcare-and-medic"
                 + "ine-kit/512/help-512.png");
@@ -154,8 +159,8 @@ public class HospitalController {
             if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
                 state = STATE_ADD_LOCATION;
                 replyText = "Terima kasih, permintaan anda akan kami proses";
-            } else if (contentText.length() == 16 &&
-                    contentText.substring(0, 16).equals("/random_hospital")) {
+            } else if (contentText.length() == 16
+                    && contentText.substring(0, 16).equals("/random_hospital")) {
                 state = STATE_GENERAL;
                 TemplateMessage carouselReply =
                         new TemplateMessage("Hospital List", getCarouselTemplateMessage());
@@ -240,9 +245,11 @@ public class HospitalController {
             );
 
             if (i == 0) {
-                index = i; jarak = jarakTemp;
+                index = i;
+                jarak = jarakTemp;
             } else if (jarak > jarakTemp) {
-                index = i; jarak = jarakTemp;
+                index = i;
+                jarak = jarakTemp;
             }
         }
 
