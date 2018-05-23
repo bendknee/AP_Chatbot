@@ -46,9 +46,10 @@ public class ScrappercdoriconSingle {
                 String title = rank.select("h2.title").text();
                 String artist = rank.select("p.name").text();
                 Elements list = rank.select("ul.list li");
-                String release = list.get(0).text();
-                release = format("%s - %s - ", release.substring(5, 9), release.substring(10, 12));
-                release = release + release.substring(13, 15);
+                String releaseTmp = list.get(0).text();
+                String release = format("%s-", releaseTmp.substring(5, 9));
+                release = release + format("%s-", releaseTmp.substring(10, 12));
+                release = release + releaseTmp.substring(13, 15);
                 val.add(format("(%d) %s - %s - %s", i, title, artist, release));
                 i++;
             }
