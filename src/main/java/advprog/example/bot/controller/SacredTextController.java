@@ -47,7 +47,7 @@ public class SacredTextController {
     private LineMessagingClient lineMessagingClient;
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
+    public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
         throws Exception {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", 
             event.getTimestamp(), event.getMessage()));
@@ -103,10 +103,9 @@ public class SacredTextController {
         } else {
             if (!hasChosed) {
                 if (contentText.equals("/sacred_text")) {
-                    String img = "";
+                    String img = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Om_symbol.svg/100px-Om_symbol.svg.png";
                     ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
                     for (int i = 1; i <= 20; i++) {
-                        img = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Om_symbol.svg/100px-Om_symbol.svg.png";
                         carouselList.add(new CarouselColumn(img, "" + i,
                             "The Rig Veda Book 1 HYMN " + i,
                             Arrays.asList(new PostbackAction("Choose", "" + i))));
@@ -114,7 +113,7 @@ public class SacredTextController {
                     CarouselTemplate carouselTemplate = new CarouselTemplate(carouselList);
                     TemplateMessage templateMessage = 
                         new TemplateMessage("Carousel alt text", carouselTemplate);
-                    this.reply(event.getReplyToken(), templateMessage);
+                    return templateMessage;
 
                 } else if (contentText.startsWith("/sacred_text ")) {
                     String[] replyTextArray = contentText.split(" ");

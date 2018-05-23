@@ -10,6 +10,8 @@ import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.event.source.GroupSource;
+import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
 
 import java.time.Instant;
@@ -46,10 +48,10 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 5:2");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
         assertEquals("To him the richest of the rich, the Lord of treasures excellent,\n"
-            + "Indra, with Soma juice outpoured.", reply.getText());
+            + "Indra, with Soma juice outpoured.", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -58,9 +60,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 5:2 extra");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
+        assertEquals("Parameter should just be <Chapter>:<Verse>", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -68,9 +70,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 5");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
+        assertEquals("Parameter should just be <Chapter>:<Verse>", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -78,9 +80,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 5:2:1");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Parameter should just be <Chapter>:<Verse>", reply.getText());
+        assertEquals("Parameter should just be <Chapter>:<Verse>", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -88,9 +90,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text notInt:2");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter and Verse must both be an integer", reply.getText());
+        assertEquals("Chapter and Verse must both be an integer", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -98,9 +100,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 5:notInt");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter and Verse must both be an integer", reply.getText());
+        assertEquals("Chapter and Verse must both be an integer", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -108,9 +110,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 200:1");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Chapter not available\n Available Chapters: 1-191", reply.getText());
+        assertEquals("Chapter not available\n Available Chapters: 1-191", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -118,9 +120,9 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/sacred_text 103:0");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
-        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", reply.getText());
+        assertEquals("Invalid Verse Number\nVerse Range(inclusive): 1-8", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -128,10 +130,10 @@ public class SacredTextControllerTest extends TestCase {
         MessageEvent<TextMessageContent> event =
             EventTestUtil.createDummyTextMessage("/random");
 
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
+        Message reply = sacredTextController.handleTextMessageEvent(event);
 
         assertEquals("Command doesn't exist\n"
-            + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>", reply.getText());
+            + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>", ((TextMessage) reply).getText());
     }
     
     @Test
@@ -140,15 +142,15 @@ public class SacredTextControllerTest extends TestCase {
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(reply.getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        Message reply = sacredTextController.handleTextMessageEvent(event);
+        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "" + answer),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("You are correct", reply.getText());
+        assertEquals("You are correct", ((TextMessage) reply).getText());
 
     }
 
@@ -157,21 +159,21 @@ public class SacredTextControllerTest extends TestCase {
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(reply.getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        Message reply = sacredTextController.handleTextMessageEvent(event);
+        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nTry again, chances remaining: 4", reply.getText());
+        assertEquals("Incorrect\nTry again, chances remaining: 4", ((TextMessage) reply).getText());
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "" + answer),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("You are correct", reply.getText());
+        assertEquals("You are correct", ((TextMessage) reply).getText());
 
     }
 
@@ -180,39 +182,39 @@ public class SacredTextControllerTest extends TestCase {
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(reply.getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        Message reply = sacredTextController.handleTextMessageEvent(event);
+        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nTry again, chances remaining: 4", reply.getText());
+        assertEquals("Incorrect\nTry again, chances remaining: 4", ((TextMessage) reply).getText());
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nTry again, chances remaining: 3", reply.getText());
+        assertEquals("Incorrect\nTry again, chances remaining: 3", ((TextMessage) reply).getText());
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nTry again, chances remaining: 2", reply.getText());
+        assertEquals("Incorrect\nTry again, chances remaining: 2", ((TextMessage) reply).getText());
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nTry again, chances remaining: 1", reply.getText());
+        assertEquals("Incorrect\nTry again, chances remaining: 1", ((TextMessage) reply).getText());
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "0"),
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
-        assertEquals("Incorrect\nCorrect answer is " + answer, reply.getText());
+        assertEquals("Incorrect\nCorrect answer is " + answer, ((TextMessage) reply).getText());
 
     }
 
@@ -221,8 +223,8 @@ public class SacredTextControllerTest extends TestCase {
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(reply.getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        Message reply = sacredTextController.handleTextMessageEvent(event);
+        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
         int answer = sacredTextController.getRandomChapter();
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
@@ -230,7 +232,7 @@ public class SacredTextControllerTest extends TestCase {
             Instant.now());
         reply = sacredTextController.handleTextMessageEvent(event);
         assertEquals("Another game is still ongoing\n"
-            + "Complete the game before starting a new one", reply.getText());
+            + "Complete the game before starting a new one", ((TextMessage) reply).getText());
 
     }
 
@@ -240,8 +242,8 @@ public class SacredTextControllerTest extends TestCase {
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "randomVerse"),
             Instant.now());
-        TextMessage reply = sacredTextController.handleTextMessageEvent(event);
-        assertTrue(reply.getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
+        Message reply = sacredTextController.handleTextMessageEvent(event);
+        assertTrue(((TextMessage) reply).getText().contains("Guess the chapter from Book 1 of The Rig Veda!"));
         event = new MessageEvent<TextMessageContent>(
             "replyToken", new GroupSource("groupId", "userId"),
             new TextMessageContent("id", "answer"),
