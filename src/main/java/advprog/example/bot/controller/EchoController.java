@@ -5,7 +5,7 @@ import advprog.example.bot.anime.ListAnimeBot;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
-import com.linecorp.bot.model.event.source.GroupSource;
+import com.linecorp.bot.model.event.source.UserSource;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
@@ -39,8 +39,8 @@ public class EchoController {
         } else if (command.equals("/is_airing")) {
             AnimeBot ab = new AnimeBot(input);
             return new TextMessage(ab.getStatusMessage());
-        } else if ((contentText.equals("hari ini nonton apa?"))
-                && (event.getSource() instanceof GroupSource)) {
+        } else if (contentText.toLowerCase().contains("hari ini nonton apa?")
+                && event.getSource().getClass() != UserSource.class) {
             ListAnimeBot lab = new ListAnimeBot();
             return new TextMessage(lab.getListAnime());
         }
