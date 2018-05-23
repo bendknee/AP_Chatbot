@@ -60,11 +60,15 @@ public class BotController {
 
         Message reply = null;
 
-        if (content.matches("^stop zonk$")) {
+        if (content.matches("^[Ss]top zonk$")) {
             return quizHandler.handleStopZonk(senderId);
-        } else if (content.matches("^next question$")) {
+        } else if (content.matches("^[Nn]ext question$")) {
             return quizHandler.handleNextQuestion(senderId);
-        } else if (content.matches("^start zonk$")) {
+        } else if (quizContext.containsContext(senderId)) {
+            String userId = source.getUserId();
+
+            return quizHandler.handleMessageOnActiveSession(senderId, userId, content);
+        } else if (content.matches("^[Ss]tart zonk$")) {
             if (source instanceof RoomSource || source instanceof GroupSource) {
                 return quizHandler.handleStartZonk(senderId);
             } else {

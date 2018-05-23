@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Quiz {
-    private HashMap<String, Integer> score = new HashMap<>();
+    private HashMap<String, Integer> scores = new HashMap<>();
     private List<Question> questions;
     private Question currentQuestion;
     private Random random = new Random();
@@ -15,11 +15,13 @@ public class Quiz {
     }
 
     public void incrementUserScore(String id) {
-        score.put(id, score.get(id) + 1);
+        int nextScore = scores.getOrDefault(id, 0) + 1;
+        System.out.println(id + " " + nextScore);
+        scores.put(id, nextScore);
     }
 
-    public HashMap<String, Integer> getScore() {
-        return score;
+    public HashMap<String, Integer> getScores() {
+        return scores;
     }
 
     public Question getRandomQuestion() {
