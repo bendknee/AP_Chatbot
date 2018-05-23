@@ -49,9 +49,13 @@ public class Question {
         return question;
     }
 
-    public boolean isQuestionSet() { return this.question != null; }
+    public boolean isQuestionSet() {
+        return this.question != null;
+    }
 
-    public void setQuestion(String question) { this.question = question; }
+    public void setQuestion(String question) {
+        this.question = question;
+    }
 
     public void addAnswer(Answer answer) {
         this.answers.add(answer);

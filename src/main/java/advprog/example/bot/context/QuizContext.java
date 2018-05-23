@@ -1,9 +1,10 @@
 package advprog.example.bot.context;
 
 import advprog.example.bot.entity.Quiz;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class QuizContext {

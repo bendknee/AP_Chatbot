@@ -17,8 +17,6 @@ import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 
 import com.linecorp.bot.model.profile.UserProfileResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +28,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class QuizHandler {
@@ -236,10 +237,10 @@ public class QuizHandler {
                 .stream()
                 .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
-                        Entry::getKey,
-                        Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
+                    Entry::getKey,
+                    Entry::getValue,
+                    (e1, e2) -> e1,
+                    LinkedHashMap::new
                 ));
 
         int juara = 1;

@@ -6,7 +6,6 @@ import advprog.example.bot.entity.Question;
 import advprog.example.bot.handler.EchoHandler;
 import advprog.example.bot.handler.QuizHandler;
 
-import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.PostbackEvent;
@@ -20,15 +19,15 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.logging.Logger;
 
 @LineMessageHandler
 public class BotController {
 
     private static final Logger LOGGER = Logger.getLogger(BotController.class.getName());
-    private LineMessagingClient lineMessagingClient;
     private EchoHandler echoHandler;
     private QuizHandler quizHandler;
     private QuestionContext questionContext;
@@ -36,13 +35,11 @@ public class BotController {
 
     @Autowired
     public BotController(
-            LineMessagingClient lineMessagingClient,
             EchoHandler echoHandler,
             QuizHandler quizHandler,
             QuestionContext questionContext,
             QuizContext quizContext
     ) {
-        this.lineMessagingClient = lineMessagingClient;
         this.echoHandler = echoHandler;
         this.quizHandler = quizHandler;
         this.questionContext = questionContext;
@@ -101,12 +98,6 @@ public class BotController {
                 reply = quizHandler.handleChangeAnswer(senderId);
             } else {
                 reply = new TextMessage("Private chat only.");
-            }
-        } else if (content.matches("^/bye$")) {
-            if (source instanceof GroupSource) {
-                lineMessagingClient.leaveGroup(((GroupSource) source).getGroupId()).get();
-            } else if (source instanceof RoomSource) {
-                lineMessagingClient.leaveRoom(((RoomSource) source).getRoomId()).get();
             }
         }
 
