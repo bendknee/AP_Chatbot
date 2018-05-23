@@ -17,8 +17,8 @@ public class ScrapperTest {
                 + "(7) GREEN MIND AT BUDOKAN - 秦 基博 - 2018-05-02\n"
                 + "(8) THE IDOLM@STER SideM GREETING TOUR 2017 〜BEYOND THE DREAM〜 LIVE Blu-ray "
                 + "- アイドルマスターSideM - 2018-04-25\n"
-                + "(9) SHOGO HAMADA ON THE ROAD 2015-2016“Journey of a Songwriter” "
-                + "- 浜田省吾 - 2018-04-25\n"
+                + "(9) SHOGO HAMADA ON THE ROAD 2015-2016“Journey of a Songwriter” - 浜田省吾 "
+                + "- 2018-04-25\n"
                 + "(10) ラブライブ!サンシャイン!! Aqours 2nd LoveLive! HAPPY PARTY TRAIN TOUR Blu-ray "
                 + "Memorial BOX - Aqours - 2018-04-25\n";
         String dateWeekly = "2018-05-14";
