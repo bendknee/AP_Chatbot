@@ -47,7 +47,8 @@ public class SacredTextController {
     private LineMessagingClient lineMessagingClient;
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
+        throws Exception {
         LOGGER.fine(String.format("TextMessageContent(timestamp='%s',content='%s')", 
             event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
@@ -102,21 +103,7 @@ public class SacredTextController {
         } else {
             if (!hasChosed) {
                 if (contentText.equals("/sacred_text")) {
-
-                    /*
-                     * ArrayList<CarouselColumn> carouselList = new
-                     * ArrayList<CarouselColumn>(); for (int i = 1; i <= 20;
-                     * i++) { String img = ""; carouselList.add(new
-                     * CarouselColumn(img, "" + i, "The Rig Veda Book 1 HYMN " +
-                     * i, Arrays.asList(new PostbackAction("Choose", "" + i))));
-                     * } CarouselTemplate carouselTemplate = new
-                     * CarouselTemplate(carouselList); TemplateMessage
-                     * templateMessage = new
-                     * TemplateMessage("Carousel alt text", carouselTemplate);
-                     * System.out.println("check template: "
-                     * +templateMessage+" #dah" ); return templateMessage;
-                     */
-                	String img = "";
+                    String img = "";
                     ArrayList<CarouselColumn> carouselList = new ArrayList<CarouselColumn>();
                     for (int i = 1; i <= 20; i++) {
                         img = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Om_symbol.svg/100px-Om_symbol.svg.png";
@@ -148,7 +135,7 @@ public class SacredTextController {
                     return new TextMessage(sacredResponse(chapter, verse));
                 } else if (contentText.startsWith("/")) {
                     return new TextMessage("Command doesn't exist\n"
-                    		+ "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>");
+                        + "Try: /sacred_text OR /sacred_text <Chapter>:<Verse>");
                 }
             } else {
                 if (contentText.startsWith("/")) {
@@ -269,5 +256,9 @@ public class SacredTextController {
     public void handleJoinEvent(JoinEvent event) {
         String replyToken = event.getReplyToken();
         this.replyText(replyToken, "Joined " + event.getSource());
+    }
+
+    public int getRandomChapter() {
+        return randomChapter;
     }
 }
