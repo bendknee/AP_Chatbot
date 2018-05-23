@@ -39,7 +39,8 @@ public class EchoController {
         } else if (command.equals("/is_airing")) {
             AnimeBot ab = new AnimeBot(input);
             return new TextMessage(ab.getStatusMessage());
-        } else if ((command.equals("hari ini nonton apa?"))) {
+        } else if ((splitContent.equals("hari ini nonton apa?"))
+                && (event.getSource() instanceof GroupSource)) {
             ListAnimeBot lab = new ListAnimeBot();
             return new TextMessage(lab.getListAnime());
         }
