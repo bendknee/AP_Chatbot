@@ -93,12 +93,4 @@ public class FakeNewsParser {
             return "input not valid";
         }
     }
-
-    public static void main(String[] args) {
-        FakeNewsParser y = new FakeNewsParser();
-        String x = "2";
-        y.checkListContainsNews("100percentfedup.com");
-        System.out.println(y.checkNews("conservativespirit.com", "political"));
-        System.out.println(y.addNewCriteria("consert.com", "asek"));
-    }
 }

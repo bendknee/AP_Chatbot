@@ -48,26 +48,29 @@ public class FakeNewsController {
                 }
             }
             String depan = content.getText().split(" ")[0];
-            String filterUrl = content.getText().split(" ")[1];
-            String filterType = content.getText().split(" ")[2];
             if (depan.equalsIgnoreCase("/is_fake")) {
                 String news = content.getText().replace(depan, "");
-                parser.checkNews(news, "fake");
+                return new TextMessage(parser.checkNews(news, "fake"));
             } else if (depan.equalsIgnoreCase("/is_satire")){
                 String news = content.getText().replace(depan, "");
-                parser.checkNews(news, "satire");
+                return new TextMessage(parser.checkNews(news, "satire"));
             } else if (depan.equalsIgnoreCase("/is_conspiracy")){
                 String news = content.getText().replace(depan, "");
-                parser.checkNews(news, "conspiracy");
+                return new TextMessage(parser.checkNews(news, "conspiracy"));
             } else if (depan.equalsIgnoreCase("/add_filter")){
-                parser.addNewCriteria(filterUrl, filterType);
+                String filterUrl = content.getText().split(" ")[1];
+                String filterType = content.getText().split(" ")[2];
+                return new TextMessage(parser.addNewCriteria(filterUrl, filterType));
             } else {
                 throw new IllegalArgumentException();
             }
-            String reply = "hh";
-            return new TextMessage(reply);
         } catch (IllegalArgumentException e){
-            return new TextMessage("Inputan tidak tersedia nih, coba /is_sfw atau masukan gambar");
+            return new TextMessage("Inputan tidak tersedia nih, coba /is_fake URL\n" +
+                    "\n" +
+                    "/is_satire URL\n" +
+                    "/is_conspiracy URL\n" +
+                    "\n" +
+                    "/add_filter URL TYPE");
         }
     }
 
