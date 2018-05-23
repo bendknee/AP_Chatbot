@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
@@ -51,8 +50,6 @@ public class WeatherController {
                 personalTrigger.add(source.getSenderId());
                 return new TextMessage("Please submit a location straightaway "
                         + "with Line's 'Share location' feature below. ☟");
-            } else if (content.toLowerCase().contains("/configure_weather")) {
-
             }
         }
 
@@ -122,7 +119,7 @@ public class WeatherController {
     private String kelvinToCelcius(String kelvin) {
         double temperature = Double.parseDouble(kelvin);
         temperature -= 273.15;
-        return String.format ("%,.2f", temperature);
+        return String.format("%,.2f", temperature);
     }
 
     private int emojiSelector(String weather) {
