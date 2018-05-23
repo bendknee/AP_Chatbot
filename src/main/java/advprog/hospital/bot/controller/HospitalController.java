@@ -150,15 +150,14 @@ public class HospitalController {
         TextMessageContent content = event.getMessage();
         String replyToken = event.getReplyToken();
         String contentText = content.getText();
-        String daruratText;
-        daruratText = contentText.replace("darurat", "");
-        daruratText = daruratText.replace("Darurat", "");
+        String daruratText = contentText.toLowerCase().replace("darurat", "");
 
         String replyText = "Mohon ulangi permintaan Anda";
         if (state == STATE_GENERAL || state == STATE_DARURAT) {
             if (contentText.length() == 9 && contentText.substring(0, 9).equals("/hospital")) {
                 state = STATE_ADD_LOCATION;
-                replyText = "Terima kasih, permintaan anda akan kami proses";
+                replyText = "Silahkan masukkan lokasi Anda";
+                reply(replyToken, new TextMessage(replyText));
             } else if (contentText.length() == 16
                     && contentText.substring(0, 16).equals("/random_hospital")) {
                 state = STATE_GENERAL;
@@ -181,7 +180,7 @@ public class HospitalController {
                 state = STATE_DARURAT;
             }
         } else if (state == STATE_ADD_LOCATION) {
-            replyText = "Silahkan masukkan lokasi";
+            replyText = "Silahkan masukkan lokasi Anda";
             reply(replyToken, new TextMessage(replyText));
         }
 
@@ -330,6 +329,6 @@ public class HospitalController {
     private double pythagorean(double a, double b, double c, double d) {
         double aa = (a - c) * Math.pow(10, 6);
         double bb = (b - d) * Math.pow(10, 6);
-        return Math.sqrt(Math.pow(aa, 2) + Math.pow(bb, 2));
+        return (Math.sqrt(Math.pow(aa, 2) + Math.pow(bb, 2))) / 10;
     }
 }

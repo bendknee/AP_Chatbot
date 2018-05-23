@@ -71,8 +71,8 @@ public class HospitalControllerTest {
         String reply1 = hospitalController.handleTextMessageEvent(event1);
         String reply2 = hospitalController.handleLocationMessageEvent(event2);
 
-        assertEquals("Terima kasih, permintaan anda akan kami proses", reply0);
-        assertEquals("Silahkan masukkan lokasi", reply1);
+        assertEquals("Silahkan masukkan lokasi Anda", reply0);
+        assertEquals("Silahkan masukkan lokasi Anda", reply1);
         assertEquals("Mohon tunggu, permintaan Anda sedang kami proses", reply2);
     }
 
