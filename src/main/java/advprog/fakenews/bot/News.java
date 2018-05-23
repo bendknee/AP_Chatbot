@@ -1,7 +1,11 @@
 package advprog.fakenews.bot;
 
 public class News {
-    String newsUrl, type, type2, type3, newsNotes;
+    private String newsUrl;
+    private String type;
+    private String type2;
+    private String type3;
+    private String newsNotes;
 
     public News(String newsUrl, String type, String type2, String type3, String newsNotes) {
         this.newsUrl = newsUrl;
@@ -51,9 +55,9 @@ public class News {
         this.newsNotes = newsNotes;
     }
 
-    public boolean containsFilter(String criteria){
+    public boolean containsFilter(String criteria) {
         if (this.getType().equalsIgnoreCase(criteria) || this.getType2()
-                .equalsIgnoreCase(criteria) || this.getType3().equalsIgnoreCase(criteria)){
+                .equalsIgnoreCase(criteria) || this.getType3().equalsIgnoreCase(criteria)) {
             return true;
         } else {
             return false;

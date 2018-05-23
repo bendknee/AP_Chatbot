@@ -17,15 +17,13 @@ import java.util.regex.Pattern;
 
 @LineMessageHandler
 public class FakeNewsController {
-    BotFakeNewsApplication x = new BotFakeNewsApplication();
-
     private static final Logger LOGGER = Logger.getLogger(FakeNewsController.class.getName());
     private static final String PATTERN_STRING = "((http:\\/\\/|https:\\/\\/)?"
             + "(www.)?(([a-zA-Z0-9-]){2,}\\.){1,4}([a-zA-Z]){2,6}(\\/"
             + "([a-zA-Z-_\\/\\.0-9#:?=&;,]*)?)?)";
     private FakeNewsParser parser = new FakeNewsParser();
 
-    private String findUrl(String contentText) {
+    private String isUrl(String contentText) {
         Pattern pattern = Pattern.compile(PATTERN_STRING);
         return Arrays.stream(contentText.split(" "))
                 .filter(word -> {
@@ -41,9 +39,9 @@ public class FakeNewsController {
                 event.getTimestamp(), event.getMessage()));
         TextMessageContent content = event.getMessage();
         try {
-            if (event.getSource()instanceof GroupSource){
-                String url = findUrl(content.getText());
-                if (!url.equals("")){
+            if (event.getSource()instanceof GroupSource) {
+                String url = isUrl(content.getText());
+                if (!url.equals("")) {
                     return new TextMessage(parser.printWarning(url));
                 }
             }
@@ -51,26 +49,24 @@ public class FakeNewsController {
             if (depan.equalsIgnoreCase("/is_fake")) {
                 String news = content.getText().replace(depan, "");
                 return new TextMessage(parser.checkNews(news, "fake"));
-            } else if (depan.equalsIgnoreCase("/is_satire")){
+            } else if (depan.equalsIgnoreCase("/is_satire")) {
                 String news = content.getText().replace(depan, "");
                 return new TextMessage(parser.checkNews(news, "satire"));
-            } else if (depan.equalsIgnoreCase("/is_conspiracy")){
+            } else if (depan.equalsIgnoreCase("/is_conspiracy")) {
                 String news = content.getText().replace(depan, "");
                 return new TextMessage(parser.checkNews(news, "conspiracy"));
-            } else if (depan.equalsIgnoreCase("/add_filter")){
+            } else if (depan.equalsIgnoreCase("/add_filter")) {
                 String filterUrl = content.getText().split(" ")[1];
                 String filterType = content.getText().split(" ")[2];
                 return new TextMessage(parser.addNewCriteria(filterUrl, filterType));
             } else {
                 throw new IllegalArgumentException();
             }
-        } catch (IllegalArgumentException e){
-            return new TextMessage("Inputan tidak tersedia nih, coba /is_fake URL\n" +
-                    "\n" +
-                    "/is_satire URL\n" +
-                    "/is_conspiracy URL\n" +
-                    "\n" +
-                    "/add_filter URL TYPE");
+        } catch (IllegalArgumentException e) {
+            return new TextMessage("Inputan tidak tersedia nih, coba masukkan /is_fake URL\n"
+                    + "/is_satire URL\n"
+                    + "/is_conspiracy URL\n"
+                    + "/add_filter URL TYPE");
         }
     }
 
