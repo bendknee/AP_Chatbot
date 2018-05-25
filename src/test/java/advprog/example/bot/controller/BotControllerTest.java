@@ -89,6 +89,29 @@ class BotControllerTest {
         assertEquals("pertanyaan:\n/add_question\n\njawaban:\n/add_question\n"
                         + "/add_question\n/add_question\n/add_question\n\njawaban benar:\n"
                         + "/add_question", reply.getText());
+
+        command = "/change_answer";
+
+        message = EventTestUtil.createDummyTextMessage(command);
+
+        TemplateMessage replyCarousel = (TemplateMessage)
+                botController.handleTextMessageEvent(message);
+        replyText = replyCarousel.getAltText();
+
+        assertEquals("Select question", replyText);
+
+        postbackEvent = EventTestUtil.createDummyPostbackEvent("1");
+        replyCarousel = (TemplateMessage) botController.handlePostbackEvent(postbackEvent);
+        replyText = replyCarousel.getAltText();
+
+        assertEquals("Select correct answer", replyText);
+        postbackEvent = EventTestUtil.createDummyPostbackEvent("0");
+        reply = (TextMessage) botController.handlePostbackEvent(postbackEvent);
+
+        assertEquals("pertanyaan:\n/add_question\n\njawaban:\n/add_question\n"
+                + "/add_question\n/add_question\n/add_question\n\njawaban benar:\n"
+                + "/add_question", reply.getText());
+
     }
 
     @Test

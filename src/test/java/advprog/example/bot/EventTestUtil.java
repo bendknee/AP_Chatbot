@@ -24,7 +24,7 @@ public class EventTestUtil {
     public static PostbackEvent createDummyPostbackEvent(String text) {
         return new PostbackEvent("replyToken",
                 new UserSource("userId"),
-                new PostbackContent("0", null),
+                new PostbackContent(text, null),
                 Instant.parse("2018-01-01T00:00:00.000Z")
         );
     }

@@ -69,4 +69,18 @@ public class QuestionTest {
 
         assertThat(question.getAnswers().size()).isEqualTo(0);
     }
+
+    @Test
+    void testGetCorrectAnswer() {
+        when(question.getCorrectAnswer()).thenReturn(answer1);
+
+        assertEquals(question.getCorrectAnswer(), answer1);
+    }
+
+    @Test
+    void testHasCorrectAnswer() {
+        when(question.hasCorrectAnswer()).thenReturn(true);
+
+        assertTrue(question.hasCorrectAnswer());
+    }
 }

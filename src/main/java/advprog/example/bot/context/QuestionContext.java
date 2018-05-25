@@ -35,7 +35,7 @@ public class QuestionContext {
     }
 
     public void removeChangeContext(String key) {
-        store.get("change-" + key);
+        store.remove("change-" + key);
     }
 
     public boolean containsChangeContextKey(String key) {
