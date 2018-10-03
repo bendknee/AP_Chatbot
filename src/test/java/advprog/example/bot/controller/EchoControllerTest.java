@@ -39,7 +39,7 @@ public class EchoControllerTest {
 
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
-                EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
+                EventTestUtil.createPrivateTextMessage("/echo Lorem Ipsum");
 
         TextMessage reply = echoController.handleTextMessageEvent(event);
 
