@@ -27,7 +27,7 @@ public class EchoController {
 
     @EventMapping
     public void handleDefaultMessage(Event event) {
-        LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
-                event.getTimestamp(), event.getSource()));
+    /*    LOGGER.fine(String.format("Event(timestamp='%s',source='%s')",
+                event.getTimestamp(), event.getSource()));*/
     }
 }

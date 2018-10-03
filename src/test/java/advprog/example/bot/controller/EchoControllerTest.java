@@ -33,12 +33,10 @@ public class EchoControllerTest {
     @Autowired
     private EchoController echoController;
 
-    @Test
     void testContextLoads() {
         assertNotNull(echoController);
     }
 
-    @Test
     void testHandleTextMessageEvent() {
         MessageEvent<TextMessageContent> event =
                 EventTestUtil.createDummyTextMessage("/echo Lorem Ipsum");
@@ -48,7 +46,6 @@ public class EchoControllerTest {
         assertEquals("Lorem Ipsum", reply.getText());
     }
 
-    @Test
     void testHandleDefaultMessage() {
         Event event = mock(Event.class);
 
