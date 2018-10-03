@@ -1,4 +1,4 @@
-package advprog.example.bot.controller;
+/*package advprog.example.bot.controller;
 
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -31,3 +31,4 @@ public class EchoController {
                 event.getTimestamp(), event.getSource()));
     }
 }
+*/
